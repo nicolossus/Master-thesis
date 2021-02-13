@@ -10,19 +10,15 @@ import numpy as np
 from journal import Journal
 
 
-class ABCSampler:
+class RejectionABC:
 
-    def __init__(self, observed_data, simulator, summary_calculator, distance_metric):
+    def __init__(self, simulator, summary_calculator, distance_metric):
 
-        self._obs_data = observed_data           # observed data
         self._simulator = simulator              # model simulator function
         self._summary_calc = summary_calculator  # summary calculator function
         self._distance_metric = distance_metric  # distance metric function
 
-        self._obs_sumstat = self._summary_calc(
-            self._obs_data)  # observed data summary statistic
-
-    def rejection_abc(self, priors, n_posterior_samples, n_simulator_samples_per_parameter, epsilon):
+    def sample(self, observed_data, priors, n_posterior_samples, n_simulator_samples_per_parameter, epsilon):
         """
         n_samples: integer
             Number of samples to generate
@@ -30,6 +26,9 @@ class ABCSampler:
 
         _inference_scheme = "Rejection ABC"
         N = n_simulator_samples_per_parameter
+
+        self._obs_sumstat = self._summary_calc(
+            observed_data)  # observed data summary statistic
 
         journal = Journal()  # journal instance
         journal._start_journal()
@@ -61,11 +60,29 @@ class ABCSampler:
 
         return journal
 
-    def mcmc_abc(self):
+
+class MCMCABC:
+
+    def __init__(self, observed_data, simulator, summary_calculator, distance_metric):
         pass
 
-    def smc_abc(self):
+    def sample(self):
         pass
 
-    def pmc_abc(self):
+
+class SMCABC:
+
+    def __init__(self, observed_data, simulator, summary_calculator, distance_metric):
+        pass
+
+    def sample(self):
+        pass
+
+
+class PMCABC:
+
+    def __init__(self, observed_data, simulator, summary_calculator, distance_metric):
+        pass
+
+    def sample(self):
         pass
