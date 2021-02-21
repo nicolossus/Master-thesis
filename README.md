@@ -2,7 +2,7 @@
 
 Simulation-based inference of parameteres in mechanistic models.
 
-### Environment
+## Environment
 
 **Install Anaconda**
 
@@ -28,7 +28,7 @@ See [anaconda.com](https://www.anaconda.com/products/individual).
 
     $ conda info --envs
 
-### Installation
+## Installation
 
 `cd` into root directory
 
@@ -40,7 +40,7 @@ See [anaconda.com](https://www.anaconda.com/products/individual).
 
     $ pip install .
 
-### Tests
+## Tests
 
 `cd` into root directory
 
@@ -48,7 +48,7 @@ See [anaconda.com](https://www.anaconda.com/products/individual).
 
     $ pytest -v -p no:warnings
 
-### Structure
+## Structure
 
 The [latex folder](https://github.com/nicolossus/Master-thesis/tree/master/latex) contains the LaTeX source for building the thesis, as well as [figures](https://github.com/nicolossus/Master-thesis/tree/master/latex/figures) and [tables](https://github.com/nicolossus/Master-thesis/tree/master/tables) generated in the analyses.
 
