@@ -1,8 +1,6 @@
-**Warning:** filenames that contains string 'example' will be deleted when `clean_examples.sh` is run.
+# Master Thesis
 
-# Project X
-
-This repository contains programs made for project X
+Simulation-based inference of parameteres in mechanistic models.
 
 ### Structure
 
