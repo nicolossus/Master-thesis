@@ -27,8 +27,8 @@ class ToyModels:
         pass
 
     @staticmethod
-    def gaussian_model(n_samples):
-        pass
+    def gaussian_model(mu, sigma, n_samples):
+        return stats.norm(loc=mu, scale=sigma).rvs(size=n_samples)
 
     @staticmethod
     def multinormal(n_samples):
