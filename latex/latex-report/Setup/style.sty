@@ -9,17 +9,18 @@
 
 %--------- encoding ----------
 \usepackage[utf8]{inputenc}        % Source file encoding
-\usepackage[norsk, english]{babel} % typographic rules
+%\usepackage[norsk, english]{babel} % typographic rules
+\usepackage[american]{babel} % typographic rules
 
 
 %--------- color ------------
-\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor} 
 
 %----- document formatting ---- 
 % Begin paragraphs with an empty line rather than an indent:
 \usepackage[parfill]{parskip} 
 %Set document margin (1 inch = 2.54cm):
-\usepackage[margin=0.9in]{geometry}
+\usepackage[left=1.5in,right=1.2in,top=1in,bottom=1in]{geometry}
 % prevent orphan and widow lines
 \clubpenalty = 10000
 \widowpenalty = 10000
@@ -37,16 +38,15 @@
 \usepackage{hologo}      % Logos, such as BibTeX
 
 %------ header and foot --------
-\usepackage{fancyhdr}
+%\usepackage{fancyhdr}
 
 %------ sections layout --------
-\usepackage{sectsty}
-\sectionfont{\fontsize{12}{15}\selectfont}
-\subsectionfont{\fontsize{10}{15}\selectfont}
-\sectionfont{\centering \color{purple}} %centering and color
-\subsectionfont{\color{purple}}  % sets color of subsections
-\subsubsectionfont{\color{purple}}
-
+%\usepackage{sectsty}
+%\sectionfont{\fontsize{12}{15}\selectfont}
+%\subsectionfont{\fontsize{10}{15}\selectfont}
+%\sectionfont{\centering \color{purple}} %centering and color
+%\subsectionfont{\color{purple}}  % sets color of subsections
+%\subsubsectionfont{\color{purple}}
 
 %---------- figure & tables ---------------
 \usepackage{graphicx}
@@ -92,18 +92,19 @@
 \usepackage{tikz}
 \usepackage[listings,theorems,skins,breakable]{tcolorbox}
 \tcbset{highlight math style={enhanced,
-  colframe=red,colback=white,arc=0pt,boxrule=2pt}}
+  colframe=red,colback=white,arc=0pt,boxrule=2pt}} 
   
+
 %--------- referencing ----------------
 \usepackage[obeyspaces, spaces, hyphens]{url} % typesetting URLs
 \urlstyle{sf}
 \usepackage{hyperref} % create hyperlinks within the document
 \hypersetup{          % set color of referenced items
     colorlinks=true,
-    linkcolor=blue,
-    citecolor=red,
-    filecolor=blue,      
-    urlcolor=blue,}
+    linkcolor=blue, % black
+    citecolor=red,  % black
+    filecolor=blue, % black     
+    urlcolor=blue,} % black 
     
 \usepackage[nameinlink,capitalize]{cleveref} % must be loaded after hyperref  
 
@@ -149,16 +150,6 @@
 }
 \lstset{style=mystyle}
 
-%--- define front & main matter for article class ---
-\makeatletter
-\newcommand\frontmatter{%
-    \cleardoublepage
-  \pagenumbering{roman}}
-
-\newcommand\mainmatter{%
-    \cleardoublepage
-  \pagenumbering{arabic}}
-\makeatother
 
 %------------ TODO --------------
 % Add todo notes in the margin of the document

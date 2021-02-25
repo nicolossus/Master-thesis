@@ -7,19 +7,10 @@
 \counterwithin{figure}{section}
 \counterwithin{table}{section}
 
-%--------- format abstract ---------
-\makeatletter
-\renewenvironment{abstract}{
-    \if@twocolumn
-      \section*{\abstractname}
-    \else
-      \begin{center}
-        {\bfseries \large\abstractname\vspace{\z@}}
-      \end{center}
-      \quotation
-    \fi}
-    {\if@twocolumn\else\endquotation\fi}
-\makeatother
+
+%--------- list of abbreviations ---------
+\newcommand{\abbrlabel}[1]{\makebox[3cm][l]{\textbf{#1}}}
+\newenvironment{abbreviations}{\begin{list}{}{\renewcommand{\makelabel}{\abbrlabel}}}{\end{list}}
 
 %----------------- tikz ---------------------------
 % Define block styles

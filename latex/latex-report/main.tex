@@ -1,37 +1,37 @@
 %==========================================================
 %-------------------- begin preamble ----------------------
 %==========================================================
-%\documentclass[12pt]{article}
-\documentclass[12pt, a4paper, abstracton]{scrartcl}
-\setkomafont{disposition}{\normalfont\bfseries}
+%\documentclass[12pt]{scrbook}
+%\documentclass[12pt, twoside=true]{scrbook} % sidetall nede
+%\documentclass[12pt, openany]{book} % brukt
+\documentclass[12pt, oneside]{book}
+%\documentclass[12pt, twoside]{book}
+
+%\setkomafont{disposition}{\normalfont\bfseries}
 \usepackage{Setup/style}
+\usepackage{siunitx}
 \input{Setup/macros}
 \addbibresource{bibliography.bib}   % Bibliography
 
 % Set graphics path
 \graphicspath{{latex/figures/}}
 
-%-------- header & foot -------- 
-% FILL IN APPROPRIATE DESCRIPTIONS
-% title page
-\pagestyle{fancy}
-\fancypagestyle{firststyle}
-{
-   \fancyhf{}
-   \fancyfoot[C]{
-   % Link to GitHub
-   \faGithub \ 
-   \href{https://github.com/nicolossus}{github.com/nicolossus}}
-   \renewcommand{\headrulewidth}{0pt}
-   \renewcommand{\footrulewidth}{0.4pt}
-}
-% rest of document
-\fancyhead[L]{\small Course code}       % Set <course>
-\fancyhead[C]{\small Title}             % Set <title>    
-\fancyhead[R]{\small Month Day, Year}   % Set <date>
-\fancyfoot[C]{-- \thepage\ --}
-\renewcommand{\headrulewidth}{0.4pt}
-\renewcommand{\footrulewidth}{0.4pt}
+%\usepackage[titles]{tocloft}   % fix spacing in \listoffigures
+%\cftsetindents{figure}{0em}{3.5em}
+
+\usepackage[T1]{fontenc}
+\usepackage[newcentury]{quotchap}
+\usepackage{blindtext}
+
+\usepackage[nouppercase]{scrlayer-scrpage} % header no upper case
+\pagestyle{scrheadings}
+
+
+
+\usepackage{biblatex}
+\addbibresource{bibliography.bib}
+\raggedbottom
+
 %==========================================================
 %-------------------- end preamble ----------------------
 %==========================================================
@@ -41,44 +41,39 @@
 %==========================================================
 \begin{document}
 %------------------ title -------------------------
-\input{Sections/1_Titlepage}
+\input{Sections/0_Frontpage}
 \pagenumbering{gobble}
-\thispagestyle{firststyle}
-
-%---------------- abstract -------------------------
-\input{Sections/2_Abstract}   % Abstract on title page
-\newpage
+\input{Sections/1_Firstpage}
+\pagenumbering{gobble}
+\clearpage 
 
 %------------ content overview ---------------------
 \frontmatter      % Folios in Roman numerals
+\input{Sections/2_Acknowledgements}
+\input{Sections/3_Abstract}
+\newpage
 \tableofcontents    
 %\abstractintoc   % Add abstract to table of contents
+\newpage
 %\listoffigures      
 %\listoftables       
 %\listofalgorithms
 %\listoftodos       % list TODOs
 
+
 %----------------- body ----------------------------
 \mainmatter         % Folios in Arabic numerals
-\input{Sections/3_Introduction}
-\newpage 
-\input{Sections/4_Theory}
-\newpage
-\input{Sections/5_Method}
-\newpage
-\input{Sections/6_Results}
-\newpage
-\input{Sections/7_Discussion}
+\input{Sections/4_Introduction}
+\input{Sections/5_Background}
+\input{Sections/6_Methodology}
+\input{Sections/7_Results_discussion}
 \input{Sections/8_Conclusion}
-\input{Sections/9_FutureWork}
- 
+%-------- appendix -----------
+\input{Sections/X_Appendix}
+
 %-------- bibliography ----------- 
 \newpage 
 \printbibliography[heading=bibintoc, title={References}]
-
-%-------- appendix -----------
-\appendix
-\include{Sections/X_Appendix} 
 
 \end{document}
 %==========================================================
