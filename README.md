@@ -1,5 +1,7 @@
 # Master Thesis
 
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/nicolossus/Master-thesis/HEAD)
+
 Simulation-based inference of parameteres in mechanistic models.
 
 ## Environment
