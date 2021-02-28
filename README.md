@@ -1,6 +1,10 @@
 # Master Thesis
 
+<!---
+[![Documentation Status](https://readthedocs.org/projects/ansicolortags/badge/?version=latest)](http://ansicolortags.readthedocs.io/?badge=latest)
+--->
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/nicolossus/Master-thesis/HEAD)
+[![nbviewer](https://raw.githubusercontent.com/jupyter/design/master/logos/Badges/nbviewer_badge.svg)](https://nbviewer.jupyter.org/github/nicolossus/Master-thesis/tree/master/notebooks/development/)
 
 Simulation-based inference of parameteres in mechanistic models.
 
