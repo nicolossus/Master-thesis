@@ -3,8 +3,11 @@
 <!---
 [![Documentation Status](https://readthedocs.org/projects/ansicolortags/badge/?version=latest)](http://ansicolortags.readthedocs.io/?badge=latest)
 --->
+[![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/nicolossus/Master-thesis/HEAD)
 [![nbviewer](https://raw.githubusercontent.com/jupyter/design/master/logos/Badges/nbviewer_badge.svg)](https://nbviewer.jupyter.org/github/nicolossus/Master-thesis/tree/master/notebooks/development/)
+
+**Initial development is in progress, i.e., things may not work as intended yet.**
 
 Simulation-based inference of parameteres in mechanistic models.
 
