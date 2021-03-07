@@ -1,12 +1,17 @@
 %---------------- custom style -----------------------
 %----- equation numbering -------
-\numberwithin{equation}{section}     % number within section
+\numberwithin{equation}{chapter}     % number within chapter
+%\numberwithin{equation}{section}     % number within section
 %\numberwithin{equation}{subsection} % number within subsection
+
+\renewcommand\thepart{\Roman{part}}
 
 %----- fig & table numbering -----
 \counterwithin{figure}{section}
 \counterwithin{table}{section}
 
+% Easily insert sources in images
+\newcommand{\source}[1]{\vspace{-4pt} \caption*{\hfill \footnotesize{Source: {#1}} } }   
 
 %--------- list of abbreviations ---------
 \newcommand{\abbrlabel}[1]{\makebox[3cm][l]{\textbf{#1}}}
@@ -49,6 +54,10 @@
 \DeclareMathOperator*{\cv}{CV}
 \DeclareMathOperator*{\df}{df}
 \newcommand{\T}{\mathcal{T}}
+\newcommand{\e}[1]{\times 10^{#1}}  % Powers of 10 notation
+\newcommand{\ie}{\leavevmode\unskip, i.e.,\xspace}
+\newcommand{\eg}{\leavevmode\unskip, e.g.,\xspace}
+\newcommand{\dash}{\textthreequartersemdash\xspace}
 
 \NewDocumentCommand{\cw}{v}{%
 \textbf{\texttt{\textcolor{Blue}{#1}}}%
