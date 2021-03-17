@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
-from checks import check_1D_data
+from checks import check_1D_data, check_number_of_entries
 from scipy import optimize, special
+from stats import iqr
 
 
 def histogram(data, bins=10, density=True, **kwargs):
@@ -30,8 +31,9 @@ def calculate_bins(data, bins):
         elif bins == "knuth":
             bins = knuths_rule(data)
         else:
-            raise ValueError(
-                f"Unrecognized bin rule: '{bins}'. Supported rules are: 'sqrt', 'sturges', 'scott', 'freedman', 'knuth'")
+            msg = (f"Unrecognized bin rule: '{bins}'. Supported rules are: "
+                   "'sqrt', 'sturges', 'scott', 'freedman', 'knuth'")
+            raise ValueError(msg)
 
     return bins
 
@@ -41,9 +43,8 @@ def square_root_rule(data):
     Calculate number of histogram bins using the Square-root rule.
     """
     data = np.asarray(data)
-    n = data.size
     check_1D_data(data)
-
+    n = data.size
     return int(np.ceil(np.sqrt(n)))
 
 
@@ -52,9 +53,9 @@ def sturges_rule(data):
     Calculate number of histogram bins using Sturges' rule.
     """
     data = np.asarray(data)
-    n = data.size
     check_1D_data(data)
-
+    check_number_of_entries(data, n_entries=1)
+    n = data.size
     return int(np.ceil(np.log2(n)) + 1)
 
 
@@ -69,9 +70,10 @@ def scotts_rule(data):
     Biometricka 66 (3): 605-610
     """
     data = np.asarray(data)
-    n = data.size
     check_1D_data(data)
+    check_number_of_entries(data, n_entries=1)
 
+    n = data.size
     dmin, dmax = data.min(), data.max()
     h = 3.49 * np.std(data) * n**(-1 / 3)
     k = int(np.ceil((dmax - dmin) / h))
@@ -91,16 +93,12 @@ def freedman_diaconis_rule(data):
     Probability Theory and Related Fields 57 (4): 453-476
     """
     data = np.asarray(data)
-    n = data.size
     check_1D_data(data)
+    check_number_of_entries(data, n_entries=3)
 
-    if n < 4:
-        raise ValueError("data should have more than three entries")
-
+    n = data.size
     dmin, dmax = data.min(), data.max()
-    q75, q25 = np.percentile(data, [75, 25])
-    iqr = q75 - q25
-    h = 2 * iqr * n**(-1 / 3)
+    h = 2 * iqr(data) * n**(-1 / 3)
 
     if h == 0:
         bins = scotts_rule(data)
@@ -126,9 +124,10 @@ def knuths_rule(data):
     arXiv:0605197
     """
     data = np.array(data, copy=True)
-    n = data.size
     check_1D_data(data)
+    check_number_of_entries(data, n_entries=3)
 
+    n = data.size
     data.sort()
 
     def knuth_func(M):
