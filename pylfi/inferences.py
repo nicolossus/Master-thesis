@@ -9,6 +9,23 @@ import matplotlib.pyplot as plt
 import numpy as np
 from journal import Journal
 
+'''
+change implementation to something like this:
+
+sbi takes any function as simulator. Thus, sbi also has the flexibility to use
+simulators that utilize external packages, e.g., Brian (http://briansimulator.org/),
+nest (https://www.nest-simulator.org/), or NEURON (https://neuron.yale.edu/neuron/).
+External simulators do not even need to be Python-based as long as they store
+simulation outputs in a format that can be read from Python. All that is necessary
+is to wrap your external simulator of choice into a Python callable that takes a
+parameter set and outputs a set of summary statistics we want to fit the parameters to
+
+* simulator must return summary statistics
+* then in init, only simulator is needed
+* change distance metric to keyword and allow for custom callable
+* remove n_simulator_samples_per_parameter from sample method 
+'''
+
 
 class RejectionABC:
 
@@ -19,7 +36,7 @@ class RejectionABC:
         summary_calculator : callable
             summary statistics calculator
         distance_metric : callable
-            discrepancy measure 
+            discrepancy measure
         """
 
         self._simulator = simulator              # model simulator function
