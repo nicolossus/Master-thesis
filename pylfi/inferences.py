@@ -23,7 +23,7 @@ parameter set and outputs a set of summary statistics we want to fit the paramet
 * simulator must return summary statistics
 * then in init, only simulator is needed
 * change distance metric to keyword and allow for custom callable
-* remove n_simulator_samples_per_parameter from sample method 
+* remove n_simulator_samples_per_parameter from sample method
 '''
 
 
@@ -45,6 +45,8 @@ class RejectionABC:
 
     def sample(self, observed_data, priors, n_posterior_samples, n_simulator_samples_per_parameter, epsilon):
         """
+        add **kwargs for simulator call
+
         Pritchard et al. (1999) algorithm
 
         n_samples: integer
