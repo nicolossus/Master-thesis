@@ -259,7 +259,7 @@ if __name__ == "__main__":
     ###
     ###
     np.random.seed(42)
-    N = int(5e3)
+    N = int(1e3)
     groundtruth = 2.0
     likelihood = stats.norm(loc=0., scale=np.sqrt(groundtruth))
     data = likelihood.rvs(size=N)
@@ -268,6 +268,7 @@ if __name__ == "__main__":
 
     #kde = KDE(data, bandwidth='auto', kernel='auto')
     #kde = KDE(data, bandwidth='auto', kernel=['gaussian', 'tophat'])
+    #kde = KDE(data, bandwidth='auto', kernel=['gaussian', 'epanechnikov'])
     kde = KDE(data, bandwidth='auto', kernel='gaussian')
 
     best_params = kde.best_params

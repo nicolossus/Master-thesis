@@ -52,6 +52,7 @@ print(f"Silverman bandwidth: {silverman_bw}")
 print(f"ISJ bandwidth: {isj_bw}")
 y1 = FFTKDE(kernel='gaussian', bw="silverman").fit(data).evaluate(x)
 y2 = FFTKDE(kernel='gaussian', bw='ISJ').fit(data).evaluate(x)
+y3 = FFTKDE(kernel='gaussian', bw=kde.bandwidth).fit(data).evaluate(x)
 
 fig, ax = plt.subplots(1, 1)
 ax.plot(x, true_pdf, label='true pdf')
@@ -59,14 +60,35 @@ ax.plot(x, density, label='sklearn kde')
 ax.plot(x, density2, label='sklearn bad kde')
 ax.plot(x, y1, label='kdepy1 silver')
 ax.plot(x, y2, label='kdepy2 ISJ')
+ax.plot(x, y3, label='kdepy3 opt. bw')
 ax.set_ylabel('Density')
 ax.set_xlabel('$x$')
 ax.legend()
 plt.show()
 
-print(f"KL div from kdepy1 to true pdf: {kl_div(true_pdf, y1):.4f}")
-print(f"KL div from kdepy2 to true pdf: {kl_div(true_pdf, y2):.4f}")
+print("\nMY KL DIV")
+print(
+    f"KL div from true pdf to true pdf (sanity check, should be 0): {kl_div(true_pdf, true_pdf):.4f}")
+print(
+    f"KL div from kdepy1 (silverman) to true pdf: {kl_div(true_pdf, y1):.4f}")
+print(f"KL div from kdepy2 (ISJ) to true pdf: {kl_div(true_pdf, y2):.4f}")
+print(f"KL div from kdepy3 (opt. bw) to true pdf: {kl_div(true_pdf, y3):.4f}")
 print(
     f"KL div from sklearn optimal kde to true pdf: {kl_div(true_pdf, density):.4f}")
 print(
     f"KL div from sklearn bad kde to true pdf: {kl_div(true_pdf, density2):.4f}")
+
+print("\nSCIPY ENTROPY")
+
+print(
+    f"KL div from true pdf to true pdf (sanity check, should be 0): {stats.entropy(true_pdf, true_pdf):.4f}")
+print(
+    f"KL div from kdepy1 (silverman) to true pdf: {stats.entropy(true_pdf, y1):.4f}")
+print(
+    f"KL div from kdepy2 (ISJ) to true pdf: {stats.entropy(true_pdf, y2):.4f}")
+print(
+    f"KL div from kdepy3 (opt. bw) to true pdf: {stats.entropy(true_pdf, y3):.4f}")
+print(
+    f"KL div from sklearn optimal kde to true pdf: {stats.entropy(true_pdf, density):.4f}")
+print(
+    f"KL div from sklearn bad kde to true pdf: {stats.entropy(true_pdf, density2):.4f}")
