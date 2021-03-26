@@ -452,7 +452,7 @@ if __name__ == "__main__":
     h = hh.h
 
     # plot voltage trace
-    fig = plt.figure(figsize=(8, 7), tight_layout=True)
+    fig = plt.figure(figsize=(8, 7), tight_layout=True, dpi=120)
     gs = gridspec.GridSpec(3, 1, height_ratios=[4, 4, 1])
     ax = plt.subplot(gs[0])
     plt.plot(t, V, lw=2)
