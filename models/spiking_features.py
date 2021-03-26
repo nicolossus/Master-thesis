@@ -37,15 +37,7 @@ class SpikingFeatures:
 
     Notes
     -----
-    The implemented features are:
-    ==========================  ==========================
-    nr_spikes                   time_before_first_spike
-    spike_rate                  average_AP_overshoot
-    average_AHP_depth           average_AP_width
-    accommodation_index         average_duration
-    ==========================  ==========================
-
-    Features are directly or adapted from:
+    Features are from:
     Druckmann, S., Banitt, Y., Gidon, A. A., Schurmann, F., Markram, H., and Segev, I.
     (2007). A novel multiple objective optimization framework for constraining conductance-
     based neuron models by experimental data. Frontiers in Neuroscience 1, 7-18. doi:10.
@@ -185,15 +177,6 @@ class SpikingFeatures:
                 self._time[self._spikes_ind[i]]
             ISIs.append(ISI)
         return np.array(ISIs)
-
-    @property
-    def ISIs_lines(self):
-        """3 tuple of arrays for drawing ISIs with plt.hlines().
-        """
-        y = self._V_spikes_height
-        xmin = self._time[self._spikes_ind[:-1]]
-        xmax = self._time[self._spikes_ind[1:]]
-        return (y, xmin, xmax)
 
     # Features
 
@@ -386,27 +369,39 @@ if __name__ == "__main__":
 
     # plot voltage trace with features
     spike_pos = features.spikes_position
+    V_spikes_height = features.V_spikes_height
     contour_lines = features.contour_lines
-    print(len(contour_lines[0]))
-    print(len(contour_lines[1]))
-    print(len(contour_lines[2]))
     ahp_depth_pos = features.AHP_depth_pos
-    ISIs_lines = features.ISIs_lines
 
     fig = plt.figure(figsize=(8, 6), tight_layout=True, dpi=140)
     gs = gridspec.GridSpec(2, 1, height_ratios=[4, 1])
     ax = plt.subplot(gs[0])
+
+    # voltage trace
     plt.plot(t, V, lw=1.5, label='Voltage trace')
+
+    # AP overshoot
     plt.plot(t[spike_pos], V[spike_pos], "x",
              ms=7, color='black', label='AP overshoot')
+
+    # AP widths
     plt.hlines(*contour_lines, color="red", lw=2, label='AP width')
+
+    # AHP depths
     plt.plot(t[ahp_depth_pos], V[ahp_depth_pos], 'o',
              ms=5, color='indianred', label='AHP depth')
 
-    # The marked ISIs are used to compute the accommodation index
+    # latency to first spike
+    plt.hlines(hh.V_rest, t_stim_on,
+               t[spike_pos[0]], color='black', lw=1.5, ls=":")
+    plt.vlines(t[spike_pos[0]], hh.V_rest, V_spikes_height[0],
+               color='black', lw=1.5, ls=":", label="Latency to first spike")
+
+    # the marked ISIs are used to compute the accommodation index
     # ISI arrow legend
     plt.plot([], [], color='g', marker=r'$\longleftrightarrow$',
              linestyle='None', markersize=15, label='ISIs')
+
     # ISI spike 1 -> 2
     plt.vlines(t[spike_pos[0]], V[spike_pos[0]],
                48, color='darkorange', ls='--', label='Spike rate')
@@ -457,7 +452,7 @@ if __name__ == "__main__":
     ax = plt.subplot(gs[1])
     plt.plot(t, I_stim, 'k', lw=2)
     plt.xlabel('Time (ms)')
-    plt.ylabel('Input (nA)')
+    plt.ylabel('Stimulus (nA)')
     ax.set_xticks([0, np.max(t) / 2, np.max(t)])
     ax.set_yticks([0, np.max(I_stim)])
     ax.yaxis.set_major_formatter(mpl.ticker.FormatStrFormatter('%.2f'))
