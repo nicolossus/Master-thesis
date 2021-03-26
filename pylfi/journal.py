@@ -167,6 +167,54 @@ class Journal:
     def _kde(self):
         pass
 
+    def _square_root_rule(x):
+        """
+        Calculate number of histogram bins using the Square-root Rule.
+        """
+        x = np.asarray(data)
+        n = x.size
+        k = int(np.ceil(np.sqrt(n)))
+        return k
+
+    def _sturges_rule(self, data):
+        """
+        Calculate number of histogram bins using the Sturges' Rule.
+        """
+        x = np.asarray(data)
+        n = x.size
+        k = int(np.ceil(np.log2(n)) + 1)
+        return k
+
+    def _scotts_rule(self, data):
+        """
+        Calculate number of histogram bins using the Square-root Rule.
+        """
+        x = np.asarray(data)
+        n = x.size
+        h = 3.49 * np.std(x) * n**(-1 / 3)
+        k = int(np.ceil((x.max() - x.min()) / h))
+        return k
+
+    def _freedman_diaconis_rule(self, data):
+        """
+        Calculate number of histogram bins using Freedman-Diaconis rule.
+        """
+        x = np.asarray(data)
+        if data.ndim != 1:
+            raise ValueError("data must be one-dimensional")
+        n = x.size
+        if n < 2:
+            k = 1
+        else:
+            q75, q25 = np.percentile(x, [75, 25])
+            iqr = q75 - q25
+            h = 2 * iqr * n**(-1 / 3)
+            if h == 0:
+                k = self._square_root_rule(x)
+            else:
+                k = int(np.ceil((x.max() - x.min()) / h))
+        return k
+
     def _freedman_diaconis_rule(self, data):
         """
         Calculate number of hist bins using Freedman-Diaconis rule.
@@ -187,6 +235,19 @@ class Journal:
                 Number of bins = (max - min) / Bin width,
         where max is the maximum and min is the minimum value of the data.
         """
+
+        '''
+        data = np.asarray(data)
+        if data.ndim != 1:
+            raise ValueError("data should be one-dimensional")
+
+        n = data.size
+        if n < 4:
+            raise ValueError("data should have more than three entries")
+
+        v25, v75 = np.percentile(data, [25, 75])
+        dx = 2 * (v75 - v25) / (n ** (1 / 3))
+        '''
         x = np.asarray(data)
         n = len(x)
         if n < 2:
@@ -208,6 +269,7 @@ class Journal:
                   'legend.fontsize': 'large',
                   'legend.handlelength': 2}
         plt.rcParams.update(params)
+        plt.rc('text', usetex=True)
 
     def _add_histplot(self, data, ax, index, density, point_estimates, true_vals_bool, true_parameter_values):
         n_bins = self._freedman_diaconis_rule(data)
@@ -320,8 +382,10 @@ class Journal:
         with open(filename, 'wb') as output:
             pickle.dump(self, output, -1)
 
-    def load(self):
-        pass
+    def load(self, filename):
+        with open(filename, 'rb') as input:
+            journal = pickle.load(input)
+        return journal
 
     '''
     @staticmethod
