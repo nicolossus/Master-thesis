@@ -29,17 +29,23 @@ class HodgkinHuxley:
     of the squid, Hodgkin and Huxley succeeded to measure these currents and
     to describe their dynamics in terms of differential equations.
 
+    All model parameters can be accessed (get or set) as attributes, as well
+    can solutions after running the class method `solve`.
+
     Attributes
     ----------
-    time : array_like
+    t : array_like
         The time array of the spike.
     V : array_like
         The voltage array of the spike.
-    time_spike : {float, int}
-        The timing of the peak of the spike.
-    V_spike : {float, int}
-        The voltage at the peak of the spike.
-    global_index : int
+    Vm : array_like
+        The voltage array of the spike (alias for V).
+    n : array_like
+        The state variable of the potassium channel.
+    m : array_like
+        The activating state variable of the sodium channel.
+    h : array_like
+        The inactivating state variable of the sodium channel.
     """
 
     def __init__(self, V_rest=-65., Cm=1., gbar_K=36., gbar_Na=120., gbar_L=0.3, E_K=-77., E_Na=50., E_L=-54.4):
@@ -87,9 +93,6 @@ class HodgkinHuxley:
         self._E_Na = E_Na          # sodium reversal potential [mV]
         self._E_L = E_L            # leak reversal potential [mV]
 
-        # for debugging
-        self.flag = False
-
     def __call__(self, t, y):
         """RHS of the Hodgkin-Huxley ODEs.
 
@@ -99,29 +102,7 @@ class HodgkinHuxley:
             The time point
         y : tuple of floats
             A tuple of the state variables, y = (V, n, m, h)
-        I : callable
-            Input stimulus in units: μA/cm**2
         """
-
-        # THE BUG
-        '''
-        print(f"{t=}", type(t))
-        if self.flag:
-            exit()
-        if t > 1000:
-            self.flag = True
-        '''
-
-        # the second time point, t_1, becomes the large number below
-        # t=0.0 <class 'float'>
-        # t=3992.6598490813017 <class 'numpy.float64'>
-        # t=0.1320707378163929 <class 'numpy.float64'>
-
-        if t == 3992.6598490813017:
-            '''
-            This is a stupid solution
-            '''
-            t = 0
 
         V, n, m, h = y
         dVdt = (self.I(t) - self._gbar_K * (n**4) * (V - self._E_K) - self._gbar_Na *
@@ -130,31 +111,6 @@ class HodgkinHuxley:
         dmdt = self.alpha_m(V) * (1 - m) - self.beta_m(V) * m
         dhdt = self.alpha_h(V) * (1 - h) - self.beta_h(V) * h
         return [dVdt, dndt, dmdt, dhdt]
-
-    '''
-    def __call__(self, y, t):
-        """RHS of the Hodgkin-Huxley ODEs.
-
-        Parameters
-        ----------
-        t : float
-            The time point
-        y : tuple of floats
-            A tuple of the state variables, y = (V, n, m, h)
-        I : callable
-            Input stimulus in units: μA/cm**2
-        """
-        print(f"{t=}", type(t))
-        V, n, m, h = y
-        I = self.I(t)
-        # print(f"{I=}")
-        dVdt = (I - self._gbar_K * (n**4) * (V - self._E_K) - self._gbar_Na *
-                (m**3) * h * (V - self._E_Na) - self._gbar_L * (V - self._E_L)) / self._Cm
-        dndt = self.alpha_n(V) * (1 - n) - self.beta_n(V) * n
-        dmdt = self.alpha_m(V) * (1 - m) - self.beta_m(V) * m
-        dhdt = self.alpha_h(V) * (1 - h) - self.beta_h(V) * h
-        return [dVdt, dndt, dmdt, dhdt]
-    '''
 
     # K channel kinetics
     def alpha_n(self, V):
@@ -196,7 +152,6 @@ class HodgkinHuxley:
     def tau_h(self, V):
         return 1. / (self.alpha_h(V) + self.alpha_h(V))
 
-    # initial conditions
     @property
     def _initial_conditions(self):
         """Default Hodgkin-Huxley model initial conditions"""
@@ -205,8 +160,7 @@ class HodgkinHuxley:
         h0 = self.h_inf(self.V_rest)
         return (self.V_rest, n0, m0, h0)
 
-    # solver
-    def solve(self, stimulus, T=120, dt=0.01, y0=None, **kwargs):
+    def solve(self, stimulus, T, dt, y0=None, **kwargs):
         """Solve the Hodgkin-Huxley equations.
 
         The equations are solved on the interval (0, T] and the solutions
@@ -219,18 +173,21 @@ class HodgkinHuxley:
         Notes
         -----
         The ODEs are solved numerically using the function
-        scipy.integrate.solve_ivp. For details, see https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.solve_ivp.html
+        scipy.integrate.solve_ivp. For details, see
+        https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.solve_ivp.html
 
         Parameters
         ----------
-        stimulus : array, shape (int(T/dt),)
-            Input stimulus in units: μA/cm**2
+        stimulus : array, shape (int(T/dt)+1,) or callable
+            Input stimulus in units: μA/cm**2. If callable, the call signature
+            must be '(t)'
         T : float
             End time in milliseconds (ms)
         dt : float
             Time step where solutions are evaluated
-        y0 : array_like, shape (n,), default None
-            Initial state. If None, the default HH initial conditions will be used.
+        y0 : array_like, shape (4,), default None
+            Initial state of state variables V, n, m, h. If None, the default
+            Hodgkin-Huxley model's initial conditions will be used.
         **kwargs
             Arbitrary keyword arguments are passed along to
             scipy.integrate.solve_ivp
@@ -239,37 +196,28 @@ class HodgkinHuxley:
         if y0 is None:
             y0 = self._initial_conditions
 
-        #t_eval = np.arange(0, T + dt, dt)
-        # alternative
-        N = int(T / dt) + 1
-        t_eval = np.linspace(0, T, N)
+        t_eval = np.arange(0, T + dt, dt)
 
         if callable(stimulus):
             self.I = stimulus
         elif isinstance(stimulus, np.ndarray):
-            # Input stimulus as callable interpolation function
-            self.I = interp1d(x=t_eval, y=stimulus)
+            if not stimulus.shape == t_eval.shape:
+                msg = ("stimulus numpy.ndarray must have shape (int(T/dt)+1)")
+                raise ValueError(msg)
+            # Interpolate stimulus
+            self.I = interp1d(x=t_eval, y=stimulus)  # linear spline
         else:
             msg = ("'stimulus' must be either a callable function of t "
-                   "or a numpy.ndarray of shape (int(T/dt))")
+                   "or a numpy.ndarray of shape (int(T/dt)+1)")
             raise ValueError(msg)
 
         solution = solve_ivp(self, t_span=(0, T), y0=y0,
-                             t_eval=t_eval, **kwargs)
+                             t_eval=t_eval, first_step=dt, **kwargs)
         self._time = solution.t
         self._V = solution.y[0]
         self._n = solution.y[1]
         self._m = solution.y[2]
         self._h = solution.y[3]
-
-        '''
-        solution = odeint(self, y0, t_eval)
-        self._time = t_eval
-        self._V = solution[:, 0]
-        self._n = solution[:, 1]
-        self._m = solution[:, 2]
-        self._h = solution[:, 3]
-        '''
 
     # getters and setters
     @property
