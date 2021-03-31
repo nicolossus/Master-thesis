@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
-from scipy.integrate import odeint, solve_ivp
+from scipy.integrate import solve_ivp
 from scipy.interpolate import interp1d
 
 # ignore overflow warnings; occurs with certain np.exp() evaluations
@@ -29,8 +29,10 @@ class HodgkinHuxley:
     of the squid, Hodgkin and Huxley succeeded to measure these currents and
     to describe their dynamics in terms of differential equations.
 
-    All model parameters can be accessed (get or set) as attributes, as well
-    can solutions after running the class method `solve`.
+    All model parameters can be accessed (get or set) as class attributes.
+
+    The following solutions are available as class attributes after calling
+    the class method `solve`.
 
     Attributes
     ----------
@@ -173,8 +175,52 @@ class HodgkinHuxley:
         Notes
         -----
         The ODEs are solved numerically using the function
-        scipy.integrate.solve_ivp. For details, see
+        `scipy.integrate.solve_ivp`. For details, see
         https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.solve_ivp.html
+
+        If `stimulus` is passed as an array, it and the time array, defined by
+        `T` and `dt`, will be used to create an interpolation function via
+        `scipy.interpolate.interp1d`.
+
+        Credits to supervisor Joakim Sundnes for helping unravel the following.
+
+        `solve_ivp` is an ODE solver with adaptive step size. If the keyword
+        argument `first_step` is not specified, the solver will empirically
+        select an initial "good" step size with the function `select_initial_step`
+        (https://github.com/scipy/scipy/blob/master/scipy/integrate/_ivp/common.py#L64).
+        This function calculates two proposals and returns the smallest. It
+        first calculates an intermediate proposal, h0, that is based on the
+        initial condition (y0) and the ODE's RHS evaluated for the initial
+        condition (f0). For the standard Hodgkin-Huxley model, however, this
+        estimated step size will be very large due to unfortunate circumstances
+        (because norm(y0) > 0 while norm(f0) ~= 0). Since h0 only is an
+        intermediate calculation, it is not used or returned by the solver.
+        However, it is used to calculate the next proposal, h1, by calling the
+        RHS. Normally, this procedure poses no problem, but can fail if an
+        object with a limited interval is present in the RHS, such as an
+        `interp1d` object.
+
+        In the case of the standard Hodgkin-Huxley model, one might be tempted
+        to pass the stimulus as an array to the solver. In order for `solve_ivp`
+        to be able to evaluate the stimulus, it must be passed as an callable or
+        constant. Thus, if an array is passed to the solver, an interpolation
+        function must be created, in this implementation done with `interp1d`,
+        for `solve_ivp` to be able to evaluate it. For the reasons explained
+        above, the program will hence terminate unless the `first_step` keyword
+        is specified and is set to a sufficiently small value. In this
+        implementation, `first_step=dt` is already set in `solve_ivp`.
+
+        The `solve_ivp` keyword `max_step` should be considered to be specified
+        for stimuli over short time spans, in order to ensure that the solver
+        does not step over them.
+
+        Note that `first_step` still needs to specified even if `max_step` is.
+        `select_initial_step` will be called regardless if `first_step` is not
+        specified, and the calls for calculating h1 will be done before checking
+        whether h0 is larger than than the max allowed step size or not. Thus
+        will only specifying `max_step` still result in program termination.
+        (Will not be a problem in this implementation since `first_step` is
+        already specified.)
 
         Parameters
         ----------
@@ -193,10 +239,28 @@ class HodgkinHuxley:
             scipy.integrate.solve_ivp
         """
 
-        if y0 is None:
-            y0 = self._initial_conditions
+        if not isinstance(dt, (int, float)):
+            msg = (f"{dt=}".split('=')[0]
+                   + " must be given as an int or float")
+            raise TypeError(msg)
+
+        if dt <= 0:
+            msg = ("dt > 0 is required")
+            raise ValueError(msg)
+
+        if not isinstance(T, (int, float)):
+            msg = (f"{T=}".split('=')[0]
+                   + " must be given as an int or float")
+            raise TypeError(msg)
+
+        if T <= 0:
+            msg = ("T > 0 is required")
+            raise ValueError(msg)
 
         t_eval = np.arange(0, T + dt, dt)
+
+        if y0 is None:
+            y0 = self._initial_conditions
 
         if callable(stimulus):
             self.I = stimulus
@@ -212,7 +276,7 @@ class HodgkinHuxley:
             raise ValueError(msg)
 
         solution = solve_ivp(self, t_span=(0, T), y0=y0,
-                             t_eval=t_eval, first_step=dt, **kwargs)
+                             t_eval=t_eval, first_step=dt, max_step=5 * dt, **kwargs)
         self._time = solution.t
         self._V = solution.y[0]
         self._n = solution.y[1]
@@ -228,7 +292,12 @@ class HodgkinHuxley:
     @V_rest.setter
     def V_rest(self, value):
         """Set resting potential"""
-        self._V_rest = value
+        V_rest = value
+        if not isinstance(V_rest, (int, float)):
+            msg = (f"{V_rest=}".split('=')[0]
+                   + " must be set as an int or float")
+            raise TypeError(msg)
+        self._V_rest = V_rest
 
     @property
     def Cm(self):
@@ -238,7 +307,12 @@ class HodgkinHuxley:
     @Cm.setter
     def Cm(self, value):
         """Set membrane capacitance"""
-        self._Cm = value
+        Cm = value
+        if not isinstance(Cm, (int, float)):
+            msg = (f"{Cm=}".split('=')[0]
+                   + " must be set as an int or float")
+            raise TypeError(msg)
+        self._Cm = Cm
 
     @property
     def gbar_K(self):
@@ -248,7 +322,12 @@ class HodgkinHuxley:
     @gbar_K.setter
     def gbar_K(self, value):
         """Set potassium conductance"""
-        self._gbar_K = value
+        gbar_K = value
+        if not isinstance(gbar_K, (int, float)):
+            msg = (f"{gbar_K=}".split('=')[0]
+                   + " must be set as an int or float")
+            raise TypeError(msg)
+        self._gbar_K = gbar_K
 
     @property
     def gbar_Na(self):
@@ -258,7 +337,12 @@ class HodgkinHuxley:
     @gbar_Na.setter
     def gbar_Na(self, value):
         """Set sodium conductance"""
-        self._gbar_Na = value
+        gbar_Na = value
+        if not isinstance(gbar_Na, (int, float)):
+            msg = (f"{gbar_Na=}".split('=')[0]
+                   + " must be set as an int or float")
+            raise TypeError(msg)
+        self._gbar_Na = gbar_Na
 
     @property
     def gbar_L(self):
@@ -268,7 +352,12 @@ class HodgkinHuxley:
     @gbar_L.setter
     def gbar_L(self, value):
         """Set leak conductance"""
-        self._gbar_L = value
+        gbar_L = value
+        if not isinstance(gbar_L, (int, float)):
+            msg = (f"{gbar_L=}".split('=')[0]
+                   + " must be set as an int or float")
+            raise TypeError(msg)
+        self._gbar_L = gbar_L
 
     @property
     def E_K(self):
@@ -278,7 +367,12 @@ class HodgkinHuxley:
     @E_K.setter
     def E_K(self, value):
         """Set potassium reversal potential"""
-        self._E_K = value
+        E_K = value
+        if not isinstance(E_K, (int, float)):
+            msg = (f"{E_K=}".split('=')[0]
+                   + " must be set as an int or float")
+            raise TypeError(msg)
+        self._E_K = E_K
 
     @property
     def E_Na(self):
@@ -288,7 +382,12 @@ class HodgkinHuxley:
     @E_Na.setter
     def E_Na(self, value):
         """Set sodium reversal potential"""
-        self._E_Na = value
+        E_Na = value
+        if not isinstance(E_Na, (int, float)):
+            msg = (f"{E_Na=}".split('=')[0]
+                   + " must be set as an int or float")
+            raise TypeError(msg)
+        self._E_Na = E_Na
 
     @property
     def E_L(self):
@@ -298,7 +397,12 @@ class HodgkinHuxley:
     @E_L.setter
     def E_L(self, value):
         """Set leak reversal potential"""
-        self._E_L = value
+        E_L = value
+        if not isinstance(E_L, (int, float)):
+            msg = (f"{E_L=}".split('=')[0]
+                   + " must be set as an int or float")
+            raise TypeError(msg)
+        self._E_L = E_L
 
     @ property
     def t(self):
@@ -310,7 +414,7 @@ class HodgkinHuxley:
 
     @ property
     def V(self):
-        """Values of the solution of V at t. (Identical to property Vm)."""
+        """Values of the solution of V at t."""
         try:
             return self._V
         except AttributeError:
@@ -318,7 +422,7 @@ class HodgkinHuxley:
 
     @ property
     def Vm(self):
-        """Values of the solution of V at t. (Identical to property V)."""
+        """Values of the solution of V at t. (Alias for property V)."""
         try:
             return self._V
         except AttributeError:
@@ -392,7 +496,10 @@ if __name__ == "__main__":
 
     # HH simulation
     hh = HodgkinHuxley()
-    hh.solve(I, T, dt)
+
+    hh.V_rest = np.array([0, 1])
+
+    hh.solve(I, T, [dt])
     t = hh.t
     V = hh.V
     n = hh.n
