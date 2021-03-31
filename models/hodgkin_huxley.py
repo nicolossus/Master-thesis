@@ -32,7 +32,7 @@ class HodgkinHuxley:
     All model parameters can be accessed (get or set) as class attributes.
 
     The following solutions are available as class attributes after calling
-    the class method `solve`.
+    the class method `solve`:
 
     Attributes
     ----------
@@ -156,7 +156,7 @@ class HodgkinHuxley:
 
     @property
     def _initial_conditions(self):
-        """Default Hodgkin-Huxley model initial conditions"""
+        """Default Hodgkin-Huxley model initial conditions."""
         n0 = self.n_inf(self.V_rest)
         m0 = self.m_inf(self.V_rest)
         h0 = self.h_inf(self.V_rest)
@@ -218,9 +218,9 @@ class HodgkinHuxley:
         `select_initial_step` will be called regardless if `first_step` is not
         specified, and the calls for calculating h1 will be done before checking
         whether h0 is larger than than the max allowed step size or not. Thus
-        will only specifying `max_step` still result in program termination.
-        (Will not be a problem in this implementation since `first_step` is
-        already specified.)
+        will only specifying `max_step` still result in program termination if
+        `stimulus` is passed as an array. (Will not be a problem in this
+        implementation since `first_step` is already specified.)
 
         Parameters
         ----------
@@ -239,6 +239,7 @@ class HodgkinHuxley:
             scipy.integrate.solve_ivp
         """
 
+        # error-handling
         if not isinstance(dt, (int, float)):
             msg = (f"{dt=}".split('=')[0]
                    + " must be given as an int or float")
@@ -257,11 +258,14 @@ class HodgkinHuxley:
             msg = ("T > 0 is required")
             raise ValueError(msg)
 
+        # times at which to store the computed solution
         t_eval = np.arange(0, T + dt, dt)
 
         if y0 is None:
+            # use default HH initial conditions
             y0 = self._initial_conditions
 
+        # handle the passed stimulus
         if callable(stimulus):
             self.I = stimulus
         elif isinstance(stimulus, np.ndarray):
@@ -275,8 +279,11 @@ class HodgkinHuxley:
                    "or a numpy.ndarray of shape (int(T/dt)+1)")
             raise ValueError(msg)
 
+        # solve HH ODEs
         solution = solve_ivp(self, t_span=(0, T), y0=y0,
                              t_eval=t_eval, first_step=dt, max_step=5 * dt, **kwargs)
+
+        # store solutions
         self._time = solution.t
         self._V = solution.y[0]
         self._n = solution.y[1]
@@ -286,13 +293,12 @@ class HodgkinHuxley:
     # getters and setters
     @property
     def V_rest(self):
-        """Get resting potential"""
+        """Get resting potential."""
         return self._V_rest
 
     @V_rest.setter
-    def V_rest(self, value):
-        """Set resting potential"""
-        V_rest = value
+    def V_rest(self, V_rest):
+        """Set resting potential."""
         if not isinstance(V_rest, (int, float)):
             msg = (f"{V_rest=}".split('=')[0]
                    + " must be set as an int or float")
@@ -301,13 +307,12 @@ class HodgkinHuxley:
 
     @property
     def Cm(self):
-        """Get membrane capacitance"""
+        """Get membrane capacitance."""
         return self._Cm
 
     @Cm.setter
-    def Cm(self, value):
-        """Set membrane capacitance"""
-        Cm = value
+    def Cm(self, Cm):
+        """Set membrane capacitance."""
         if not isinstance(Cm, (int, float)):
             msg = (f"{Cm=}".split('=')[0]
                    + " must be set as an int or float")
@@ -316,13 +321,12 @@ class HodgkinHuxley:
 
     @property
     def gbar_K(self):
-        """Get potassium conductance"""
+        """Get potassium conductance."""
         return self._gbar_K
 
     @gbar_K.setter
-    def gbar_K(self, value):
-        """Set potassium conductance"""
-        gbar_K = value
+    def gbar_K(self, gbar_K):
+        """Set potassium conductance."""
         if not isinstance(gbar_K, (int, float)):
             msg = (f"{gbar_K=}".split('=')[0]
                    + " must be set as an int or float")
@@ -331,13 +335,12 @@ class HodgkinHuxley:
 
     @property
     def gbar_Na(self):
-        """Get sodium conductance"""
+        """Get sodium conductance."""
         return self._gbar_Na
 
     @gbar_Na.setter
-    def gbar_Na(self, value):
-        """Set sodium conductance"""
-        gbar_Na = value
+    def gbar_Na(self, gbar_Na):
+        """Set sodium conductance."""
         if not isinstance(gbar_Na, (int, float)):
             msg = (f"{gbar_Na=}".split('=')[0]
                    + " must be set as an int or float")
@@ -346,13 +349,12 @@ class HodgkinHuxley:
 
     @property
     def gbar_L(self):
-        """Get leak conductance"""
+        """Get leak conductance."""
         return self._gbar_L
 
     @gbar_L.setter
-    def gbar_L(self, value):
-        """Set leak conductance"""
-        gbar_L = value
+    def gbar_L(self, gbar_L):
+        """Set leak conductance."""
         if not isinstance(gbar_L, (int, float)):
             msg = (f"{gbar_L=}".split('=')[0]
                    + " must be set as an int or float")
@@ -361,13 +363,12 @@ class HodgkinHuxley:
 
     @property
     def E_K(self):
-        """Get potassium reversal potential"""
+        """Get potassium reversal potential."""
         return self._E_K
 
     @E_K.setter
-    def E_K(self, value):
-        """Set potassium reversal potential"""
-        E_K = value
+    def E_K(self, E_K):
+        """Set potassium reversal potential."""
         if not isinstance(E_K, (int, float)):
             msg = (f"{E_K=}".split('=')[0]
                    + " must be set as an int or float")
@@ -376,13 +377,12 @@ class HodgkinHuxley:
 
     @property
     def E_Na(self):
-        """Get sodium reversal potential"""
+        """Get sodium reversal potential."""
         return self._E_Na
 
     @E_Na.setter
-    def E_Na(self, value):
-        """Set sodium reversal potential"""
-        E_Na = value
+    def E_Na(self, E_Na):
+        """Set sodium reversal potential."""
         if not isinstance(E_Na, (int, float)):
             msg = (f"{E_Na=}".split('=')[0]
                    + " must be set as an int or float")
@@ -391,13 +391,12 @@ class HodgkinHuxley:
 
     @property
     def E_L(self):
-        """Get leak reversal potential"""
+        """Get leak reversal potential."""
         return self._E_L
 
     @E_L.setter
-    def E_L(self, value):
-        """Set leak reversal potential"""
-        E_L = value
+    def E_L(self, E_L):
+        """Set leak reversal potential."""
         if not isinstance(E_L, (int, float)):
             msg = (f"{E_L=}".split('=')[0]
                    + " must be set as an int or float")
