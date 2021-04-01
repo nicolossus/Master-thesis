@@ -55,9 +55,9 @@ class HodgkinHuxley:
         Solve the specified Hodgkin-Huxley system.
     """
 
-    def __init__(self, V_rest=-65., Cm=1., gbar_K=36., gbar_Na=120., gbar_L=0.3, E_K=-77., E_Na=50., E_L=-54.4):
-        """
-        Define the model parameters.
+    def __init__(self, V_rest=-65., Cm=1., gbar_K=36., gbar_Na=120.,
+                 gbar_L=0.3, E_K=-77., E_Na=50., E_L=-54.4):
+        """Define the model parameters.
 
         Parameters
         ----------
@@ -112,8 +112,9 @@ class HodgkinHuxley:
         """
 
         V, n, m, h = y
-        dVdt = (self.I(t) - self._gbar_K * (n**4) * (V - self._E_K) - self._gbar_Na *
-                (m**3) * h * (V - self._E_Na) - self._gbar_L * (V - self._E_L)) / self._Cm
+        dVdt = (self.I(t) - self._gbar_K * (n**4) * (V - self._E_K) -
+                self._gbar_Na * (m**3) * h * (V - self._E_Na) -
+                self._gbar_L * (V - self._E_L)) / self._Cm
         dndt = self._alpha_n(V) * (1 - n) - self._beta_n(V) * n
         dmdt = self._alpha_m(V) * (1 - m) - self._beta_m(V) * m
         dhdt = self._alpha_h(V) * (1 - h) - self._beta_h(V) * h
@@ -263,7 +264,7 @@ class HodgkinHuxley:
             msg = ("T > 0 is required")
             raise ValueError(msg)
 
-        # times at which to store the computed solution
+        # times at which to store the computed solutions
         t_eval = np.arange(0, T + dt, dt)
 
         if y0 is None:
