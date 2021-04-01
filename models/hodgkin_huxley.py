@@ -48,14 +48,19 @@ class HodgkinHuxley:
         The activating state variable of the sodium channel.
     h : array_like
         The inactivating state variable of the sodium channel.
+
+    Methods
+    -------
+    solve(stimulus, T, dt, y0=None, **kwargs):
+        Solve the specified Hodgkin-Huxley system.
     """
 
     def __init__(self, V_rest=-65., Cm=1., gbar_K=36., gbar_Na=120., gbar_L=0.3, E_K=-77., E_Na=50., E_L=-54.4):
         """
         Define the model parameters.
 
-        Arguments
-        ---------
+        Parameters
+        ----------
         V_rest : float, default: -65.
             Resting potential of neuron in units: mV
         Cm : float, default: 1.
@@ -109,57 +114,57 @@ class HodgkinHuxley:
         V, n, m, h = y
         dVdt = (self.I(t) - self._gbar_K * (n**4) * (V - self._E_K) - self._gbar_Na *
                 (m**3) * h * (V - self._E_Na) - self._gbar_L * (V - self._E_L)) / self._Cm
-        dndt = self.alpha_n(V) * (1 - n) - self.beta_n(V) * n
-        dmdt = self.alpha_m(V) * (1 - m) - self.beta_m(V) * m
-        dhdt = self.alpha_h(V) * (1 - h) - self.beta_h(V) * h
+        dndt = self._alpha_n(V) * (1 - n) - self._beta_n(V) * n
+        dmdt = self._alpha_m(V) * (1 - m) - self._beta_m(V) * m
+        dhdt = self._alpha_h(V) * (1 - h) - self._beta_h(V) * h
         return [dVdt, dndt, dmdt, dhdt]
 
     # K channel kinetics
-    def alpha_n(self, V):
+    def _alpha_n(self, V):
         return 0.01 * (V + 55.) / (1 - np.exp(-(V + 55.) / 10.))
 
-    def beta_n(self, V):
+    def _beta_n(self, V):
         return 0.125 * np.exp(-(V + 65) / 80.)
 
     # Na channel kinetics (activating)
-    def alpha_m(self, V):
+    def _alpha_m(self, V):
         return 0.1 * (V + 40) / (1 - np.exp(-(V + 40) / 10.))
 
-    def beta_m(self, V):
+    def _beta_m(self, V):
         return 4 * np.exp(-(V + 65) / 18.)
 
     # Na channel kinetics (inactivating)
-    def alpha_h(self, V):
+    def _alpha_h(self, V):
         return 0.07 * np.exp(-(V + 65) / 20.)
 
-    def beta_h(self, V):
+    def _beta_h(self, V):
         return 1. / (1 + np.exp(-(V + 35) / 10.))
 
     # steady-states and time constants
-    def n_inf(self, V):
-        return self.alpha_n(V) / (self.alpha_n(V) + self.beta_n(V))
+    def _n_inf(self, V):
+        return self._alpha_n(V) / (self._alpha_n(V) + self._beta_n(V))
 
-    def tau_n(self, V):
-        return 1. / (self.alpha_n(V) + self.alpha_n(V))
+    def _tau_n(self, V):
+        return 1. / (self._alpha_n(V) + self._alpha_n(V))
 
-    def m_inf(self, V):
-        return self.alpha_m(V) / (self.alpha_m(V) + self.beta_m(V))
+    def _m_inf(self, V):
+        return self._alpha_m(V) / (self._alpha_m(V) + self._beta_m(V))
 
-    def tau_m(self, V):
-        return 1. / (self.alpha_m(V) + self.alpha_m(V))
+    def _tau_m(self, V):
+        return 1. / (self._alpha_m(V) + self._alpha_m(V))
 
-    def h_inf(self, V):
-        return self.alpha_h(V) / (self.alpha_h(V) + self.beta_h(V))
+    def _h_inf(self, V):
+        return self._alpha_h(V) / (self._alpha_h(V) + self._beta_h(V))
 
-    def tau_h(self, V):
-        return 1. / (self.alpha_h(V) + self.alpha_h(V))
+    def _tau_h(self, V):
+        return 1. / (self._alpha_h(V) + self._alpha_h(V))
 
     @property
     def _initial_conditions(self):
         """Default Hodgkin-Huxley model initial conditions."""
-        n0 = self.n_inf(self.V_rest)
-        m0 = self.m_inf(self.V_rest)
-        h0 = self.h_inf(self.V_rest)
+        n0 = self._n_inf(self.V_rest)
+        m0 = self._m_inf(self.V_rest)
+        h0 = self._h_inf(self.V_rest)
         return (self.V_rest, n0, m0, h0)
 
     def solve(self, stimulus, T, dt, y0=None, **kwargs):
