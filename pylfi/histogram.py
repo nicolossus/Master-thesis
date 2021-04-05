@@ -4,7 +4,7 @@
 import numpy as np
 from checks import check_1D_data, check_number_of_entries
 from scipy import optimize, special
-from stats import iqr
+from utils import iqr
 
 
 def histogram(data, bins=10, density=True, **kwargs):

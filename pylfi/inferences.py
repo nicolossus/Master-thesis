@@ -7,7 +7,8 @@ import sys
 
 import matplotlib.pyplot as plt
 import numpy as np
-from journal import Journal
+
+from .journal import Journal
 
 '''
 change implementation to something like this:
@@ -27,14 +28,76 @@ parameter set and outputs a set of summary statistics we want to fit the paramet
 '''
 
 
+class RejectABC:
+
+    def __init__(self, simulator, distance_metric):
+        """
+        simulator : callable
+            simulator model
+        summary_calculator : callable, defualt None
+            summary statistics calculator. If None, simulator should output
+            sum stat
+        distance_metric : callable
+            discrepancy measure
+        """
+
+        self._simulator = simulator              # model simulator function
+        self._distance_metric = distance_metric  # distance metric function
+
+    def sample(self, obs_sumstat, priors, n_posterior_samples, epsilon):
+        """
+        add **kwargs for simulator call
+
+        Pritchard et al. (1999) algorithm
+
+        n_samples: integer
+            Number of samples to generate
+        """
+
+        _inference_scheme = "Rejection ABC"
+
+        journal = Journal()  # journal instance
+        journal._start_journal()
+
+        journal._add_config(self._simulator, self._summary_calc, self._distance_metric,
+                            _inference_scheme, n_posterior_samples, n_simulator_samples_per_parameter, epsilon)
+        journal._add_parameter_names(priors)
+
+        number_of_simulations = 0
+        accepted_count = 0
+
+        while accepted_count < n_posterior_samples:
+            number_of_simulations += 1
+            # draw thetas from priors
+            thetas = [theta.rvs() for theta in priors]
+            # simulated data given realizations of drawn thetas
+            sim_sumstat = self._simulator(*thetas)
+            # calculate distance
+            distance = self._distance_metric(sim_sumstat, obs_sumstat)
+
+            if distance <= epsilon:
+                accepted_count += 1
+                journal._add_accepted_parameters(thetas)
+                journal._add_distance(distance)
+                journal._add_sumstat(sim_sumstat)
+
+        journal._add_sampler_summary(number_of_simulations, accepted_count)
+
+        return journal
+
+###
+###
+
+
 class RejectionABC:
 
     def __init__(self, simulator, summary_calculator, distance_metric):
         """
         simulator : callable
             simulator model
-        summary_calculator : callable
-            summary statistics calculator
+        summary_calculator : callable, defualt None
+            summary statistics calculator. If None, simulator should output
+            sum stat
         distance_metric : callable
             discrepancy measure
         """

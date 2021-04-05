@@ -18,7 +18,7 @@ def check_kernel(kernel):
             "'linear', 'cosine'")
 
     if not isinstance(kernel, (str, list, np.ndarray)):
-        raise ValueError(msg1)
+        raise TypeError(msg1)
 
     if isinstance(kernel, str):
         if kernel not in VALID_KERNELS:
@@ -33,7 +33,7 @@ def check_bandwidth(bandwidth):
     """Check for valid bandwidth(s)"""
     if not isinstance(bandwidth, (int, str, float, list, np.ndarray)):
         msg = ("Bandwidth must be specified as a number, sequence or rule")
-        raise ValueError(msg)
+        raise TypeError(msg)
 
     if isinstance(bandwidth, (list, np.ndarray)):
         if not all(isinstance(e, (str, int, float)) for e in bandwidth):
@@ -95,20 +95,19 @@ if __name__ == "__main__":
 
     '''
     ## kernel sampling
-    n_samples = 1000
     rseed = 42
     rng = np.random.RandomState(rseed)
+    n_samples = 1000
     h = 0.1
 
     data = rng.randn(n_samples)
-    data_len = len(data)
 
-    i = rng.randint(0, data_len, size=n_samples)
+    i = rng.randint(0, len(data), size=n_samples)
     points = data[i]
     samples = rng.normal(loc=points, scale=h)
 
     data_mean = np.mean(data, axis=0)
-    mean = np.mean(samples, axis=0)
+    kde_mean = np.mean(samples, axis=0)
 
     data_std = np.std(data, axis=0, ddof=1)
     std = np.std(data, axis=0, ddof=1)

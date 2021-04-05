@@ -1,32 +1,35 @@
-import numpy
-import setuptools
-from setuptools.extension import Extension
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
-setuptools.setup(
-    name="pylfi",
-    version="0.0.1",
-    author="Nicolai Haug",
-    author_email="nicolai.haug@fys.uio.no",
-    description="Likelihood-free inference with Python",
-    # this installs the Python package (looks for dirs containing '__init__.py')
-    packages=setuptools.find_packages(),
-    # 'scripts' are put on $PATH
-    # scripts=["bin/instapy"],
-    # Cython extensions are compiled
-    # ext_modules=[Extension(
-    # the 'import' name of the module
-    # "instapy._cython",
-    # the location of Cython source files
-    # sources=["instapy/_cython.pyx"],
-    # any additional included directories, e.g. for Cython
-    # included_dirs=[numpy.get_include()],
-    # )],
-    setup_requires=["cython", "numpy", "setuptools>=18.0"],
-    install_requires=["numpy", "numba"],
+from setuptools import find_packages, setup
+
+# Package meta-data.
+NAME = 'pylfi'
+DESCRIPTION = 'Likelihood-free inference with Python.'
+URL = 'https://github.com/nicolossus/master-thesis'
+EMAIL = 'nicolai.haug@fys.uio.no'
+AUTHOR = 'Nicolai Haug'
+REQUIRES_PYTHON = '>=3.8.0'
+VERSION = '0.1.0'
+
+about = {}
+about['__version__'] = VERSION
+
+setup(
+    name=NAME,
+    version=about['__version__'],
+    description=DESCRIPTION,
+    author=AUTHOR,
+    author_email=EMAIL,
+    url=URL,
+    python_requires=REQUIRES_PYTHON,
+    packages=find_packages(
+        exclude=["tests", "*.tests", "*.tests.*", "tests.*"]),
+    setup_requires=["setuptools>=18.0"],
+    install_requires=["numpy", "matplotlib", "scipy", "sklearn"],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    python_requires='>=3.6',
 )
