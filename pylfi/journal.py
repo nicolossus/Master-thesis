@@ -45,17 +45,15 @@ class Journal:
             msg = "The number of true parameter values in list must equal the number of inferred parameters."
             raise ValueError(msg)
 
-    def _add_config(self, simulator, summary_calc, distance_metric, inference_scheme, n_posterior_samples, n_simulator_samples_per_parameter, epsilon):
+    def _add_config(self, simulator, inference_scheme, distance, n_simulations, epsilon):
         """
         docs
         """
 
         self.configuration["Simulator model"] = simulator.__name__
-        self.configuration["Summary calculator"] = summary_calc.__name__
-        self.configuration["Distance metric"] = summary_calc.__name__
         self.configuration["Inference scheme"] = inference_scheme
-        self.configuration["Number of posterior samples"] = n_posterior_samples
-        self.configuration["Number of simulator samples per parameter"] = n_simulator_samples_per_parameter
+        self.configuration["Distance metric"] = distance.__name__
+        self.configuration["Number of simulations"] = n_simulations
         self.configuration["Epsilon"] = epsilon
 
     def _add_parameter_names(self, priors):

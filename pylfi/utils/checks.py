@@ -3,10 +3,18 @@
 
 import numpy as np
 
+VALID_DISTANCES = ['l1', 'l2', 'mse']
 VALID_KERNELS = ['auto', 'gaussian', 'tophat',
                  'epanechnikov', 'exponential', 'linear', 'cosine']
 VALID_BANDWIDTHS = ['auto', 'scott', 'silverman']
 VALID_BANDWIDTHS2 = ['scott', 'silverman']
+
+
+def check_distance_str(distance):
+    """Check if distance function str is valid"""
+    if not distance in VALID_DISTANCES:
+        msg = (f"distance function str must be one of {VALID_DISTANCES}")
+        raise ValueError(msg)
 
 
 def check_kernel(kernel):

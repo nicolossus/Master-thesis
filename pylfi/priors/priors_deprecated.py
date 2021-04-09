@@ -3,6 +3,7 @@
 
 import os
 import sys
+from abc import ABCMeta, abstractmethod
 
 import scipy.stats as stats
 from numpy.random import default_rng
@@ -24,6 +25,23 @@ more_vals = random.standard_normal(10)
 # TODO: make this module more streamlined and coherent
 # consider changing from numpy.random to scipy.stats despite slower performance
 # add method for plotting the prior
+
+
+class Prior(metaclass=ABCMeta):
+    """This abstract base class defines how to ...
+    The base class also implements ...
+    """
+
+    @abstractmethod
+    def __init__(self, name, tex, *args):
+        """Constructor that must be overwritten by the sub-class.
+        The constructor of a sub-class must accept arguments for ...
+
+        Parameters
+        ----------
+        """
+
+        raise NotImplementedError
 
 
 class Uniform:

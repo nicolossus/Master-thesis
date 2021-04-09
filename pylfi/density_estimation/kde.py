@@ -10,6 +10,8 @@ from sklearn.neighbors import KernelDensity
 
 # warnings.filterwarnings("ignore")
 
+# calculate initial bw with ISJ or silverman and then do a gridsearch in the neighborhood around this value.
+
 '''
 perhaps scrap sklearn and use this instead:
 https://github.com/tommyod/KDEpy

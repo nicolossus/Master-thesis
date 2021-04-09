@@ -5,6 +5,8 @@ import numpy as np
 from scipy.interpolate import interp1d
 from scipy.signal import find_peaks, peak_widths
 
+# for features that requires several spikes, check and evaulate to np.inf if too few spikes
+
 
 class SpikingFeatures:
     """Spiking features of a voltage trace.

@@ -25,6 +25,11 @@ def euclidean(s1, s2):
     numpy.float
         The distance between the summary statistic sets.
     """
+    if isinstance(s1, (int, float)):
+        s1 = [s1]
+    if isinstance(s2, (int, float)):
+        s2 = [s2]
+
     s1 = np.asarray(s1)
     s2 = np.asarray(s2)
 
