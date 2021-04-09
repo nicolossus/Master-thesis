@@ -36,15 +36,32 @@ This reference gives details about the API of modules, classes and functions inc
       :undoc-members:
       :show-inheritance:
 
-pylfi.models module
--------------------
+  pylfi.models module
+  -------------------
+  .. currentmodule:: pylfi
+
+  .. automodule:: models.hodgkin_huxley
+      :members:
+      :special-members: __init__
+      :undoc-members:
+      :show-inheritance:
+
+:mod:`pylfi.models`: Mechanistic and probabilistic models
+=========================================================
+
+.. automodule:: pylfi.models
+    :no-members:
+    :no-inherited-members:
+
 .. currentmodule:: pylfi
 
-.. automodule:: models.hodgkin_huxley
-    :members:
-    :special-members: __init__
-    :undoc-members:
-    :show-inheritance:
+Mechanistic models
+------------------
+.. autosummary::
+   :toctree: generated/
+   :template: class.rst
+
+   models.HodgkinHuxley
 
 ..
 
@@ -81,7 +98,7 @@ pylfi.models module
 Continuous priors
 -----------------
 .. autosummary::
-   .. :toctree: generated/
+   :toctree: generated/
    :template: class.rst
 
    priors.Uniform
@@ -90,7 +107,7 @@ Continuous priors
 Discrete priors
 -----------------
 .. autosummary::
-  .. :toctree: generated/
+  :toctree: generated/
   :template: class.rst
 
   priors.Binomial
