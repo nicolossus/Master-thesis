@@ -134,6 +134,21 @@ Discrete priors
 .. autoclass:: pylfi.Journal
    :members:
    :special-members: __init__
+   :undoc-members:
+
+:mod:`pylfi.journal`: Journal
+=============================
+.. autoclass:: pylfi.journal.Journal
+  :members:
+  :special-members: __init__
+  :undoc-members:
+
+:mod:`pylfi.journal`: Journal
+=============================
+.. automodule:: pylfi.journal.Journal
+  :members:
+  :special-members: __init__
+  :undoc-members:
 
 ..
   .. automodule:: pylfi.journal

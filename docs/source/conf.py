@@ -11,6 +11,9 @@ import sys
 
 import sphinx_rtd_theme
 
+# Get version
+exec(open(os.path.join("..", "..", "pylfi", "_version.py")).read())
+
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
@@ -32,10 +35,10 @@ author = u'Nicolai Haug'
 # built documents.
 
 # The short X.Y version.
-#version = pylfi.__version__
-version = u'1.0'
+# The short X.Y version.
+version = __version__
 # The full version, including alpha/beta/rc tags.
-release = u'1.0'
+release = __version__
 
 
 # -- General configuration ---------------------------------------------------
@@ -43,20 +46,6 @@ release = u'1.0'
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = [
-    'sphinx.ext.autodoc',
-    # 'numpydoc',
-    'sphinx.ext.autosummary',
-    'sphinx.ext.todo',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.mathjax',
-    'sphinx.ext.viewcode',
-    'sphinx.ext.napoleon',
-    'sphinx.ext.githubpages',
-    "sphinx_rtd_theme",
-]
-
-#autodoc_member_order = 'bysource'
 
 autodoc_mock_imports = ['numpy', 'numpy.random', 'matplotlib',
                         'matplotlib.pyplot', 'scipy', 'scipy.stats',
@@ -64,21 +53,46 @@ autodoc_mock_imports = ['numpy', 'numpy.random', 'matplotlib',
                         'scipy.integrate', 'scipy.interpolate',
                         'seaborn', 'pandas', 'sklearn', 'sklearn.linear_model',
                         'sklearn.metrics', 'sklearn.model_selection',
-                        'sklearn.neighbors', 'torch', 'coverage', 'ot',
-                        'pylfi', 'pylfi.density_estimation', 'pylfi.distances',
-                        'pylfi.features', 'pylfi.inferences', 'pylfi.models',
-                        'pylfi.plotting', 'pylfi.priors', 'pylfi.simulators',
-                        'pylfi.utils', 'pylfi.journal']
+                        'sklearn.neighbors', 'torch', 'coverage', 'ot']
+"""
+'pylfi', 'pylfi.density_estimation', 'pylfi.distances',
+'pylfi.features', 'pylfi.inferences', 'pylfi.models',
+'pylfi.plotting', 'pylfi.priors', 'pylfi.simulators',
+'pylfi.utils', 'pylfi.journal']
+"""
 
+extensions = [
+    'sphinx.ext.autodoc',
+    'sphinx.ext.autosummary',
+    'sphinx.ext.coverage',
+    'sphinx.ext.githubpages',
+    'sphinx.ext.intersphinx',
+    'sphinx.ext.mathjax',
+    'sphinx.ext.napoleon',
+    # 'numpydoc',
+    'sphinx.ext.todo',
+    'sphinx.ext.viewcode',
+    "sphinx_rtd_theme",
+]
+
+#autodoc_member_order = 'bysource'
+viewcode_import = True
+
+# Napoleon options
 napoleon_google_docstring = False
+napoleon_numpy_docstring = True
+napoleon_include_init_with_doc = False
 napoleon_use_param = False
 napoleon_use_ivar = True
+napoleon_include_special_with_doc = False
+napoleon_use_admonition_for_notes = False
+
+# generate autosummary even if no references
+autosummary_generate = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
-# generate autosummary even if no references
-autosummary_generate = True
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
@@ -133,6 +147,8 @@ pygments_style = 'sphinx'
 #
 #html_theme = 'alabaster'
 #html_theme = 'nature'
+
+htmlhelp_basename = 'pylfidoc'
 
 #html_title = project
 
