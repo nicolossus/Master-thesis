@@ -111,6 +111,7 @@ Discrete priors
   :template: class.rst
 
   priors.Binomial
+  priors.Randint
 
 ..
 
