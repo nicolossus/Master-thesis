@@ -6,14 +6,16 @@ This reference gives details about the API of modules, classes and functions inc
 
 .. currentmodule:: pylfi
 
-pylfi.density_estimation module
--------------------------------
+..
 
-pylfi.distances module
-----------------------
+  pylfi.density_estimation module
+  -------------------------------
 
-pylfi.features module
----------------------
+  pylfi.distances module
+  ----------------------
+
+  pylfi.features module
+  ---------------------
 
 pylfi.inferences module
 -----------------------
@@ -39,8 +41,10 @@ pylfi.models module
     :undoc-members:
     :show-inheritance:
 
-pylfi.plotting module
----------------------
+..
+
+  pylfi.plotting module
+  ---------------------
 
 pylfi.priors module
 -------------------
@@ -57,11 +61,13 @@ pylfi.priors module
     :undoc-members:
     :show-inheritance:
 
-pylfi.simulators module
------------------------
+..
 
-pylfi.utils module
-------------------
+  pylfi.simulators module
+  -----------------------
+
+  pylfi.utils module
+  ------------------
 
 pylfi.journal module
 --------------------
