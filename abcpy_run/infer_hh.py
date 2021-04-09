@@ -12,7 +12,7 @@ from abcpy.inferences import PMCABC, SMCABC, RejectionABC
 from abcpy.perturbationkernel import DefaultKernel
 from abcpy.statistics import Identity
 from abcpy.statisticslearning import Semiautomatic, StatisticsLearningNN
-from model import HHSimulator
+from model import Features, HHSimulator
 from pylfi.models import constant_stimulus
 
 # ignore overflow warnings; occurs with certain np.exp() evaluations
