@@ -38,7 +38,7 @@ extensions = [
     'sphinx.ext.napoleon',
 ]
 
-autodoc_member_order = 'bysource'
+#autodoc_member_order = 'bysource'
 
 autodoc_mock_imports = ['numpy', 'numpy.random', 'matplotlib',
                         'matplotlib.pyplot', 'scipy', 'scipy.stats',
