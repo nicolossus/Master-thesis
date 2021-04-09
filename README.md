@@ -1,61 +1,13 @@
 # Master Thesis
 
-<!---
-[![Documentation Status](https://readthedocs.org/projects/ansicolortags/badge/?version=latest)](http://ansicolortags.readthedocs.io/?badge=latest)
---->
 [![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/nicolossus/Master-thesis/HEAD)
 [![nbviewer](https://raw.githubusercontent.com/jupyter/design/master/logos/Badges/nbviewer_badge.svg)](https://nbviewer.jupyter.org/github/nicolossus/Master-thesis/tree/master/notebooks/development/)
+[![Documentation Status](https://readthedocs.org/projects/pylfi/badge/?version=latest)](https://pylfi.readthedocs.io/en/latest/?badge=latest)
 
 **Initial development is in progress, i.e., things may not work as intended yet.**
 
 Simulation-based inference of parameteres in mechanistic models.
-
-## Environment
-
-**Install Anaconda**
-
-See [anaconda.com](https://www.anaconda.com/products/individual).
-
-**Create environment**
-
-    $ conda env create --file environment.yml
-
-**Activate environment**
-
-    $ conda activate master
-
-**Deactivate environment**
-
-    $ conda deactivate
-
-**To remove environment**
-
-    $ conda remove --name master --all
-
-**To verify that the environment was removed**
-
-    $ conda info --envs
-
-## Installation
-
-`cd` into root directory
-
-**Development Install**
-
-    $ pip install --editable .
-
-**Install Package**
-
-    $ pip install .
-
-## Tests
-
-`cd` into root directory
-
-**Run tests:**
-
-    $ pytest -v -p no:warnings
 
 ## Structure
 
