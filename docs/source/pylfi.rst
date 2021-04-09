@@ -14,10 +14,10 @@ This reference gives details about the API of modules, classes and functions inc
     :no-members:
     :no-inherited-members:
 
-.. currentmodule:: pylfi
-
 Kernel density estimation
 -------------------------
+.. currentmodule:: pylfi
+
 .. autosummary::
    :toctree: generated/
    :template: class.rst
@@ -53,10 +53,10 @@ Kernel density estimation
     :no-members:
     :no-inherited-members:
 
-.. currentmodule:: pylfi
-
 Mechanistic models
 ------------------
+.. currentmodule:: pylfi
+
 .. autosummary::
    :toctree: generated/
    :template: class.rst
@@ -78,10 +78,10 @@ Mechanistic models
     :no-members:
     :no-inherited-members:
 
-.. currentmodule:: pylfi
-
 Continuous priors
 -----------------
+.. currentmodule:: pylfi
+
 .. autosummary::
    :toctree: generated/
    :template: class.rst
@@ -91,6 +91,8 @@ Continuous priors
 
 Discrete priors
 -----------------
+.. currentmodule:: pylfi
+
 .. autosummary::
   :toctree: generated/
   :template: class.rst
@@ -126,6 +128,13 @@ Discrete priors
    :template: class.rst
 
    journal.Journal
+
+:mod:`pylfi.journal`: Journal
+=============================
+.. currentmodule:: pylfi
+.. autoclass:: pylfi.journal
+   :members:
+   :special-members: __init__
 
 ..
   .. automodule:: pylfi.journal

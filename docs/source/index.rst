@@ -18,7 +18,7 @@ Welcome to pyLFI's documentation!
 
 .. toctree::
    :maxdepth: 2
-   :caption: Reference
+   :caption: API Reference
 
    pylfi
 
