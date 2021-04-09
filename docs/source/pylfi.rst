@@ -131,8 +131,7 @@ Discrete priors
 
 :mod:`pylfi.journal`: Journal
 =============================
-.. currentmodule:: pylfi.journal
-.. autoclass:: Journal
+.. autoclass:: pylfi.journal.Journal
    :members:
    :special-members: __init__
 
