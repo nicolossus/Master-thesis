@@ -3,8 +3,8 @@ pylfi package
 
 This reference gives details about the API of modules, classes and functions included in pyLFI.
 
-
-.. currentmodule:: pylfi
+..
+  .. currentmodule:: pylfi
 
 ..
 
@@ -17,20 +17,20 @@ This reference gives details about the API of modules, classes and functions inc
   pylfi.features module
   ---------------------
 
-pylfi.inferences module
------------------------
+  pylfi.inferences module
+  -----------------------
 
-.. automodule:: pylfi.inferences.abc_base
-    :members:
-    :special-members: __init__
-    :undoc-members:
-    :show-inheritance:
+  .. automodule:: pylfi.inferences.abc_base
+      :members:
+      :special-members: __init__
+      :undoc-members:
+      :show-inheritance:
 
-.. automodule:: pylfi.inferences.rejection_abc
-    :members:
-    :special-members: __init__
-    :undoc-members:
-    :show-inheritance:
+  .. automodule:: pylfi.inferences.rejection_abc
+      :members:
+      :special-members: __init__
+      :undoc-members:
+      :show-inheritance:
 
 pylfi.models module
 -------------------
@@ -69,11 +69,11 @@ pylfi.priors module
   pylfi.utils module
   ------------------
 
-pylfi.journal module
---------------------
+  pylfi.journal module
+  --------------------
 
-.. automodule:: pylfi.journal
-    :members:
-    :special-members: __init__
-    :undoc-members:
-    :show-inheritance:
+  .. automodule:: pylfi.journal
+      :members:
+      :special-members: __init__
+      :undoc-members:
+      :show-inheritance:
