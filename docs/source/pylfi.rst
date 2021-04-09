@@ -7,44 +7,44 @@ API Reference
 
 This reference gives details about the API of modules, classes and functions included in pyLFI.
 
-..
-  .. currentmodule:: pylfi
+:mod:`pylfi.density_estimation`: Density estimation
+===================================================
 
-..
+.. automodule:: pylfi.density_estimation
+    :no-members:
+    :no-inherited-members:
 
-  pylfi.density_estimation module
-  -------------------------------
+.. currentmodule:: pylfi
 
-  pylfi.distances module
-  ----------------------
+Kernel density estimation
+-------------------------
+.. autosummary::
+   :toctree: generated/
+   :template: class.rst
 
-  pylfi.features module
-  ---------------------
+   density_estimation.KDE
 
-  pylfi.inferences module
-  -----------------------
 
-  .. automodule:: pylfi.inferences.abc_base
-      :members:
-      :special-members: __init__
-      :undoc-members:
-      :show-inheritance:
+:mod:`pylfi.distances`: Distance metrics
+========================================
 
-  .. automodule:: pylfi.inferences.rejection_abc
-      :members:
-      :special-members: __init__
-      :undoc-members:
-      :show-inheritance:
+.. automodule:: pylfi.distances
+    :no-members:
+    :no-inherited-members:
 
-  pylfi.models module
-  -------------------
-  .. currentmodule:: pylfi
+:mod:`pylfi.features`: Model features
+=====================================
 
-  .. automodule:: models.hodgkin_huxley
-      :members:
-      :special-members: __init__
-      :undoc-members:
-      :show-inheritance:
+.. automodule:: pylfi.features
+    :no-members:
+    :no-inherited-members:
+
+:mod:`pylfi.inferences`: Inference schemes
+==========================================
+
+.. automodule:: pylfi.inferences
+    :no-members:
+    :no-inherited-members:
 
 :mod:`pylfi.models`: Mechanistic and probabilistic models
 =========================================================
@@ -63,31 +63,16 @@ Mechanistic models
 
    models.HodgkinHuxley
 
-..
+:mod:`pylfi.plotting`: Plotting procedures
+==========================================
 
-  pylfi.plotting module
-  ---------------------
-..
-  pylfi.priors module
-  -------------------
-
-  .. automodule:: pylfi.priors.prior_base
-      :members:
-      :special-members: __init__
-      :undoc-members:
-      :show-inheritance:
-
-  .. automodule:: pylfi.priors.priors
-      :members:
-      :special-members: __init__
-      :undoc-members:
-      :show-inheritance:
+.. automodule:: pylfi.plotting
+   :no-members:
+   :no-inherited-members:
 
 
 :mod:`pylfi.priors`: Prior distributions
 ========================================
-..
-  .. currentmodule:: pylfi
 
 .. automodule:: pylfi.priors
     :no-members:
@@ -113,17 +98,36 @@ Discrete priors
   priors.Binomial
   priors.Randint
 
+:mod:`pylfi.simulators`: Simulator models
+=========================================
+
+.. automodule:: pylfi.simulators
+    :no-members:
+    :no-inherited-members:
+
+:mod:`pylfi.utils`: Utility functions
+=====================================
+
+.. automodule:: pylfi.utils
+    :no-members:
+    :no-inherited-members:
+
+:mod:`pylfi.journal`: Journal
+=============================
+
+.. automodule:: pylfi.journal
+    :no-members:
+    :no-inherited-members:
+
+.. currentmodule:: pylfi
+
+.. autosummary::
+   :toctree: generated/
+   :template: class.rst
+
+   journal.Journal
+
 ..
-
-  pylfi.simulators module
-  -----------------------
-
-  pylfi.utils module
-  ------------------
-
-  pylfi.journal module
-  --------------------
-
   .. automodule:: pylfi.journal
       :members:
       :special-members: __init__
