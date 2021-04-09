@@ -13,8 +13,49 @@ from matplotlib import gridspec
 
 
 class Journal:
+    """Journal.
+
+    Class for representing the Hodgkin-Huxley model.
+
+    All model parameters can be accessed (get or set) as class attributes.
+
+    The following solutions are available as class attributes after calling
+    the class method `solve`:
+
+    Attributes
+    ----------
+    t : array_like
+        The time array of the spike.
+    V : array_like
+        The voltage array of the spike.
+    """
 
     def __init__(self):
+        """Define the model parameters.
+
+        Parameters
+        ----------
+        V_rest : float, default: -65.
+            Resting potential of neuron in units: mV
+        Cm : float, default: 1.
+            Membrane capacitance in units: μF/cm**2
+        gbar_K : float, default: 36.
+            Potassium conductance in units: mS/cm**2
+        gbar_Na : float, default: 120.
+            Sodium conductance in units: mS/cm**2
+        gbar_L : float, default: 0.3.
+            Leak conductance in units: mS/cm**2
+        E_K : float, default: -77.
+            Potassium reversal potential in units: mV
+        E_Na : float, default: 50.
+            Sodium reversal potential in units: mV
+        E_L : float, default: -54.4
+            Leak reversal potential in units: mV
+
+        Notes
+        -----
+        Default parameter values as given by Hodgkin and Huxley (1952).
+        """
 
         self.accepted_parameters = {}
         self.parameter_names = []
