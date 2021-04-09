@@ -6,21 +6,34 @@
 
 # -- Path setup --------------------------------------------------------------
 
+import os
+import sys
+
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-import os
-import sys
+import pylfi
 
-sys.path.insert(0, os.path.abspath(os.pardir))
+#sys.path.insert(0, os.path.abspath(os.pardir))
+sys.path.insert(0, os.path.abspath('../../'))
 
 
 # -- Project information -----------------------------------------------------
 
-project = 'pyLFI'
-copyright = '2021, Nicolai Haug'
-author = 'Nicolai Haug'
+project = u'pyLFI'
+copyright = u'2021, Nicolai Haug'
+author = u'Nicolai Haug'
+
+# The version info for the project you're documenting, acts as replacement for
+# |version| and |release|, also used in various other places throughout the
+# built documents.
+
+# The short X.Y version.
+#version = pylfi.__version__
+version = u'1.0'
+# The full version, including alpha/beta/rc tags.
+release = u'1.0'
 
 
 # -- General configuration ---------------------------------------------------
@@ -36,6 +49,7 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.viewcode',
     'sphinx.ext.napoleon',
+    'sphinx.ext.githubpages',
 ]
 
 #autodoc_member_order = 'bysource'
