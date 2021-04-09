@@ -65,9 +65,9 @@ pylfi.utils module
 
 pylfi.journal module
 --------------------
-
-.. automodule:: pylfi.journal
-    :members:
-    :special-members: __init__
-    :undoc-members:
-    :show-inheritance:
+..
+  .. automodule:: pylfi.journal
+      :members:
+      :special-members: __init__
+      :undoc-members:
+      :show-inheritance:
