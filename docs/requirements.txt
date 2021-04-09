@@ -1,5 +1,7 @@
-Sphinx~=2.2.0
+Sphinx~=3.5.1
 Pallets-Sphinx-Themes~=1.2.2
 sphinxcontrib-log-cabinet~=1.0.1
 sphinx-issues~=1.2.0
 packaging~=19.2
+sphinx_rtd_theme==0.5.1
+readthedocs-sphinx-search==0.1.0
