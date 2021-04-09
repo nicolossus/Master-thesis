@@ -1,4 +1,8 @@
-pylfi package
+.. _pylfi:
+
+
+=============
+API Reference
 =============
 
 This reference gives details about the API of modules, classes and functions included in pyLFI.
@@ -34,8 +38,9 @@ This reference gives details about the API of modules, classes and functions inc
 
 pylfi.models module
 -------------------
+.. currentmodule:: pylfi
 
-.. automodule:: pylfi.models.hodgkin_huxley
+.. automodule:: models.hodgkin_huxley
     :members:
     :special-members: __init__
     :undoc-members:
@@ -45,21 +50,50 @@ pylfi.models module
 
   pylfi.plotting module
   ---------------------
+..
+  pylfi.priors module
+  -------------------
 
-pylfi.priors module
--------------------
+  .. automodule:: pylfi.priors.prior_base
+      :members:
+      :special-members: __init__
+      :undoc-members:
+      :show-inheritance:
 
-.. automodule:: pylfi.priors.prior_base
-    :members:
-    :special-members: __init__
-    :undoc-members:
-    :show-inheritance:
+  .. automodule:: pylfi.priors.priors
+      :members:
+      :special-members: __init__
+      :undoc-members:
+      :show-inheritance:
 
-.. automodule:: pylfi.priors.priors
-    :members:
-    :special-members: __init__
-    :undoc-members:
-    :show-inheritance:
+
+:mod:`pylfi.priors`: Prior distributions
+========================================
+..
+  .. currentmodule:: pylfi
+
+.. automodule:: pylfi.priors
+    :no-members:
+    :no-inherited-members:
+
+.. currentmodule:: pylfi
+
+Continuous priors
+-----------------
+.. autosummary::
+   .. :toctree: generated/
+   :template: class.rst
+
+   priors.Uniform
+   priors.Normal
+
+Discrete priors
+-----------------
+.. autosummary::
+  .. :toctree: generated/
+  :template: class.rst
+
+  priors.Binomial
 
 ..
 

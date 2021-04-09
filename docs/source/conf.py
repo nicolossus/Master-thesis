@@ -43,6 +43,7 @@ release = u'1.0'
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
+    # 'numpydoc',
     'sphinx.ext.autosummary',
     'sphinx.ext.todo',
     'sphinx.ext.intersphinx',
