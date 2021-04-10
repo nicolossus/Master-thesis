@@ -83,11 +83,13 @@ Continuous priors
 .. currentmodule:: pylfi
 
 .. autosummary::
+   :nosignatures:
    :toctree: generated/
    :template: class.rst
 
    priors.Uniform
    priors.Normal
+   priors.Beta
 
 Discrete priors
 -----------------
@@ -124,31 +126,11 @@ Discrete priors
 .. currentmodule:: pylfi
 
 .. autosummary::
+   :nosignatures:
    :toctree: generated/
    :template: class.rst
 
    journal.Journal
-
-:mod:`pylfi.journal`: Journal
-=============================
-.. autoclass:: pylfi.Journal
-   :members:
-   :special-members: __init__
-   :undoc-members:
-
-:mod:`pylfi.journal`: Journal
-=============================
-.. autoclass:: pylfi.journal.Journal
-  :members:
-  :special-members: __init__
-  :undoc-members:
-
-:mod:`pylfi.journal`: Journal
-=============================
-.. automodule:: pylfi.journal.Journal
-  :members:
-  :special-members: __init__
-  :undoc-members:
 
 ..
   .. automodule:: pylfi.journal
