@@ -3,4 +3,4 @@
 
 .. currentmodule:: pylfi.priors
 
-.. autoattribute:: Normal
+.. autoclass:: Normal

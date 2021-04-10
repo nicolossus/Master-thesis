@@ -3,4 +3,4 @@
 
 .. currentmodule:: pylfi.journal
 
-.. autoattribute:: Journal
+.. autoclass:: Journal

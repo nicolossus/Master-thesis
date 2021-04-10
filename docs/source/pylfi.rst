@@ -58,6 +58,8 @@ Mechanistic models
 .. currentmodule:: pylfi
 
 .. autosummary::
+   :nosignatures:
+   :recursive:
    :toctree: generated/
    :template: class.rst
 
@@ -101,6 +103,7 @@ Discrete priors
 
   priors.Binomial
   priors.Randint
+  priors.Poisson
 
 :mod:`pylfi.simulators`: Simulator models
 =========================================
@@ -116,8 +119,8 @@ Discrete priors
     :no-members:
     :no-inherited-members:
 
-:mod:`pylfi.journal`: Journal
-=============================
+:mod:`pylfi.journal`: Journal class
+===================================
 
 .. automodule:: pylfi.journal
     :no-members:
@@ -131,6 +134,38 @@ Discrete priors
    :template: class.rst
 
    journal.Journal
+
+:mod:`pylfi.journal`: Journal base
+==================================
+
+.. automodule:: pylfi.journal
+   :no-members:
+   :no-inherited-members:
+
+.. currentmodule:: pylfi
+
+.. autosummary::
+  :nosignatures:
+  :toctree: generated/
+  :template: base.rst
+
+  journal.Journal
+
+:mod:`pylfi.journal`: Journal module
+====================================
+
+.. automodule:: pylfi.journal
+   :no-members:
+   :no-inherited-members:
+
+.. currentmodule:: pylfi
+
+.. autosummary::
+  :nosignatures:
+  :toctree: generated/
+  :template: module.rst
+
+  journal.Journal
 
 ..
   .. automodule:: pylfi.journal

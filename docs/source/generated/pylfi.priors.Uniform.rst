@@ -3,4 +3,4 @@
 
 .. currentmodule:: pylfi.priors
 
-.. autoattribute:: Uniform
+.. autoclass:: Uniform
