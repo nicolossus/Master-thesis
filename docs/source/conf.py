@@ -65,18 +65,36 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
     'sphinx.ext.coverage',
+    'sphinx.ext.doctest',
     'sphinx.ext.extlinks',
     'sphinx.ext.githubpages',
+    'sphinx.ext.imgconverter',
     'sphinx.ext.intersphinx',
     'sphinx.ext.inheritance_diagram',
+    'sphinx.ext.linkcode',
     'sphinx.ext.mathjax',
-    'sphinxcontrib.napoleon',
     # 'sphinx.ext.napoleon',
-    # 'numpydoc',
+    'sphinx-prompt',
     'sphinx.ext.todo',
     'sphinx.ext.viewcode',
+    'sphinx_gallery.gen_gallery',
+    # 'sphinx_issues',
+    # 'add_toctree_functions',
     "sphinx_rtd_theme",
+    'sphinxcontrib.napoleon',
+    'numpydoc',
 ]
+
+# this is needed for some reason...
+# see https://github.com/numpy/numpydoc/issues/69
+numpydoc_class_members_toctree = False
+
+autodoc_default_options = {
+    'members': True,
+    'inherited-members': True
+}
+
+#autodoc_default_flags = ['members']
 
 #autodoc_member_order = 'bysource'
 viewcode_import = True

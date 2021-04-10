@@ -6,3 +6,5 @@ sphinx-issues
 packaging
 sphinx_rtd_theme
 readthedocs-sphinx-search
+numpydoc
+sphinx-gallery

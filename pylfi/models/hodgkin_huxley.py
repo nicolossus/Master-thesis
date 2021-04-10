@@ -29,6 +29,25 @@ class HodgkinHuxley:
     of the squid, Hodgkin and Huxley succeeded to measure these currents and
     to describe their dynamics in terms of differential equations.
 
+    Parameters
+    ----------
+    V_rest : float, default: -65.
+        Resting potential of neuron in units: mV
+    Cm : float, default: 1.
+        Membrane capacitance in units: μF/cm**2
+    gbar_K : float, default: 36.
+        Potassium conductance in units: mS/cm**2
+    gbar_Na : float, default: 120.
+        Sodium conductance in units: mS/cm**2
+    gbar_L : float, default: 0.3.
+        Leak conductance in units: mS/cm**2
+    E_K : float, default: -77.
+        Potassium reversal potential in units: mV
+    E_Na : float, default: 50.
+        Sodium reversal potential in units: mV
+    E_L : float, default: -54.4
+        Leak reversal potential in units: mV
+
     All model parameters can be accessed (get or set) as class attributes.
 
     The following solutions are available as class attributes after calling
@@ -53,6 +72,17 @@ class HodgkinHuxley:
     -------
     solve(stimulus, T, dt, y0=None, **kwargs):
         Solve the specified Hodgkin-Huxley system.
+
+    Notes
+    -----
+    Default parameter values as given by Hodgkin and Huxley (1952).
+
+    References
+    ----------
+    Hodgkin, A. L., Huxley, A.F. (1952).
+    "A quantitative description of membrane current and its application
+    to conduction and excitation in nerve".
+    J. Physiol. 117, 500-544.
     """
 
     def __init__(self, V_rest=-65., Cm=1., gbar_K=36., gbar_Na=120.,
