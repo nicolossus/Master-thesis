@@ -100,6 +100,7 @@ napoleon_custom_sections = None
 
 # generate autosummary even if no references
 autosummary_generate = True
+autosummary_imported_members = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
