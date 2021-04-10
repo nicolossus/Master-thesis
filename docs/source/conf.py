@@ -71,7 +71,7 @@ extensions = [
     'sphinx.ext.imgconverter',
     'sphinx.ext.intersphinx',
     'sphinx.ext.inheritance_diagram',
-    'sphinx.ext.linkcode',
+    # 'sphinx.ext.linkcode',
     'sphinx.ext.mathjax',
     # 'sphinx.ext.napoleon',
     'sphinx-prompt',
