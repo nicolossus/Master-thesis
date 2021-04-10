@@ -92,7 +92,7 @@ numpydoc_class_members_toctree = False
 autodoc_default_options = {
     'members': True,
     'special-members': True,
-    'exclude-members': [__dict__, __weakref__],
+    'exclude-members': __weakref__,
     'inherited-members': True
 }
 
