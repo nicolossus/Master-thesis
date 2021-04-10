@@ -90,9 +90,9 @@ Base classes
    :toctree: generated/
    :template: class.rst
 
-   prior_base.Prior
-   prior_base.ContinuousPrior
-   prior_base.DiscretePrior
+   priors.Prior
+   priors.ContinuousPrior
+   priors.DiscretePrior
 
 Continuous priors
 -----------------
