@@ -113,6 +113,26 @@ class Normal(ContinuousPrior):
         f(x) = \frac{\exp(-x^2/2)}{\sqrt{2\pi}}
 
     for a real number :math:`x`.
+
+    Parameters
+    ----------
+    loc : array_like, optional
+        Location parameter (default=0)
+    scale: array_like, optional
+        Scale parameter (default=1)
+    name : str
+        Name of random variate. Default is None (which will raise an ``Error``).
+    tex : raw str literal, optional
+        LaTeX formatted name of random variate given as ``r"foo"``. Default is
+        None.
+    rng : Random number generator, optional
+        Defines the random number generator to be used. Default is
+        np.random.RandomState
+    seed : {None, int}, optional
+        This parameter defines the object to use for drawing random
+        variates. If seed is None the RandomState singleton is used.
+        If seed is an int, a new RandomState instance is used, seeded
+        with seed. Default is None.
     """
 
     def __init__(
@@ -151,6 +171,26 @@ class Beta(ContinuousPrior):
     :math:`\Gamma` is the gamma function (`scipy.special.gamma`).
 
     ``Beta`` takes ``a`` and ``b`` as shape parameters.
+
+    Parameters
+    ----------
+    loc : array_like, optional
+        Location parameter (default=0)
+    scale: array_like, optional
+        Scale parameter (default=1)
+    name : str
+        Name of random variate. Default is None (which will raise an ``Error``).
+    tex : raw str literal, optional
+        LaTeX formatted name of random variate given as ``r"foo"``. Default is
+        None.
+    rng : Random number generator, optional
+        Defines the random number generator to be used. Default is
+        np.random.RandomState
+    seed : {None, int}, optional
+        This parameter defines the object to use for drawing random
+        variates. If seed is None the RandomState singleton is used.
+        If seed is an int, a new RandomState instance is used, seeded
+        with seed. Default is None.
     """
 
     def __init__(
@@ -189,7 +229,7 @@ class Exponential(ContinuousPrior):
 
     Notes
     -----
-    The probability density function for `Exponential` is:
+    The probability density function for ``Exponential`` is:
 
     .. math::
         f(x) = \exp(-x)
@@ -197,9 +237,9 @@ class Exponential(ContinuousPrior):
     for :math:`x \ge 0`.
 
     The probability density is defined in the “standardized” form. To shift
-    and/or scale the distribution use the `loc` and `scale` parameters.
+    and/or scale the distribution use the ``loc`` and ``scale`` parameters.
 
-    A common parameterization for `Exponential` is in terms of the
+    A common parameterization for ``Exponential`` is in terms of the
     rate parameter ``lambda``, such that ``pdf = lambda * exp(-lambda * x)``.
     This parameterization corresponds to using ``scale = 1 / lambda``.
     """
@@ -250,17 +290,35 @@ class Randint(DiscretePrior):
 
     Notes
     -----
-    The probability mass function for `Randint` is:
+    The probability mass function for ``Randint`` is:
 
     .. math::
         f(k) = \frac{1}{high - low}
 
     for ``k = low, ..., high - 1``.
 
-    `Randint` takes ``low`` and ``high`` as shape parameters.
+    ``Randint`` takes ``low`` and ``high`` as shape parameters.
 
     The probability mass function is defined in the “standardized” form.
-    To shift distribution use the `loc` parameter.
+    To shift distribution use the ``loc`` parameter.
+
+    Parameters
+    ----------
+    loc : array_like, optional
+        Location parameter (default=0)
+    name : str
+        Name of random variate. Default is None (which will raise an ``Error``).
+    tex : raw str literal, optional
+        LaTeX formatted name of random variate given as ``r"foo"``. Default is
+        None.
+    rng : Random number generator, optional
+        Defines the random number generator to be used. Default is
+        np.random.RandomState
+    seed : {None, int}, optional
+        This parameter defines the object to use for drawing random
+        variates. If seed is None the RandomState singleton is used.
+        If seed is an int, a new RandomState instance is used, seeded
+        with seed. Default is None.
     """
 
     def __init__(
@@ -289,19 +347,37 @@ class Binomial(DiscretePrior):
 
     Notes
     -----
-    The probability mass function for `Binomial` is:
+    The probability mass function for ``Binomial`` is:
 
     .. math::
        f(k) = \binom{n}{k} p^k (1-p)^{n-k}
 
     for ``k`` in ``{0, 1,..., n}``, :math:`0 \leq p \leq 1`
 
-    `Binomial` takes :math:`n` and :math:`p` as shape parameters, where
-    :math:`p` is the probability of a single success and :math:`1 - p` is
+    ``Binomial`` takes ``n`` and ``p`` as shape parameters, where
+    ``p`` is the probability of a single success and ``1 - p`` is
     the probability of a single failure.
 
     The probability mass function is defined in the “standardized” form.
-    To shift distribution use the `loc` parameter.
+    To shift distribution use the ``loc`` parameter.
+
+    Parameters
+    ----------
+    loc : array_like, optional
+        Location parameter (default=0)
+    name : str
+        Name of random variate. Default is None (which will raise an ``Error``).
+    tex : raw str literal, optional
+        LaTeX formatted name of random variate given as ``r"foo"``. Default is
+        None.
+    rng : Random number generator, optional
+        Defines the random number generator to be used. Default is
+        np.random.RandomState
+    seed : {None, int}, optional
+        This parameter defines the object to use for drawing random
+        variates. If seed is None the RandomState singleton is used.
+        If seed is an int, a new RandomState instance is used, seeded
+        with seed. Default is None.
     """
 
     def __init__(
@@ -330,18 +406,38 @@ class Poisson(DiscretePrior):
 
     Notes
     -----
-    The probability mass function for `Poisson` is:
+    The probability mass function for ``Poisson`` is:
 
     .. math::
         f(k) = \exp(-\mu) \frac{\mu^k}{k!}
 
     for :math:`k \ge 0`.
 
-    `Poisson` takes :math:`\mu` as shape parameter. When mu = 0 then at
-    quantile k = 0, ``pmf`` method returns `1.0`.
+    ``Poisson`` takes :math:`\mu` as shape parameter. When ``mu = 0`` then at
+    quantile ``k = 0``, ``pmf`` method returns ``1.0``.
 
     The probability mass function is defined in the “standardized” form.
-    To shift distribution use the `loc` parameter.
+    To shift distribution use the ``loc`` parameter.
+
+    Parameters
+    ----------
+    mu : float
+        Shape parameter 
+    loc : array_like, optional
+        Location parameter (default=0)
+    name : str
+        Name of random variate. Default is None (which will raise an ``Error``).
+    tex : raw str literal, optional
+        LaTeX formatted name of random variate given as ``r"foo"``. Default is
+        None.
+    rng : Random number generator, optional
+        Defines the random number generator to be used. Default is
+        np.random.RandomState
+    seed : {None, int}, optional
+        This parameter defines the object to use for drawing random
+        variates. If seed is None the RandomState singleton is used.
+        If seed is an int, a new RandomState instance is used, seeded
+        with seed. Default is None.
     """
 
     def __init__(
