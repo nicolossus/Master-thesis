@@ -77,7 +77,7 @@ extensions = [
     'sphinx-prompt',
     'sphinx.ext.todo',
     'sphinx.ext.viewcode',
-    'sphinx_gallery.gen_gallery',
+    # 'sphinx_gallery.gen_gallery',
     # 'sphinx_issues',
     # 'add_toctree_functions',
     "sphinx_rtd_theme",
