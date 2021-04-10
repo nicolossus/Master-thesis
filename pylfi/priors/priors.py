@@ -11,17 +11,17 @@ class Uniform(ContinuousPrior):
 
     Notes
     -----
-    In the standard form, the distribution is uniform on `[0, 1]`. Using the
-    parameters `loc` and `scale`, one obtains the uniform distribution on
-    `[loc, loc + scale]`.
+    In the standard form, the distribution is uniform on ``[0, 1]``. Using the
+    parameters ``loc`` and ``scale``, one obtains the uniform distribution on
+    ``[loc, loc + scale]``.
 
 
     Attributes
     ----------
     name : str
-        Exposure in seconds.
+        Name of random variate
     tex : str
-        a
+        LaTeX formatted name of random variate
 
     Methods
     -------
@@ -74,9 +74,9 @@ class Uniform(ContinuousPrior):
         scale: array_like, optional
             Scale parameter (default=1)
         name : str
-            Name of random variate. Default is None (which will raise an `Error`).
+            Name of random variate. Default is None (which will raise an ``Error``).
         tex : raw str literal, optional
-            LaTeX formatted name of random variate given as `r"foo"`. Default is
+            LaTeX formatted name of random variate given as ``r"foo"``. Default is
             None.
         rng : Random number generator, optional
             Defines the random number generator to be used. Default is
@@ -102,12 +102,12 @@ class Uniform(ContinuousPrior):
 class Normal(ContinuousPrior):
     r"""A normal continuous random variable.
 
-    The location (`loc`) keyword specifies the mean. The scale (`scale`)
+    The location (``loc``) keyword specifies the mean. The scale (``scale``)
     keyword specifies the standard deviation.
 
     Notes
     -----
-    The probability density function for `Normal` is:
+    The probability density function for ``Normal`` is:
 
     .. math::
         f(x) = \frac{\exp(-x^2/2)}{\sqrt{2\pi}}
@@ -137,11 +137,11 @@ class Normal(ContinuousPrior):
 
 
 class Beta(ContinuousPrior):
-    """A beta continuous random variable.
+    r"""A beta continuous random variable.
 
     Notes
     -----
-    The probability density function for `Beta` is:
+    The probability density function for ``Beta`` is:
 
     .. math::
         f(x, a, b) = \frac{\Gamma(a+b) x^{a-1} (1-x)^{b-1}}
@@ -150,7 +150,7 @@ class Beta(ContinuousPrior):
     for :math:`0 <= x <= 1`, :math:`a > 0`, :math:`b > 0`, where
     :math:`\Gamma` is the gamma function (`scipy.special.gamma`).
 
-    `Beta` takes :math:`a` and :math:`b` as shape parameters.
+    ``Beta`` takes ``a`` and ``b`` as shape parameters.
     """
 
     def __init__(
