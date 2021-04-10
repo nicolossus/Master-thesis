@@ -88,15 +88,6 @@ class Normal(ContinuousPrior):
     The location (``loc``) keyword specifies the mean. The scale (``scale``)
     keyword specifies the standard deviation.
 
-    Notes
-    -----
-    The probability density function for ``Normal`` is:
-
-    .. math::
-        f(x) = \frac{\exp(-x^2/2)}{\sqrt{2\pi}}
-
-    for a real number :math:`x`.
-
     Parameters
     ----------
     loc : array_like, optional
@@ -116,6 +107,44 @@ class Normal(ContinuousPrior):
         variates. If seed is None the RandomState singleton is used.
         If seed is an int, a new RandomState instance is used, seeded
         with seed. Default is None.
+
+    Attributes
+    ----------
+    name : str
+        Name of random variate.
+    tex : str
+        LaTeX formatted name of random variate.
+
+    Notes
+    -----
+    The probability density function for ``Normal`` is:
+
+    .. math::
+        f(x) = \frac{\exp(-x^2/2)}{\sqrt{2\pi}}
+
+    for a real number :math:`x`.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from pylfi.priors import Normal
+
+    Initialize prior distribution for random variate :math:`\theta`:
+
+    >>> theta_prior = Normal(loc=0, scale=1, name='theta', tex=r'$\theta$', seed=42)
+
+    Draw from prior:
+
+    >>> theta = theta_prior.rvs(size=10)
+
+    Evaluate probability density function:
+
+    >>> x = np.linspace(-2, 2, 1000)
+    >>> pdf = theta_prior.pdf(x)
+
+    Display the probability density function:
+
+    >>> theta_prior.plot_prior(x)
     """
 
     def __init__(
@@ -142,19 +171,6 @@ class Normal(ContinuousPrior):
 class Beta(ContinuousPrior):
     r"""A beta continuous random variable.
 
-    Notes
-    -----
-    The probability density function for ``Beta`` is:
-
-    .. math::
-        f(x, a, b) = \frac{\Gamma(a+b) x^{a-1} (1-x)^{b-1}}
-                          {\Gamma(a) \Gamma(b)}
-
-    for :math:`0 <= x <= 1`, :math:`a > 0`, :math:`b > 0`, where
-    :math:`\Gamma` is the gamma function (`scipy.special.gamma`).
-
-    ``Beta`` takes ``a`` and ``b`` as shape parameters.
-
     Parameters
     ----------
     loc : array_like, optional
@@ -174,6 +190,19 @@ class Beta(ContinuousPrior):
         variates. If seed is None the RandomState singleton is used.
         If seed is an int, a new RandomState instance is used, seeded
         with seed. Default is None.
+
+    Notes
+    -----
+    The probability density function for ``Beta`` is:
+
+    .. math::
+        f(x, a, b) = \frac{\Gamma(a+b) x^{a-1} (1-x)^{b-1}}
+                          {\Gamma(a) \Gamma(b)}
+
+    for :math:`0 <= x <= 1`, :math:`a > 0`, :math:`b > 0`, where
+    :math:`\Gamma` is the gamma function (`scipy.special.gamma`).
+
+    ``Beta`` takes ``a`` and ``b`` as shape parameters.
     """
 
     def __init__(

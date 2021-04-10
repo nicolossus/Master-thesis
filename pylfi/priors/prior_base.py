@@ -114,12 +114,12 @@ class Prior(metaclass=ABCMeta):
 
     @ property
     def name(self) -> str:
-        r"""Name of random variate."""
+        #r"""Name of random variate."""
         return self._name
 
     @ property
     def tex(self):
-        r"""LaTeX formatted name of random variate."""
+        #r"""LaTeX formatted name of random variate."""
         return self._tex
 
 

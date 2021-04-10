@@ -91,7 +91,8 @@ numpydoc_class_members_toctree = False
 
 autodoc_default_options = {
     'members': True,
-    'special-members': True,
+    'undoc-members': False,
+    'special-members': False,
     'exclude-members': '__weakref__',
     'inherited-members': True
 }
@@ -104,7 +105,7 @@ viewcode_import = True
 # Napoleon options
 napoleon_google_docstring = False
 napoleon_numpy_docstring = True
-napoleon_include_init_with_doc = True
+napoleon_include_init_with_doc = False
 napoleon_include_private_with_doc = False
 napoleon_include_special_with_doc = False
 napoleon_use_admonition_for_examples = False
