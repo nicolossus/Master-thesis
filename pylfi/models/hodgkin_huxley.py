@@ -177,7 +177,7 @@ class HodgkinHuxley:
         Notes
         -----
         The ODEs are solved numerically using the function ``scipy.integrate.solve_ivp``.
-        For details, see `SciPy documentaion <https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.solve_ivp.html`__.
+        For details, see SciPy documentaion https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.solve_ivp.html.
 
         If ``stimulus`` is passed as an array, it and the time array, defined by
         ``T`` and ``dt``, will be used to create an interpolation function via
@@ -188,7 +188,7 @@ class HodgkinHuxley:
         ``solve_ivp`` is an ODE solver with adaptive step size. If the keyword
         argument ``first_step`` is not specified, the solver will empirically
         select an initial step size with the function ``select_initial_step``
-        (`found here <https://github.com/scipy/scipy/blob/master/scipy/integrate/_ivp/common.py#L64`__).
+        (found here https://github.com/scipy/scipy/blob/master/scipy/integrate/_ivp/common.py#L64).
 
         This function calculates two proposals and returns the smallest. It first
         calculates an intermediate proposal, ``h0``, that is based on the initial
