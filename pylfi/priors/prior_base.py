@@ -29,7 +29,7 @@ def set_plot_style():
 
 
 class Prior(metaclass=ABCMeta):
-    """This abstract base class defines handling of priors.
+    r"""Abstract base class defining handling of priors.
 
     The class wraps functionality contained in the `scipy.stats` module. In
     particular, the functionality for drawing random variables from probability
@@ -50,7 +50,7 @@ class Prior(metaclass=ABCMeta):
     """
 
     def __init__(self, shape, loc, scale, name, tex, distr_name, rng, seed):
-        """Constructor that must be overwritten by the sub-class.
+        r"""Constructor that must be overwritten by the sub-class.
 
         The constructor of a sub-class must accept the following arguments:
 
@@ -106,7 +106,7 @@ class Prior(metaclass=ABCMeta):
 
     @abstractmethod
     def rvs(self, size=None):
-        """To be overwritten by sub-class; draw random variates from
+        r"""To be overwritten by sub-class; draw random variates from
         distribution.
         """
 
@@ -114,17 +114,17 @@ class Prior(metaclass=ABCMeta):
 
     @ property
     def name(self):
-        """Name of random variate."""
+        r"""Name of random variate."""
         return self._name
 
     @ property
     def tex(self):
-        """LaTeX formatted name of random variate."""
+        r"""LaTeX formatted name of random variate."""
         return self._tex
 
 
 class ContinuousPrior(Prior):
-    """Base class for continuous priors"""
+    r"""Base class for continuous priors"""
 
     def __init__(self, shape, loc, scale, name, tex, distr_name, rng, seed):
         """Constructor for continuous prior classes.
@@ -167,7 +167,7 @@ class ContinuousPrior(Prior):
         )
 
     def rvs(self, size=None):
-        """Draw random variates from distribution.
+        r"""Draw random variates from distribution.
 
         Parameters
         ----------
@@ -189,7 +189,7 @@ class ContinuousPrior(Prior):
         return rvs
 
     def pdf(self, x):
-        """Evaluate the probability density function (PDF).
+        r"""Evaluate the probability density function (PDF).
 
         Parameters
         ----------
@@ -206,7 +206,7 @@ class ContinuousPrior(Prior):
         return pdf
 
     def plot_prior(self, x, show=True, filename=None, dpi=100):
-        """Plot prior PDF evaluated at x.
+        r"""Plot prior PDF evaluated at x.
 
         Parameters
         ----------
@@ -244,10 +244,10 @@ class ContinuousPrior(Prior):
 
 
 class DiscretePrior(Prior):
-    """Base class for discrete priors"""
+    r"""Base class for discrete priors"""
 
     def __init__(self, shape, loc, name, tex, distr_name, rng, seed):
-        """Constructor for discrete prior classes.
+        r"""Constructor for discrete prior classes.
 
         Sub-classes must provide the following arguments:
 
@@ -285,7 +285,7 @@ class DiscretePrior(Prior):
         )
 
     def rvs(self, size=None):
-        """Draw random variates from distribution.
+        r"""Draw random variates from distribution.
 
         Parameters
         ----------
@@ -306,7 +306,7 @@ class DiscretePrior(Prior):
         return rvs
 
     def pmf(self, x):
-        """Evaluate the probability mass function (PMF).
+        r"""Evaluate the probability mass function (PMF).
 
         Parameters
         ----------
@@ -323,7 +323,7 @@ class DiscretePrior(Prior):
         return pmf
 
     def plot_prior(self, x, show=True, filename=None, dpi=100):
-        """Plot prior PMF evaluated at x.
+        r"""Plot prior PMF evaluated at x.
 
         Parameters
         ----------
