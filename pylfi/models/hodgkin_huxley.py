@@ -29,60 +29,10 @@ class HodgkinHuxley:
     of the squid, Hodgkin and Huxley succeeded to measure these currents and
     to describe their dynamics in terms of differential equations.
 
-    Parameters
-    ----------
-    V_rest : float, default: -65.
-        Resting potential of neuron in units: mV
-    Cm : float, default: 1.
-        Membrane capacitance in units: μF/cm**2
-    gbar_K : float, default: 36.
-        Potassium conductance in units: mS/cm**2
-    gbar_Na : float, default: 120.
-        Sodium conductance in units: mS/cm**2
-    gbar_L : float, default: 0.3.
-        Leak conductance in units: mS/cm**2
-    E_K : float, default: -77.
-        Potassium reversal potential in units: mV
-    E_Na : float, default: 50.
-        Sodium reversal potential in units: mV
-    E_L : float, default: -54.4
-        Leak reversal potential in units: mV
-
     All model parameters can be accessed (get or set) as class attributes.
 
-    The following solutions are available as class attributes after calling
-    the class method `solve`:
-
-    Attributes
-    ----------
-    t : array_like
-        The time array of the spike.
-    V : array_like
-        The voltage array of the spike.
-    Vm : array_like
-        The voltage array of the spike (alias for V).
-    n : array_like
-        The state variable of the potassium channel.
-    m : array_like
-        The activating state variable of the sodium channel.
-    h : array_like
-        The inactivating state variable of the sodium channel.
-
-    Methods
-    -------
-    solve(stimulus, T, dt, y0=None, **kwargs):
-        Solve the specified Hodgkin-Huxley system.
-
-    Notes
-    -----
-    Default parameter values as given by Hodgkin and Huxley (1952).
-
-    References
-    ----------
-    Hodgkin, A. L., Huxley, A.F. (1952).
-    "A quantitative description of membrane current and its application
-    to conduction and excitation in nerve".
-    J. Physiol. 117, 500-544.
+    Solutions are available as class attributes after calling the class method
+    ``solve``.
     """
 
     def __init__(self, V_rest=-65., Cm=1., gbar_K=36., gbar_Na=120.,
@@ -208,11 +158,26 @@ class HodgkinHuxley:
         If multiple calls to solve are made, they are treated independently,
         with the newest one overwriting any old solution data.
 
+        Parameters
+        ----------
+        stimulus : array, shape (int(T/dt)+1,) or callable
+            Input stimulus in units: μA/cm**2. If callable, the call signature
+            must be '(t)'
+        T : float
+            End time in milliseconds (ms)
+        dt : float
+            Time step where solutions are evaluated
+        y0 : array_like, shape (4,), default None
+            Initial state of state variables V, n, m, h. If None, the default
+            Hodgkin-Huxley model's initial conditions will be used.
+        **kwargs
+            Arbitrary keyword arguments are passed along to
+            scipy.integrate.solve_ivp
+
         Notes
         -----
-        The ODEs are solved numerically using the function
-        ``scipy.integrate.solve_ivp``. For details, see
-        https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.solve_ivp.html
+        The ODEs are solved numerically using the function ``scipy.integrate.solve_ivp``.
+        For details, see `SciPy documentaion <https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.solve_ivp.html`_.
 
         If ``stimulus`` is passed as an array, it and the time array, defined by
         ``T`` and ``dt``, will be used to create an interpolation function via
@@ -223,18 +188,18 @@ class HodgkinHuxley:
         ``solve_ivp`` is an ODE solver with adaptive step size. If the keyword
         argument ``first_step`` is not specified, the solver will empirically
         select an initial step size with the function ``select_initial_step``
-        (https://github.com/scipy/scipy/blob/master/scipy/integrate/_ivp/common.py#L64).
-        This function calculates two proposals and returns the smallest. It
-        first calculates an intermediate proposal, ``h0``, that is based on the
-        initial condition (``y0``) and the ODE's RHS evaluated for the initial
-        condition (``f0``). For the standard Hodgkin-Huxley model, however, this
-        estimated step size will be very large due to unfortunate circumstances
-        (because ``norm(y0) > 0`` while ``norm(f0) ~= 0``). Since ``h0`` only is
-        an intermediate calculation, it is not used or returned by the solver.
-        However, it is used to calculate the next proposal, ``h1``, by calling
-        the RHS. Normally, this procedure poses no problem, but can fail if an
-        object with a limited interval is present in the RHS, such as an
-        ``interp1d`` object.
+        (`found here <https://github.com/scipy/scipy/blob/master/scipy/integrate/_ivp/common.py#L64`_).
+
+        This function calculates two proposals and returns the smallest. It first
+        calculates an intermediate proposal, ``h0``, that is based on the initial
+        condition (``y0``) and the ODE's RHS evaluated for the initial condition
+        (``f0``). For the standard Hodgkin-Huxley model, however, this estimated
+        step size will be very large due to unfortunate circumstances (because ``norm(y0) > 0``
+        while ``norm(f0) ~= 0``). Since ``h0`` only is an intermediate calculation,
+        it is not used or returned by the solver. However, it is used to calculate
+        the next proposal, ``h1``, by calling the RHS. Normally, this procedure
+        poses no problem, but can fail if an object with a limited interval is
+        present in the RHS, such as an ``interp1d`` object.
 
         In the case of the standard Hodgkin-Huxley model, one might be tempted
         to pass the stimulus as an array to the solver. In order for ``solve_ivp``
@@ -257,22 +222,6 @@ class HodgkinHuxley:
         will only specifying ``max_step`` still result in program termination if
         ``stimulus`` is passed as an array. (Will not be a problem in this
         implementation since ``first_step`` is already specified.)
-
-        Parameters
-        ----------
-        stimulus : array, shape (int(T/dt)+1,) or callable
-            Input stimulus in units: μA/cm**2. If callable, the call signature
-            must be '(t)'
-        T : float
-            End time in milliseconds (ms)
-        dt : float
-            Time step where solutions are evaluated
-        y0 : array_like, shape (4,), default None
-            Initial state of state variables V, n, m, h. If None, the default
-            Hodgkin-Huxley model's initial conditions will be used.
-        **kwargs
-            Arbitrary keyword arguments are passed along to
-            scipy.integrate.solve_ivp
         """
 
         # error-handling
@@ -329,12 +278,12 @@ class HodgkinHuxley:
     # getters and setters
     @property
     def V_rest(self):
-        """Get resting potential."""
+        #"""Get resting potential."""
         return self._V_rest
 
     @V_rest.setter
     def V_rest(self, V_rest):
-        """Set resting potential."""
+        #"""Set resting potential."""
         if not isinstance(V_rest, (int, float)):
             msg = (f"{V_rest=}".split('=')[0]
                    + " must be set as an int or float")
@@ -449,7 +398,7 @@ class HodgkinHuxley:
 
     @ property
     def V(self):
-        """Values of the solution of V at t."""
+        """Values of the solution of ``V`` at ``t``."""
         try:
             return self._V
         except AttributeError:
@@ -457,7 +406,7 @@ class HodgkinHuxley:
 
     @ property
     def Vm(self):
-        """Values of the solution of V at t. (Alias for property V)."""
+        """Values of the solution of ``V`` at ``t``. (Alias for property ``V``)."""
         try:
             return self._V
         except AttributeError:
@@ -465,7 +414,7 @@ class HodgkinHuxley:
 
     @ property
     def n(self):
-        """Values of the solution of n at t."""
+        """Values of the solution of ``n`` at ``t``."""
         try:
             return self._n
         except AttributeError:
@@ -473,7 +422,7 @@ class HodgkinHuxley:
 
     @ property
     def m(self):
-        """Values of the solution of m at t."""
+        """Values of the solution of ``m`` at ``t``."""
         try:
             return self._m
         except AttributeError:
@@ -481,7 +430,7 @@ class HodgkinHuxley:
 
     @ property
     def h(self):
-        """Values of the solution of n at t."""
+        """Values of the solution of ``h`` at ``t``."""
         try:
             return self._h
         except AttributeError:

@@ -19,6 +19,7 @@ Kernel density estimation
 .. currentmodule:: pylfi
 
 .. autosummary::
+   :nosignatures:
    :toctree: generated/
    :template: class.rst
 

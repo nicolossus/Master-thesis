@@ -15,44 +15,27 @@ class Uniform(ContinuousPrior):
     parameters ``loc`` and ``scale``, one obtains the uniform distribution on
     ``[loc, loc + scale]``.
 
-
-    Attributes
-    ----------
-    name : str
-        Name of random variate
-    tex : str
-        LaTeX formatted name of random variate
-
-    Methods
-    -------
-    rvs(size=None)
-        Draw random variates from distribution.
-    pdf(x)
-        Evaluate the probability density function at :math:`x`.
-    plot_prior(x, show=True, filename=None, dpi=100)
-        Plot prior PDF evaluated at :math:`x`.
-
     Examples
     --------
     >>> import numpy as np
     >>> from pylfi.priors import Uniform
 
-    Initialize distribution:
+    Initialize prior distribution for random variate :math:`\theta`:
 
-    >>> rv = Uniform(loc=0, scale=1, name='rv', tex=r'rv', seed=42)
+    >>> theta_prior = Uniform(loc=0, scale=1, name='theta', tex=r'$\theta$', seed=42)
 
-    Generate random numbers:
+    Draw from prior:
 
-    >>> r = rv.rvs(size=10)
+    >>> theta = theta_prior.rvs(size=10)
 
     Evaluate probability density function:
 
     >>> x = np.linspace(-1, 2, 1000)
-    >>> pdf = rv.pdf(x)
+    >>> pdf = theta_prior.pdf(x)
 
     Display the probability density function:
 
-    >>> rv.plot_prior(x)
+    >>> theta_prior.plot_prior(x)
     """
 
     def __init__(
@@ -78,7 +61,7 @@ class Uniform(ContinuousPrior):
         tex : raw str literal, optional
             LaTeX formatted name of random variate given as ``r"foo"``. Default is
             None.
-        rng : Random number generator, optional
+        rng : random number generator, optional
             Defines the random number generator to be used. Default is
             np.random.RandomState
         seed : {None, int}, optional
@@ -422,7 +405,7 @@ class Poisson(DiscretePrior):
     Parameters
     ----------
     mu : float
-        Shape parameter 
+        Shape parameter
     loc : array_like, optional
         Location parameter (default=0)
     name : str
