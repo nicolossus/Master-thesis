@@ -96,7 +96,7 @@ autodoc_default_options = {
 
 #autodoc_default_flags = ['members']
 
-#autodoc_member_order = 'bysource'
+autodoc_member_order = 'bysource'
 viewcode_import = True
 
 # Napoleon options

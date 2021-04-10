@@ -278,12 +278,12 @@ class HodgkinHuxley:
     # getters and setters
     @property
     def V_rest(self):
-        #"""Get resting potential."""
+        """Get resting potential. :meta private:"""
         return self._V_rest
 
     @V_rest.setter
     def V_rest(self, V_rest):
-        #"""Set resting potential."""
+        """Set resting potential."""
         if not isinstance(V_rest, (int, float)):
             msg = (f"{V_rest=}".split('=')[0]
                    + " must be set as an int or float")
