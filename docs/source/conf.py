@@ -81,7 +81,7 @@ extensions = [
     # 'sphinx_issues',
     # 'add_toctree_functions',
     "sphinx_rtd_theme",
-    # 'sphinxcontrib.napoleon',
+    'sphinxcontrib.napoleon',
     'numpydoc',
 ]
 
