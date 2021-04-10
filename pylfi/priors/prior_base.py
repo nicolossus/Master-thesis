@@ -113,7 +113,7 @@ class Prior(metaclass=ABCMeta):
         raise NotImplementedError
 
     @ property
-    def name(self):
+    def name(self) -> str:
         r"""Name of random variate."""
         return self._name
 
