@@ -1,2 +1,2 @@
-from .prior_base import ContinuousPrior, DiscretePrior
+from .prior_base import ContinuousPrior, DiscretePrior, Prior
 from .priors import *

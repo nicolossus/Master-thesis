@@ -81,8 +81,8 @@ Mechanistic models
     :no-members:
     :no-inherited-members:
 
-Base
-----
+Base classes
+------------
 .. currentmodule:: pylfi
 
 .. autosummary::

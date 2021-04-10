@@ -1,6 +1,6 @@
-﻿pylfi.priors.Randint
+﻿pylfi.priors.Poisson
 ====================
 
 .. currentmodule:: pylfi.priors
 
-.. autoclass:: Randint
+.. autoclass:: Poisson
