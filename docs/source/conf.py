@@ -91,6 +91,7 @@ numpydoc_class_members_toctree = False
 
 autodoc_default_options = {
     'members': True,
+    'special-members': True,
     'inherited-members': True
 }
 
