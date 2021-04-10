@@ -81,7 +81,7 @@ extensions = [
     # 'sphinx_issues',
     # 'add_toctree_functions',
     "sphinx_rtd_theme",
-    'sphinxcontrib.napoleon',
+    # 'sphinxcontrib.napoleon',
     'numpydoc',
 ]
 
@@ -91,9 +91,9 @@ numpydoc_class_members_toctree = False
 
 autodoc_default_options = {
     'members': True,
-    'undoc-members': False,
-    'special-members': False,
-    'exclude-members': '__weakref__',
+    # 'undoc-members': False,
+    # 'special-members': False,
+    # 'exclude-members': '__weakref__',
     'inherited-members': True
 }
 
@@ -103,6 +103,7 @@ autodoc_member_order = 'bysource'
 viewcode_import = True
 
 # Napoleon options
+'''
 napoleon_google_docstring = False
 napoleon_numpy_docstring = True
 napoleon_include_init_with_doc = False
@@ -116,6 +117,7 @@ napoleon_use_param = True
 napoleon_use_rtype = True
 napoleon_use_keyword = True
 napoleon_custom_sections = None
+'''
 #napoleon_use_param = False
 #napoleon_use_ivar = True
 
