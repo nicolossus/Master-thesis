@@ -15,6 +15,26 @@ class Uniform(ContinuousPrior):
     parameters ``loc`` and ``scale``, one obtains the uniform distribution on
     ``[loc, loc + scale]``.
 
+    Parameters
+    ----------
+    loc : array_like, optional
+        Location parameter (default=0)
+    scale: array_like, optional
+        Scale parameter (default=1)
+    name : str
+        Name of random variate. Default is None (which will raise an ``Error``).
+    tex : raw str literal, optional
+        LaTeX formatted name of random variate given as ``r"foo"``. Default is
+        None.
+    rng : random number generator, optional
+        Defines the random number generator to be used. Default is
+        np.random.RandomState
+    seed : {None, int}, optional
+        This parameter defines the object to use for drawing random
+        variates. If seed is None the RandomState singleton is used.
+        If seed is an int, a new RandomState instance is used, seeded
+        with seed. Default is None.
+
     Examples
     --------
     >>> import numpy as np
@@ -191,6 +211,13 @@ class Beta(ContinuousPrior):
         If seed is an int, a new RandomState instance is used, seeded
         with seed. Default is None.
 
+    Attributes
+    ----------
+    name : str
+        Name of random variate.
+    tex : str
+        LaTeX formatted name of random variate.
+
     Notes
     -----
     The probability density function for ``Beta`` is:
@@ -238,6 +265,33 @@ class NegativeBinomial:
 
 class Exponential(ContinuousPrior):
     r"""An exponential continuous random variable.
+
+    Parameters
+    ----------
+    loc : array_like, optional
+        Location parameter (default=0)
+    scale: array_like, optional
+        Scale parameter (default=1)
+    name : str
+        Name of random variate. Default is None (which will raise an ``Error``).
+    tex : raw str literal, optional
+        LaTeX formatted name of random variate given as ``r"foo"``. Default is
+        None.
+    rng : random number generator, optional
+        Defines the random number generator to be used. Default is
+        np.random.RandomState
+    seed : {None, int}, optional
+        This parameter defines the object to use for drawing random
+        variates. If seed is None the RandomState singleton is used.
+        If seed is an int, a new RandomState instance is used, seeded
+        with seed. Default is None.
+
+    Attributes
+    ----------
+    name : str
+        Name of random variate.
+    tex : str
+        LaTeX formatted name of random variate.
 
     Notes
     -----
@@ -300,20 +354,6 @@ class Multinomial:
 class Randint(DiscretePrior):
     r"""A uniform discrete random variable.
 
-    Notes
-    -----
-    The probability mass function for ``Randint`` is:
-
-    .. math::
-        f(k) = \frac{1}{high - low}
-
-    for ``k = low, ..., high - 1``.
-
-    ``Randint`` takes ``low`` and ``high`` as shape parameters.
-
-    The probability mass function is defined in the “standardized” form.
-    To shift distribution use the ``loc`` parameter.
-
     Parameters
     ----------
     loc : array_like, optional
@@ -331,6 +371,27 @@ class Randint(DiscretePrior):
         variates. If seed is None the RandomState singleton is used.
         If seed is an int, a new RandomState instance is used, seeded
         with seed. Default is None.
+
+    Attributes
+    ----------
+    name : str
+        Name of random variate.
+    tex : str
+        LaTeX formatted name of random variate.
+
+    Notes
+    -----
+    The probability mass function for ``Randint`` is:
+
+    .. math::
+        f(k) = \frac{1}{high - low}
+
+    for ``k = low, ..., high - 1``.
+
+    ``Randint`` takes ``low`` and ``high`` as shape parameters.
+
+    The probability mass function is defined in the “standardized” form.
+    To shift distribution use the ``loc`` parameter.
     """
 
     def __init__(
@@ -357,24 +418,12 @@ class Randint(DiscretePrior):
 class Binomial(DiscretePrior):
     r"""A binomial discrete random variable.
 
-    Notes
-    -----
-    The probability mass function for ``Binomial`` is:
-
-    .. math::
-       f(k) = \binom{n}{k} p^k (1-p)^{n-k}
-
-    for ``k`` in ``{0, 1,..., n}``, :math:`0 \leq p \leq 1`
-
-    ``Binomial`` takes ``n`` and ``p`` as shape parameters, where
-    ``p`` is the probability of a single success and ``1 - p`` is
-    the probability of a single failure.
-
-    The probability mass function is defined in the “standardized” form.
-    To shift distribution use the ``loc`` parameter.
-
     Parameters
     ----------
+    n : int
+        Shape parameter; number of trials
+    p : float
+        Shape parameter; probability of single success
     loc : array_like, optional
         Location parameter (default=0)
     name : str
@@ -390,6 +439,29 @@ class Binomial(DiscretePrior):
         variates. If seed is None the RandomState singleton is used.
         If seed is an int, a new RandomState instance is used, seeded
         with seed. Default is None.
+
+    Attributes
+    ----------
+    name : str
+        Name of random variate.
+    tex : str
+        LaTeX formatted name of random variate.
+
+    Notes
+    -----
+    The probability mass function for ``Binomial`` is:
+
+    .. math::
+       f(k) = \binom{n}{k} p^k (1-p)^{n-k}
+
+    for ``k`` in ``{0, 1,..., n}``, :math:`0 \leq p \leq 1`
+
+    ``Binomial`` takes ``n`` and ``p`` as shape parameters, where
+    ``p`` is the probability of a single success and ``1 - p`` is
+    the probability of a single failure.
+
+    The probability mass function is defined in the “standardized” form.
+    To shift distribution use the ``loc`` parameter.
     """
 
     def __init__(
@@ -416,25 +488,10 @@ class Binomial(DiscretePrior):
 class Poisson(DiscretePrior):
     r"""A Poisson discrete random variable.
 
-    Notes
-    -----
-    The probability mass function for ``Poisson`` is:
-
-    .. math::
-        f(k) = \exp(-\mu) \frac{\mu^k}{k!}
-
-    for :math:`k \ge 0`.
-
-    ``Poisson`` takes :math:`\mu` as shape parameter. When ``mu = 0`` then at
-    quantile ``k = 0``, ``pmf`` method returns ``1.0``.
-
-    The probability mass function is defined in the “standardized” form.
-    To shift distribution use the ``loc`` parameter.
-
     Parameters
     ----------
     mu : float
-        Shape parameter
+        Shape parameter; the average number of events in the given time interval
     loc : array_like, optional
         Location parameter (default=0)
     name : str
@@ -450,6 +507,33 @@ class Poisson(DiscretePrior):
         variates. If seed is None the RandomState singleton is used.
         If seed is an int, a new RandomState instance is used, seeded
         with seed. Default is None.
+
+    Attributes
+    ----------
+    name : str
+        Name of random variate.
+    tex : str
+        LaTeX formatted name of random variate.
+
+    Notes
+    -----
+    The Poisson distribution is a discrete probability distribution that
+    expresses the probability of a given number of events occuring in a fixed
+    interval of time or space if these events occur with a known constant mean
+    rate and independently of the time since the last event.[1]
+
+    The probability mass function for ``Poisson`` is:
+
+    .. math::
+        f(k) = \exp(-\mu) \frac{\mu^k}{k!}
+
+    for :math:`k \ge 0`.
+
+    ``Poisson`` takes :math:`\mu` as shape parameter. When ``mu = 0`` then at
+    quantile ``k = 0``, ``pmf`` method returns ``1.0``.
+
+    The probability mass function is defined in the “standardized” form.
+    To shift distribution use the ``loc`` parameter.
     """
 
     def __init__(

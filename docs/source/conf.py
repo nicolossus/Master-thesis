@@ -92,7 +92,7 @@ numpydoc_class_members_toctree = False
 autodoc_default_options = {
     'members': True,
     # 'undoc-members': False,
-    # 'special-members': False,
+    'special-members': False,
     # 'exclude-members': '__weakref__',
     'inherited-members': True
 }
@@ -148,6 +148,7 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # documents.
 #
 # default_role = None
+# default_role = 'literal'
 
 # If true, '()' will be appended to :func: etc. cross-reference text.
 #
