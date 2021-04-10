@@ -20,7 +20,7 @@ class ODEsNotSolved(Exception):
 
 
 class HodgkinHuxley:
-    """Class for representing the Hodgkin-Huxley model.
+    r"""Class for representing the Hodgkin-Huxley model.
 
     The Hodgkin–Huxley model describes how action potentials in neurons are
     initiated and propagated. From a biophysical point of view, action
@@ -57,7 +57,7 @@ class HodgkinHuxley:
 
     def __init__(self, V_rest=-65., Cm=1., gbar_K=36., gbar_Na=120.,
                  gbar_L=0.3, E_K=-77., E_Na=50., E_L=-54.4):
-        """Define the model parameters.
+        r"""Define the model parameters.
 
         Parameters
         ----------
@@ -101,7 +101,7 @@ class HodgkinHuxley:
         self._E_L = E_L            # leak reversal potential [mV]
 
     def __call__(self, t, y):
-        """RHS of the Hodgkin-Huxley ODEs.
+        r"""RHS of the Hodgkin-Huxley ODEs.
 
         Parameters
         ----------
@@ -169,7 +169,7 @@ class HodgkinHuxley:
         return (self.V_rest, n0, m0, h0)
 
     def solve(self, stimulus, T, dt, y0=None, **kwargs):
-        """Solve the Hodgkin-Huxley equations.
+        r"""Solve the Hodgkin-Huxley equations.
 
         The equations are solved on the interval (0, T] and the solutions
         evaluted at a given interval. The solutions are not returned, but
@@ -181,52 +181,52 @@ class HodgkinHuxley:
         Notes
         -----
         The ODEs are solved numerically using the function
-        `scipy.integrate.solve_ivp`. For details, see
+        ``scipy.integrate.solve_ivp``. For details, see
         https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.solve_ivp.html
 
-        If `stimulus` is passed as an array, it and the time array, defined by
-        `T` and `dt`, will be used to create an interpolation function via
-        `scipy.interpolate.interp1d`.
+        If ``stimulus`` is passed as an array, it and the time array, defined by
+        ``T`` and ``dt``, will be used to create an interpolation function via
+        ``scipy.interpolate.interp1d``.
 
         Credits to supervisor Joakim Sundnes for helping unravel the following.
 
-        `solve_ivp` is an ODE solver with adaptive step size. If the keyword
-        argument `first_step` is not specified, the solver will empirically
-        select an initial step size with the function `select_initial_step`
+        ``solve_ivp`` is an ODE solver with adaptive step size. If the keyword
+        argument ``first_step`` is not specified, the solver will empirically
+        select an initial step size with the function ``select_initial_step``
         (https://github.com/scipy/scipy/blob/master/scipy/integrate/_ivp/common.py#L64).
         This function calculates two proposals and returns the smallest. It
-        first calculates an intermediate proposal, h0, that is based on the
-        initial condition (y0) and the ODE's RHS evaluated for the initial
-        condition (f0). For the standard Hodgkin-Huxley model, however, this
+        first calculates an intermediate proposal, ``h0``, that is based on the
+        initial condition (``y0``) and the ODE's RHS evaluated for the initial
+        condition (``f0``). For the standard Hodgkin-Huxley model, however, this
         estimated step size will be very large due to unfortunate circumstances
-        (because norm(y0) > 0 while norm(f0) ~= 0). Since h0 only is an
-        intermediate calculation, it is not used or returned by the solver.
-        However, it is used to calculate the next proposal, h1, by calling the
-        RHS. Normally, this procedure poses no problem, but can fail if an
+        (because ``norm(y0) > 0`` while ``norm(f0) ~= 0``). Since ``h0`` only is
+        an intermediate calculation, it is not used or returned by the solver.
+        However, it is used to calculate the next proposal, ``h1``, by calling
+        the RHS. Normally, this procedure poses no problem, but can fail if an
         object with a limited interval is present in the RHS, such as an
-        `interp1d` object.
+        ``interp1d`` object.
 
         In the case of the standard Hodgkin-Huxley model, one might be tempted
-        to pass the stimulus as an array to the solver. In order for `solve_ivp`
+        to pass the stimulus as an array to the solver. In order for ``solve_ivp``
         to be able to evaluate the stimulus, it must be passed as a callable or
         constant. Thus, if an array is passed to the solver, an interpolation
-        function must be created, in this implementation done with `interp1d`,
-        for `solve_ivp` to be able to evaluate it. For the reasons explained
-        above, the program will hence terminate unless the `first_step` keyword
+        function must be created, in this implementation done with ``interp1d``,
+        for ``solve_ivp`` to be able to evaluate it. For the reasons explained
+        above, the program will hence terminate unless the ``first_step`` keyword
         is specified and is set to a sufficiently small value. In this
-        implementation, `first_step=dt` is already set in `solve_ivp`.
+        implementation, ``first_step=dt`` is already set in ``solve_ivp``.
 
-        The `solve_ivp` keyword `max_step` should be considered to be specified
+        The ``solve_ivp`` keyword ``max_step`` should be considered to be specified
         for stimuli over short time spans, in order to ensure that the solver
         does not step over them.
 
-        Note that `first_step` still needs to specified even if `max_step` is.
-        `select_initial_step` will be called regardless if `first_step` is not
+        Note that ``first_step`` still needs to specified even if ``max_step`` is.
+        ``select_initial_step`` will be called regardless if ``first_step`` is not
         specified, and the calls for calculating h1 will be done before checking
-        whether h0 is larger than than the max allowed step size or not. Thus
-        will only specifying `max_step` still result in program termination if
-        `stimulus` is passed as an array. (Will not be a problem in this
-        implementation since `first_step` is already specified.)
+        whether ``h0`` is larger than than the max allowed step size or not. Thus
+        will only specifying ``max_step`` still result in program termination if
+        ``stimulus`` is passed as an array. (Will not be a problem in this
+        implementation since ``first_step`` is already specified.)
 
         Parameters
         ----------
