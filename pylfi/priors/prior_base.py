@@ -114,10 +114,12 @@ class Prior(metaclass=ABCMeta):
 
     @ property
     def name(self):
+        """Name of random variate."""
         return self._name
 
     @ property
     def tex(self):
+        """LaTeX formatted name of random variate."""
         return self._tex
 
 
@@ -245,7 +247,7 @@ class DiscretePrior(Prior):
     """Base class for discrete priors"""
 
     def __init__(self, shape, loc, name, tex, distr_name, rng, seed):
-        """Constructor for discrete prior classes. 
+        """Constructor for discrete prior classes.
 
         Sub-classes must provide the following arguments:
 

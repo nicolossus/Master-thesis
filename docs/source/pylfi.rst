@@ -81,6 +81,19 @@ Mechanistic models
     :no-members:
     :no-inherited-members:
 
+Base
+----
+.. currentmodule:: pylfi
+
+.. autosummary::
+   :nosignatures:
+   :toctree: generated/
+   :template: class.rst
+
+   prior_base.Prior
+   prior_base.ContinuousPrior
+   prior_base.DiscretePrior
+
 Continuous priors
 -----------------
 .. currentmodule:: pylfi
@@ -136,8 +149,8 @@ Discrete priors
 
    journal.Journal
 
-:mod:`pylfi.journal`: Journal base
-==================================
+:mod:`pylfi.journal`: Journal
+=============================
 
 .. automodule:: pylfi.journal
    :no-members:
@@ -149,22 +162,6 @@ Discrete priors
   :nosignatures:
   :toctree: generated/
   :template: base.rst
-
-  journal.Journal
-
-:mod:`pylfi.journal`: Journal module
-====================================
-
-.. automodule:: pylfi.journal
-   :no-members:
-   :no-inherited-members:
-
-.. currentmodule:: pylfi
-
-.. autosummary::
-  :nosignatures:
-  :toctree: generated/
-  :template: module.rst
 
   journal.Journal
 
