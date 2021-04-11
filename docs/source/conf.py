@@ -81,7 +81,7 @@ extensions = [
     # 'sphinx_issues',
     # 'add_toctree_functions',
     "sphinx_rtd_theme",
-    'sphinxcontrib.napoleon',
+    # 'sphinxcontrib.napoleon',
     'numpydoc',
 ]
 
@@ -99,6 +99,9 @@ autodoc_default_options = {
 
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
+    'numpy': ('http://docs.scipy.org/doc/numpy', None),
+    'scipy': ('http://docs.scipy.org/doc/scipy/reference', None),
+    'matplotlib': ('http://matplotlib.org/stable', None),
     # "dolfin": ("https://fenicsproject.org/olddocs/dolfin/latest/python", None),
     # "ufl": ("https://fenics.readthedocs.io/projects/ufl/en/latest/", None),
 }
@@ -112,13 +115,13 @@ autodoc_member_order = 'bysource'
 viewcode_import = True
 
 # Napoleon options
-
+'''
 napoleon_google_docstring = False
 napoleon_numpy_docstring = True
 napoleon_include_init_with_doc = False
 napoleon_include_private_with_doc = False
 napoleon_include_special_with_doc = False
-napoleon_use_admonition_for_examples = False
+napoleon_use_admonition_for_examples = True
 napoleon_use_admonition_for_notes = True
 napoleon_use_admonition_for_references = True
 napoleon_use_ivar = False
@@ -126,12 +129,12 @@ napoleon_use_param = False
 napoleon_use_rtype = True
 napoleon_use_keyword = True
 napoleon_custom_sections = None
-#napoleon_use_param = False
-#napoleon_use_ivar = True
+#napoleon_custom_sections = [("Side Effects", "Parameters") ]
+'''
 
 # generate autosummary even if no references
 autosummary_generate = True
-#autosummary_imported_members = True
+autosummary_imported_members = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -156,7 +159,7 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # documents.
 #
 # default_role = None
-# default_role = 'literal'
+default_role = 'literal'
 
 # If true, '()' will be appended to :func: etc. cross-reference text.
 #
