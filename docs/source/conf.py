@@ -97,6 +97,15 @@ autodoc_default_options = {
     'inherited-members': True
 }
 
+intersphinx_mapping = {
+    "python": ("https://docs.python.org/3", None),
+    # "dolfin": ("https://fenicsproject.org/olddocs/dolfin/latest/python", None),
+    # "ufl": ("https://fenics.readthedocs.io/projects/ufl/en/latest/", None),
+}
+
+inheritance_node_attrs = dict(
+    shape="ellipse", fontsize=12, color="orange", style="filled"
+)
 #autodoc_default_flags = ['members']
 
 autodoc_member_order = 'bysource'
@@ -112,8 +121,8 @@ napoleon_include_special_with_doc = False
 napoleon_use_admonition_for_examples = False
 napoleon_use_admonition_for_notes = True
 napoleon_use_admonition_for_references = True
-napoleon_use_ivar = True
-napoleon_use_param = True
+napoleon_use_ivar = False
+napoleon_use_param = False
 napoleon_use_rtype = True
 napoleon_use_keyword = True
 napoleon_custom_sections = None
@@ -122,7 +131,7 @@ napoleon_custom_sections = None
 
 # generate autosummary even if no references
 autosummary_generate = True
-autosummary_imported_members = True
+#autosummary_imported_members = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
