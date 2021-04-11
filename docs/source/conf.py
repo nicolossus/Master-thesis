@@ -90,6 +90,11 @@ extensions = [
 # see https://github.com/numpy/numpydoc/issues/69
 numpydoc_class_members_toctree = False
 
+# autodoc configuration
+#autodoc_default_flags = ['members']
+
+autodoc_member_order = 'bysource'
+
 autodoc_default_options = {
     'members': True,
     # 'undoc-members': False,
@@ -107,12 +112,23 @@ intersphinx_mapping = {
     # "ufl": ("https://fenics.readthedocs.io/projects/ufl/en/latest/", None),
 }
 
+# intersphinx configuration
+intersphinx_mapping = {
+    'python': ('https://docs.python.org/{.major}'.format(
+        sys.version_info), None),
+    'numpy': ('https://numpy.org/doc/stable', None),
+    'scipy': ('https://docs.scipy.org/doc/scipy/reference', None),
+    'matplotlib': ('https://matplotlib.org/', None),
+    'pandas': ('https://pandas.pydata.org/pandas-docs/stable/', None),
+    'joblib': ('https://joblib.readthedocs.io/en/latest/', None),
+    'seaborn': ('https://seaborn.pydata.org/', None),
+}
+
+# inheritance_diagram configuration
 inheritance_node_attrs = dict(
     shape="ellipse", fontsize=12, color="orange", style="filled"
 )
-#autodoc_default_flags = ['members']
 
-autodoc_member_order = 'bysource'
 viewcode_import = True
 
 # Napoleon options
@@ -161,6 +177,7 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 #
 # default_role = None
 default_role = 'literal'
+#default_role = "autolink"
 
 # If true, '()' will be appended to :func: etc. cross-reference text.
 #
@@ -200,7 +217,8 @@ htmlhelp_basename = 'pylfidoc'
 
 #html_title = project
 
-html_theme = "sphinx_rtd_theme"
+#html_theme = "sphinx_rtd_theme"
+html_theme = "pydata_sphinx_theme"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
