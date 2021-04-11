@@ -81,7 +81,7 @@ extensions = [
     # 'sphinx_issues',
     # 'add_toctree_functions',
     "sphinx_rtd_theme",
-    'sphinx_rtd_theme_ext_color_contrast',
+    # 'sphinx_rtd_theme_ext_color_contrast',
     # 'sphinxcontrib.napoleon',
     'numpydoc',
 ]
@@ -101,15 +101,6 @@ autodoc_default_options = {
     'special-members': False,
     # 'exclude-members': '__weakref__',
     'inherited-members': True
-}
-
-intersphinx_mapping = {
-    "python": ("https://docs.python.org/3", None),
-    'numpy': ('http://docs.scipy.org/doc/numpy', None),
-    'scipy': ('http://docs.scipy.org/doc/scipy/reference', None),
-    'matplotlib': ('http://matplotlib.org/stable', None),
-    # "dolfin": ("https://fenicsproject.org/olddocs/dolfin/latest/python", None),
-    # "ufl": ("https://fenics.readthedocs.io/projects/ufl/en/latest/", None),
 }
 
 # intersphinx configuration
