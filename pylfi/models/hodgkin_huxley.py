@@ -106,21 +106,23 @@ class HodgkinHuxley:
     >>> plt.show()
 
     .. plot::
-        import matplotlib.pyplot as plt
-        from pylfi.models import HodgkinHuxley
-        hh = HodgkinHuxley(V_rest=-70)
-        hh.gbar_K = 36
-        T = 50.
-        dt = 0.025
-        def stimulus(t):
-            return 10 if 10 <= t <= 40 else 0
-        hh.solve(stimulus, T, dt)
-        t = hh.t
-        V = hh.V
-        plt.plot(t, V)
-        plt.xlabel('Time [ms]')
-        plt.ylabel('Membrane potential [mV]')
-        plt.show()
+        :context: close-figs
+
+        >>> import matplotlib.pyplot as plt
+        >>> from pylfi.models import HodgkinHuxley
+        >>> hh = HodgkinHuxley(V_rest=-70)
+        >>> hh.gbar_K = 36
+        >>> T = 50.
+        >>> dt = 0.025
+        >>> def stimulus(t):
+        ...     return 10 if 10 <= t <= 40 else 0
+        >>> hh.solve(stimulus, T, dt)
+        >>> t = hh.t
+        >>> V = hh.V
+        >>> plt.plot(t, V)
+        >>> plt.xlabel('Time [ms]')
+        >>> plt.ylabel('Membrane potential [mV]')
+        >>> plt.show()
     """
 
     def __init__(self, V_rest=-65., Cm=1., gbar_K=36., gbar_Na=120.,
