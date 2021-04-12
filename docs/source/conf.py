@@ -90,8 +90,6 @@ extensions = [
     # 'sphinxcontrib.napoleon',
     'numpydoc',
     'matplotlib.sphinxext.plot_directive',
-    'matplotlib.sphinxext.mathmpl',
-    'matplotlib.sphinxext.ipython_directive',
 ]
 
 # Determine if the matplotlib has a recent enough version of the
