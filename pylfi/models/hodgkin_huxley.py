@@ -107,6 +107,8 @@ class HodgkinHuxley:
 
     .. plot::
         :context: close-figs
+        :format: doctest
+        :include-source: False
 
         >>> import matplotlib.pyplot as plt
         >>> from pylfi.models import HodgkinHuxley
@@ -123,6 +125,7 @@ class HodgkinHuxley:
         >>> plt.xlabel('Time [ms]')
         >>> plt.ylabel('Membrane potential [mV]')
         >>> plt.show()
+
     """
 
     def __init__(self, V_rest=-65., Cm=1., gbar_K=36., gbar_Na=120.,

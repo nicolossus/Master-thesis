@@ -91,7 +91,6 @@ extensions = [
     'numpydoc',
     'matplotlib.sphinxext.plot_directive',
     'matplotlib.sphinxext.mathmpl',
-    'matplotlib.sphinxext.only_directives',
     'matplotlib.sphinxext.ipython_directive',
 ]
 
