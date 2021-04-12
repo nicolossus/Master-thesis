@@ -10,7 +10,10 @@ import math
 import os
 import sys
 
+import matplotlib
+import matplotlib.pyplot as plt
 import sphinx_rtd_theme
+from matplotlib.sphinxext import plot_directive
 
 # Get version
 exec(open(os.path.join("..", "..", "pylfi", "_version.py")).read())
@@ -22,6 +25,7 @@ exec(open(os.path.join("..", "..", "pylfi", "_version.py")).read())
 #import pylfi
 
 #sys.path.insert(0, os.path.abspath(os.pardir))
+sys.path.insert(0, os.path.abspath('../sphinxext'))
 sys.path.insert(0, os.path.abspath('../../'))
 
 
@@ -90,17 +94,13 @@ extensions = [
 
 # Determine if the matplotlib has a recent enough version of the
 # plot_directive.
-'''
-from matplotlib.sphinxext import plot_directive
+
 if plot_directive.__version__ < 2:
     raise RuntimeError("You need a recent enough version of matplotlib")
 # Do some matplotlib config in case users have a matplotlibrc that will break
 # things
-import matplotlib
 matplotlib.use('agg')
-import matplotlib.pyplot as plt
 plt.ioff()
-'''
 
 
 # -----------------------------------------------------------------------------
