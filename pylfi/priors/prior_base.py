@@ -35,12 +35,12 @@ class Prior(metaclass=ABCMeta):
     particular, the functionality for drawing random variables from probability
     distributions. For this purpose, `scipy.stats` has the following logic:
 
-    >> <dist_name>.rvs(<shape(s)>,
-                       loc=<param1>,
-                       scale=<param2>,
-                       size=(Nx, Ny),
-                       random_state=np.random.RandomState(seed=None)
-                       )
+    >>> <dist_name>.rvs(<shape(s)>,
+    ...                 loc=<param1>,
+    ...                 scale=<param2>,
+    ...                 size=(Nx, Ny),
+    ...                 random_state=np.random.RandomState(seed=None)
+                        )
 
     In general, one must provide shape parameters and, optionally, location
     and scale parameters to each call of a method of a distribution.

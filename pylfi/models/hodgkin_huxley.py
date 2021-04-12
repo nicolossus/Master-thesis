@@ -72,6 +72,42 @@ class HodgkinHuxley:
     "A quantitative description of membrane current and its application
     to conduction and excitation in nerve".
     J. Physiol. 117, 500-544.
+
+    Examples
+    --------
+
+    >>> import matplotlib.pyplot as plt
+    >>> from pylfi.models import HodgkinHuxley
+
+    Initialize the Hodgkin-Huxley system; model parameters can either be set in
+    the constructor or accessed as class attributes:
+
+    >>> hh = HodgkinHuxley(V_rest=-70)
+    >>> hh.gbar_K = 36
+
+    The simulation parameters needed are the simulation time ``T``, the time
+    step ``dt``, and the input ``stimulus``, the latter either as a callable or
+    ndarray with `shape=(int(T/dt)+1,)`:
+
+    >>> T = 50.
+    >>> dt = 0.025
+
+    >>> def stimulus(t):
+    ...    return 10 if 10 <= t <= 40 else 0
+
+    The system is solved by calling the class method ``solve`` and the solutions
+    can be accessed as class attributes:
+
+    >>> hh.solve(stimulus, T, dt)
+    >>> t = hh.t
+    >>> V = hh.V
+
+    The simulation can then be plotted:
+
+    >>> plt.plot(t, V)
+    >>> plt.xlabel('Time [ms]')
+    >>> plt.ylabel('Membrane potential [mV]')
+    >>> plt.show()
     """
 
     def __init__(self, V_rest=-65., Cm=1., gbar_K=36., gbar_Na=120.,
@@ -474,3 +510,33 @@ class HodgkinHuxley:
             return self._h
         except AttributeError:
             raise ODEsNotSolved("Missing call to solve. No solution exists.")
+
+
+if __name__ == '__main__':
+    import matplotlib.pyplot as plt
+    from pylfi.models import HodgkinHuxley
+
+    # Initialize the Hodgkin-Huxley system; model parameters can either be
+    # set in the constructor or accessed as class attributes:
+    hh = HodgkinHuxley(V_rest=-70)
+    hh.gbar_K = 36
+
+    # The simulation parameters needed are the simulation time ``T``, the time
+    # step ``dt``, and the input ``stimulus``, the latter either as a
+    # callable or ndarray with `shape=(int(T/dt)+1,)`:
+    T = 50.
+    dt = 0.025
+
+    def stimulus(t):
+        return 10 if 10 <= t <= 40 else 0
+
+    # The system is solved by calling the class method ``solve`` and the
+    # solutions can be accessed as class attributes:
+    hh.solve(stimulus, T, dt)
+    t = hh.t
+    V = hh.V
+
+    plt.plot(t, V)
+    plt.xlabel('Time [ms]')
+    plt.ylabel('Membrane potential [mV]')
+    plt.show()

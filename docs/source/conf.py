@@ -6,6 +6,7 @@
 
 # -- Path setup --------------------------------------------------------------
 
+import math
 import os
 import sys
 
@@ -80,17 +81,41 @@ extensions = [
     # 'sphinx_gallery.gen_gallery',
     # 'sphinx_issues',
     # 'add_toctree_functions',
-    "sphinx_rtd_theme",
+    # "sphinx_rtd_theme",
     # 'sphinx_rtd_theme_ext_color_contrast',
     # 'sphinxcontrib.napoleon',
     'numpydoc',
+    'matplotlib.sphinxext.plot_directive',
 ]
+
+# Determine if the matplotlib has a recent enough version of the
+# plot_directive.
+'''
+from matplotlib.sphinxext import plot_directive
+if plot_directive.__version__ < 2:
+    raise RuntimeError("You need a recent enough version of matplotlib")
+# Do some matplotlib config in case users have a matplotlibrc that will break
+# things
+import matplotlib
+matplotlib.use('agg')
+import matplotlib.pyplot as plt
+plt.ioff()
+'''
+
+
+# -----------------------------------------------------------------------------
+# Numpy extensions
+# -----------------------------------------------------------------------------
+numpydoc_use_plots = True
+
 
 # this is needed for some reason...
 # see https://github.com/numpy/numpydoc/issues/69
 numpydoc_class_members_toctree = False
 
-# autodoc configuration
+# -----------------------------------------------------------------------------
+# Autodoc
+# -----------------------------------------------------------------------------
 #autodoc_default_flags = ['members']
 
 autodoc_member_order = 'bysource'
@@ -103,7 +128,12 @@ autodoc_default_options = {
     'inherited-members': True
 }
 
-# intersphinx configuration
+autodoc_typehints = 'none'
+
+# -----------------------------------------------------------------------------
+# Intersphinx configuration
+# -----------------------------------------------------------------------------
+
 intersphinx_mapping = {
     'python': ('https://docs.python.org/{.major}'.format(
         sys.version_info), None),
@@ -140,9 +170,45 @@ napoleon_custom_sections = None
 #napoleon_custom_sections = [("Side Effects", "Parameters") ]
 '''
 
+# -----------------------------------------------------------------------------
+# Autosummary
+# -----------------------------------------------------------------------------
 # generate autosummary even if no references
 autosummary_generate = True
 autosummary_imported_members = True
+
+# ------------------------------------------------------------------------------
+# Matplotlib plot_directive options
+# ------------------------------------------------------------------------------
+
+plot_pre_code = """
+import numpy as np
+np.random.seed(123)
+"""
+plot_include_source = True
+plot_formats = [('png', 96), 'pdf']
+plot_html_show_formats = False
+plot_html_show_source_link = False
+
+phi = (math.sqrt(5) + 1) / 2
+
+font_size = 13 * 72 / 96.0  # 13 px
+
+plot_rcparams = {
+    'font.size': font_size,
+    'axes.titlesize': font_size,
+    'axes.labelsize': font_size,
+    'xtick.labelsize': font_size,
+    'ytick.labelsize': font_size,
+    'legend.fontsize': font_size,
+    'figure.figsize': (3 * phi, 3),
+    'figure.subplot.bottom': 0.2,
+    'figure.subplot.left': 0.2,
+    'figure.subplot.right': 0.9,
+    'figure.subplot.top': 0.85,
+    'figure.subplot.wspace': 0.4,
+    'text.usetex': False,
+}
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
