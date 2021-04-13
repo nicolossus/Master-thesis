@@ -40,6 +40,18 @@ Kernel density estimation
     :no-members:
     :no-inherited-members:
 
+Spiking features
+----------------
+.. currentmodule:: pylfi
+
+.. autosummary::
+   :nosignatures:
+   :recursive:
+   :toctree: generated/
+   :template: class.rst
+
+   features.SpikingFeatures
+
 :mod:`pylfi.inferences`: Inference schemes
 ==========================================
 
