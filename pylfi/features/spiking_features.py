@@ -9,72 +9,92 @@ from scipy.signal import find_peaks, peak_widths
 
 
 class SpikingFeatures:
-    """Spiking features of a voltage trace.
+    """Extract spiking features of a voltage trace.
+
+    The following features are available as class attributes:
+
+    * ``spike_rate``
+    * ``latency_to_first_spike``
+    * ``average_AP_overshoot``
+    * ``average_AHP_depth``
+    * ``average_AP_width``
+    * ``accommodation_index``
+
+   Features are from Druckmann et al. (2007).
+
+    Parameters
+    ----------
+    V : array_like
+        The voltage array of the voltage trace.
+    t : array_like
+        The time array of the voltage trace.
+    stim_duration : float
+        Duration of input stimulus
+    t_stim_on : float
+        Time of stimulus onset
+    threshold : float, optional
+        Threshold potential; when depolarization reaches this critical
+        level a neuron will initiate an action potential. Default value is
+        -55 mV.
 
     Attributes
     ----------
     n_spikes : int
-        The number of spikes during stimulus period.
+        The number of spikes during stimulus period in voltage trace.
     spikes_position : array_like
-        Spike peak positions in terms of indices
+        Array of spike peak positions in terms of indices.
     V_spikes_height : array_like
-        Peak voltage values
-    width_lines : 3-tuple of arrays
-        Data for contour lines at which the widths where calculated
+        Array of voltage values at the peak of the spikes.
+    width_lines : 3-tuple of ndarrays
+        Data for contour lines at which the widths where calculated. Can
+        be used for plotting the located spike widths via e.g.:
+            >>> features = SpikingFeatures(V, t, stim_duration, t_stim_on)
+            >>> plt.hlines(*features.width_lines)
     AHP_depth_pos : array_like
-        Positions of after hyperpolarization depths in terms of indices
+        Array of positions of after hyperpolarization depths in terms of
+        indices.
     ISIs : array_like
-        Interspike intervals; the time between subsequent action potentials
+        Interspike intervals (ISIs). ISI is the time between subsequent
+        action potentials.
     spike_rate : float
-        **Feature:** Action potential firing rate
+        **Feature:** Action potential firing rate, which is the number of
+        action potentials divided by stimulus duration. Typical unit is ``mHz``.
     latency_to_first_spike : float
-        **Feature:** Latency to first spike; the time between stimulus onset
-        and first spike occurrence.
+        **Feature:** Latency to first spike, which is the time between stimulus
+        onset and first spike occurrence. Typical unit is ``ms``.
     average_AP_overshoot : float
-        **Feature:** Average of the absolute peak voltage values of all action
-        potentials.
+        **Feature:** Average action potential peak voltage. Average AP
+        overshoot is calculated by averaging the absolute peak voltage values
+        of all action potentials (spikes). Typical unit is ``mV``.
     average_AHP_depth : float
-        **Feature:** Average minimum voltage between action potentials
+        **Feature:** Average depth of after hyperpolarization (AHP), i.e.,
+        average minimum voltage between action potentials. The average AHP
+        depth is obtained by averaging the minimum voltage between two
+        consecutive APs. Typical unit is ``mV``.
     average_AP_width : float
-        **Feature:** Average action potential width.
+        **Feature:** Average action potential width. The average AP width is
+        calculated by averaging the width of every AP at the midpoint between
+        its onset and its peak. Typical unit is ``mV``.
     accommodation_index : float
-        **Feature:** Normalized average difference in length of two consecutive
-        interspike intervals
+        **Feature:** Accommodation index, which is the normalized average
+        difference in length of two consecutive interspike intervals (ISIs).
 
     Notes
     -----
-    Features are from:
+    The basis for extracting the features is the identification of action
+    potentials (APs). ``scipy.signal.find_peaks`` is used to find all peaks,
+    i.e. APs, greater or equal than the set threshold.
 
+    References
+    ----------
     Druckmann, S., Banitt, Y., Gidon, A. A., Schurmann, F., Markram, H., and
     Segev, I. (2007).
     "A novel multiple objective optimization framework for constraining
     conductance-based neuron models by experimental data".
     Frontiers in Neuroscience 1, 7-18. doi:10.3389/neuro.01.1.1.001.2007
-
-    The basis for extracting the features is the identification of action
-    potentials (APs). `scipy.signal.find_peaks` is used to find all peaks, i.e.
-    APs, greater or equal than the set threshold.
     """
 
     def __init__(self, V, t, stim_duration, t_stim_on, threshold=-55):
-        """Initialize feature extraction for a voltage trace.
-
-        Parameters
-        ----------
-        V : array_like
-            The voltage array of the voltage trace.
-        t : array_like
-            The time array of the voltage trace.
-        stim_duration : float
-            Duration of input stimulus
-        t_stim_on : float
-            Time of stimulus onset
-        threshold : float, default: -55
-            Threshold potential; when depolarization reaches this critical
-            level a neuron will initiate an action potential. Default value is
-            -55 mV.
-        """
-
         self._V = V
         self._time = t
         self._duration = stim_duration
@@ -88,9 +108,6 @@ class SpikingFeatures:
         # calls to make spiking attributes available
         self._find_spikes()
         self._spike_widths()
-
-    def __call__(self, feature_name='all'):
-        pass
 
     def _find_spikes(self):
         """Find spikes in voltage trace."""
@@ -142,37 +159,22 @@ class SpikingFeatures:
 
     @ property
     def n_spikes(self):
-        """Number of spikes in voltage trace."""
         return self._n_spikes
 
     @property
     def spikes_position(self):
-        """Array of spike peak (index) positions."""
         return self._spikes_ind
 
     @property
     def V_spikes_height(self):
-        """Array of voltage at the peak of the spikes."""
         return self._V_spikes_height
 
     @property
     def width_lines(self):
-        """Data for contour lines at which the widths where calculated.
-
-        Can be used for plotting the located spike widths via e.g.
-
-        >>> features = SpikingFeatures(V, t, stim_duration, t_stim_on)
-        >>> plt.hlines(*features.width_lines)
-
-        Returns
-        -------
-        3 tuple of arrays
-        """
         return self._spikes_width_data_physical
 
     @property
     def AHP_depth_pos(self):
-        """Retrieve (index) postions of AHP depths."""
 
         ahp_depth_pos = []
         for i in range(self._n_spikes - 1):
@@ -191,67 +193,45 @@ class SpikingFeatures:
 
     @property
     def ISIs(self):
-        """Interspike intervals (ISIs).
-
-        ISI is the time between subsequent action potentials.
-        """
 
         ISIs = []
         for i in range(self.n_spikes - 1):
             ISI = self._time[self._spikes_ind[i + 1]] - \
                 self._time[self._spikes_ind[i]]
             ISIs.append(ISI)
+
         return np.array(ISIs)
 
     # Features
     @ property
     def spike_rate(self):
-        """Action potential firing rate.
 
-        Number of action potentials divided by stimulus duration.
+        if self.n_spikes < 1:
+            return np.inf
 
-        Notes
-        -----
-        Typical unit is mHz
-        """
         return self.n_spikes / self._duration
 
     @ property
     def latency_to_first_spike(self):
-        """Latency to first spike.
 
-        The time between stimulus onset and first spike occurrence.
+        if self.n_spikes < 1:
+            return np.inf
 
-        Notes
-        -----
-        Typical unit is ms
-        """
         return self._time[self._spikes_ind[0]] - self._t_stim_on
 
     @ property
     def average_AP_overshoot(self):
-        """Average action potential peak voltage.
 
-        Average AP overshoot is calculated by averaging the absolute peak
-        voltage values of all APs (spikes).
+        if self.n_spikes < 1:
+            return np.inf
 
-        Notes
-        -----
-        Typical unit is mV
-        """
         return np.sum(self._V_spikes_height) / self.n_spikes
 
     @ property
     def average_AHP_depth(self):
-        """Average depth of after hyperpolarization (AHP).
 
-        The average AHP depth is obtained by averaging the minimum voltage
-        between two consecutive APs.
-
-        Notes
-        -----
-        Typical unit is mV
-        """
+        if self.n_spikes < 3:
+            return np.inf
 
         sum_ahp_depth = sum([np.min(self._V[self._spikes_ind[i]:self._spikes_ind[i + 1]])
                              for i in range(self.n_spikes - 1)])
@@ -260,36 +240,25 @@ class SpikingFeatures:
 
     @ property
     def average_AP_width(self):
-        """Average action potential (AP) width.
 
-        The average AP width is calculated by averaging the width of every
-        AP at the midpoint between its onset and its peak.
-
-        Notes
-        -----
-        Typical unit is mV
-        """
+        if self.n_spikes < 1:
+            return np.inf
 
         average_AP_width = np.sum(self._V_spike_widths) / self.n_spikes
         return average_AP_width
 
     @ property
     def accommodation_index(self):
-        """Accommodation index.
 
-        Normalized average difference in length of two consecutive interspike
-        intervals (ISIs).
+        # Excerpt from Druckmann et al. (2007):
+        # "k determines the number of ISIs that will be disregarded in order not
+        # to take into account possible transient behavior as observed in
+        # Markram et al. (2004). A reasonable value for k is either four ISIs or
+        # one-fifth of the total number of ISIs, whichever is the smaller of the
+        # two."
 
-        Notes
-        -----
-        Excerpt from Druckmann et al. (2007):
-
-        "k determines the number of ISIs that will be disregarded in order not
-        to take into account possible transient behavior as observed in
-        Markram et al. (2004). A reasonable value for k is either four ISIs or
-        one-fifth of the total number of ISIs, whichever is the smaller of the
-        two."
-        """
+        if self.n_spikes < 2:
+            return np.inf
 
         ISIs = self.ISIs
         k = min(4, int(len(ISIs) / 5))
@@ -306,9 +275,8 @@ if __name__ == "__main__":
     import matplotlib.lines as mlines
     import matplotlib.pyplot as plt
     import seaborn as sns
-    from hodgkin_huxley import HodgkinHuxley
     from matplotlib import gridspec
-    from stimulus import constant_stimulus
+    from pylfi.models import HodgkinHuxley, constant_stimulus
 
     # plt.style.use('seaborn')
     sns.set()
