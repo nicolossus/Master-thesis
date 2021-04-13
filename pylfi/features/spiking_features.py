@@ -76,7 +76,7 @@ class SpikingFeatures:
         calculated by averaging the width of every AP at the midpoint between
         its onset and its peak. Typical unit is ``mV``.
     accommodation_index : float
-        ``**Feature:**`` Accommodation index, which is the normalized average
+        **Feature:** Accommodation index, which is the normalized average
         difference in length of two consecutive interspike intervals (ISIs).
 
     Notes

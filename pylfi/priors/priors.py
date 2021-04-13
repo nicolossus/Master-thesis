@@ -19,7 +19,7 @@ class Uniform(ContinuousPrior):
     ----------
     loc : array_like, optional
         Location parameter (default=0)
-    scale: array_like, optional
+    scale : array_like, optional
         Scale parameter (default=1)
     name : str
         Name of random variate. Default is None (which will raise an ``Error``).
@@ -67,29 +67,6 @@ class Uniform(ContinuousPrior):
         rng=np.random.RandomState,
         seed=None
     ):
-        """
-        Initialize distribution.
-
-        Parameters
-        ----------
-        loc : array_like, optional
-            Location parameter (default=0)
-        scale: array_like, optional
-            Scale parameter (default=1)
-        name : str
-            Name of random variate. Default is None (which will raise an ``Error``).
-        tex : raw str literal, optional
-            LaTeX formatted name of random variate given as ``r"foo"``. Default is
-            None.
-        rng : random number generator, optional
-            Defines the random number generator to be used. Default is
-            np.random.RandomState
-        seed : {None, int}, optional
-            This parameter defines the object to use for drawing random
-            variates. If seed is None the RandomState singleton is used.
-            If seed is an int, a new RandomState instance is used, seeded
-            with seed. Default is None.
-        """
         super().__init__(
             shape=(),
             loc=loc,
@@ -112,7 +89,7 @@ class Normal(ContinuousPrior):
     ----------
     loc : array_like, optional
         Location parameter (default=0)
-    scale: array_like, optional
+    scale : array_like, optional
         Scale parameter (default=1)
     name : str
         Name of random variate. Default is None (which will raise an ``Error``).
@@ -195,7 +172,7 @@ class Beta(ContinuousPrior):
     ----------
     loc : array_like, optional
         Location parameter (default=0)
-    scale: array_like, optional
+    scale : array_like, optional
         Scale parameter (default=1)
     name : str
         Name of random variate. Default is None (which will raise an ``Error``).
@@ -270,7 +247,7 @@ class Exponential(ContinuousPrior):
     ----------
     loc : array_like, optional
         Location parameter (default=0)
-    scale: array_like, optional
+    scale : array_like, optional
         Scale parameter (default=1)
     name : str
         Name of random variate. Default is None (which will raise an ``Error``).

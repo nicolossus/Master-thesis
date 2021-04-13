@@ -61,5 +61,9 @@ class DistanceMetrics:
 
 if __name__ == "__main__":
     s1 = [0.5, 0.5]
-    s2 = [[1., 1.], [1., 1.]]
+    s2 = [1., 1.]
     print(euclidean(s1, s2))
+    print(euclidean(1, np.inf))
+    dist = euclidean(1, np.inf)
+    if dist < 0.5:
+        print('yo')

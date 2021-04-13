@@ -37,9 +37,9 @@ class HodgkinHuxley:
     Parameters
     ----------
     V_rest : float, default: -65.
-        Resting potential of neuron in units: mV
+        Resting potential of neuron in units :math:`mV`
     Cm : float, default: 1.
-        Membrane capacitance in units: μF/cm**2
+        Membrane capacitance in units :math:`\mu F/cm^2`
     gbar_K : float, default: 36.
         Potassium conductance in units: mS/cm**2
     gbar_Na : float, default: 120.
