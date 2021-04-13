@@ -35,12 +35,25 @@ https://stackoverflow.com/questions/30145957/plotting-2d-kernel-density-estimati
 
 
 class KDE:
-    """
-    bandwidth 'auto': grid with 10 uniformly spaced bandwidth values between
-    1e-3 and 1e0
+    """Kernel density estimation.
+
+    Parameters
+    ----------
+    data : ndarray
+        Array of data
+    bandwidth : {float, str}, optional
+        Kernel bandwidth either ... Default=1.
+
+    Notes
+    -----
+    Grid search; ``bandwidth='auto'`` : grid with 10 uniformly spaced bandwidth
+    values between
+
+    `initial_bandwidth` keyword; calculate initial bw with ISJ or silverman and
+    then do a gridsearch in the neighborhood around this value.
     """
 
-    def __init__(self, data, bandwidth=1.0, kernel='gaussian', **kwargs):
+    def __init__(self, data, bandwidth=1.0, kernel='gaussian', initial_bandwidth='isj', **kwargs):
 
         check_bandwidth(bandwidth)
         check_kernel(kernel)
@@ -63,10 +76,6 @@ class KDE:
         return self.density(x)
 
     def _select_kde(self, **kwargs):
-        """
-        Initialize KDE
-        """
-
         if isinstance(self._bw, str):
             if self._bw == "auto":
                 self._bw = np.logspace(-2, 1, 100)
