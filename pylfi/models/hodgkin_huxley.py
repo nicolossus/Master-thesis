@@ -253,10 +253,14 @@ class HodgkinHuxley:
         If multiple calls to solve are made, they are treated independently,
         with the newest one overwriting any old solution data.
 
+        :scipy-optimize:func:`scipy.integrate.solve_ivp`
+
+        :obj:`scipy.integrate.solve_ivp`
+
         Parameters
         ----------
-        :type p: :class:`~numpy:numpy.polynomial.polynomial.Polynomial`
-            test 
+        :param p: :type p: :class:`~numpy:numpy.polynomial.polynomial.Polynomial`
+            test
         stimulus : array, shape=(int(T/dt)+1,) or callable
             Input stimulus in units :math:`\mu A/cm^2`. If callable, the call
             signature must be ``(t)``.
