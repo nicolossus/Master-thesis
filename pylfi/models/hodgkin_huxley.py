@@ -31,56 +31,54 @@ class HodgkinHuxley:
 
     All model parameters can be accessed (get or set) as class attributes.
     Solutions are available as class attributes after calling the class method
-    ``solve``.
+    :func:`~pylfi.HodgkinHuxley.solve`.
 
     Parameters
     ----------
-    V_rest : float, default: -65.
-        Resting potential of neuron in units :math:`mV`.
-    Cm : float, default: 1.
-        Membrane capacitance in units :math:`\mu F/cm^2`.
-    gbar_K : float, default: 36.
-        Potassium conductance in units :math:`mS/cm^2`.
-    gbar_Na : float, default: 120.
-        Sodium conductance in units :math:`mS/cm^2`.
-    gbar_L : float, default: 0.3.
-        Leak conductance in units :math:`mS/cm^2`.
-    E_K : float, default: -77.
-        Potassium reversal potential in units :math:`mV`.
-    E_Na : float, default: 50.
-        Sodium reversal potential in units :math:`mV`.
-    E_L : float, default: -54.4
-        Leak reversal potential in units :math:`mV`.
+    V_rest : :obj:`float`
+        Resting potential of neuron in units :math:`mV`, default=`-65.0`.
+    Cm : :obj:`float`
+        Membrane capacitance in units :math:`\mu F/cm^2`, default=`1.0`.
+    gbar_K : :obj:`float`
+        Potassium conductance in units :math:`mS/cm^2`, default=`36.0`.
+    gbar_Na : :obj:`float`
+        Sodium conductance in units :math:`mS/cm^2`, default=`120.0`.
+    gbar_L : :obj:`float`
+        Leak conductance in units :math:`mS/cm^2`, default=`0.3`.
+    E_K : :obj:`float`
+        Potassium reversal potential in units :math:`mV`, default=`-77.0`.
+    E_Na : :obj:`float`
+        Sodium reversal potential in units :math:`mV`, default=`50.0`.
+    E_L : :obj:`float`
+        Leak reversal potential in units :math:`mV`, default=`-54.4`.
 
     Attributes
     ----------
-    V_rest : float
+    V_rest : :obj:`float`
         **Model parameter:** Resting potential.
-    Cm : float
+    Cm : :obj:`float`
         **Model parameter:** Membrane capacitance.
-    gbar_K : float
+    gbar_K : :obj:`float`
         **Model parameter:** Potassium conductance.
-    gbar_Na : float
+    gbar_Na : :obj:`float`
         **Model parameter:** Sodium conductance.
-    gbar_L : float
+    gbar_L : :obj:`float`
         **Model parameter:** Leak conductance.
-    E_K : float
+    E_K : :obj:`float`
         **Model parameter:** Potassium reversal potential.
-    E_Na : float
+    E_Na : :obj:`float`
         **Model parameter:** Sodium reversal potential.
-    E_L : float
+    E_L : :obj:`float`
         **Model parameter:** Leak reversal potential.
-    t : ndarray
+    t : :obj:`ndarray`
         **Solution:** Array of time points ``t``.
-    V : ndarray
+    V : :obj:`ndarray`
         **Solution:** Array of voltage values ``V`` at ``t``.
-    Vm : ndarray
-        **Solution:** Alias for ``V``.
-    n : ndarray
+    n : :obj:`ndarray`
         **Solution:** Array of state variable values ``n`` at ``t``.
-    m : ndarray
+    m : :obj:`ndarray`
         **Solution:** Array of state variable values ``m`` at ``t``.
-    h : ndarray
+    h : :obj:`ndarray`
         **Solution:** Array of state variable values ``h`` at ``t``.
 
     Notes
@@ -253,20 +251,16 @@ class HodgkinHuxley:
         If multiple calls to solve are made, they are treated independently,
         with the newest one overwriting any old solution data.
 
-        :scipy-optimize:func:`scipy.integrate.solve_ivp`
-
-
-
         Parameters
         ----------
-        stimulus : ndarray, shape=(int(T/dt)+1,) or callable
+        stimulus : :obj:`ndarray`, shape=(int(T/dt)+1,) or callable
             Input stimulus in units :math:`\mu A/cm^2`. If callable, the call
             signature must be ``(t)``.
         T : :obj:`float`
             End time in milliseconds (:math:`ms`).
-        dt : float
+        dt : :obj:`float`
             Time step where solutions are evaluated.
-        y0 : array_like, shape=(4,)
+        y0 : :obj:`array_like`, shape=(4,)
             Initial state of state variables ``V``, ``n``, ``m``, ``h``. If None,
             the default Hodgkin-Huxley model's initial conditions will be used;
             :math:`y_0 = (V_0, n_0, m_0, h_0) = (V_{rest}, n_\infty(V_0), m_\infty(V_0), h_\infty(V_0))`.
@@ -276,12 +270,11 @@ class HodgkinHuxley:
 
         Notes
         -----
-        The ODEs are solved numerically using the function `scipy.integrate.solve_ivp`.
-        For details, see SciPy documentaion https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.solve_ivp.html.
+        The ODEs are solved numerically using the function :obj:`scipy.integrate.solve_ivp`.
 
         If ``stimulus`` is passed as an array, it and the time array, defined by
         ``T`` and ``dt``, will be used to create an interpolation function via
-        `scipy.interpolate.interp1d`.
+        :obj:`scipy.interpolate.interp1d`.
 
         Credits to supervisor Joakim Sundnes for helping unravel the following.
 
@@ -289,6 +282,8 @@ class HodgkinHuxley:
         argument ``first_step`` is not specified, the solver will empirically
         select an initial step size with the function ``select_initial_step``
         (found here https://github.com/scipy/scipy/blob/master/scipy/integrate/_ivp/common.py#L64).
+
+        :obj:`scipy.integrate._ivp.select_initial_step`
 
         This function calculates two proposals and returns the smallest. It first
         calculates an intermediate proposal, ``h0``, that is based on the initial
@@ -481,13 +476,6 @@ class HodgkinHuxley:
 
     @ property
     def V(self):
-        try:
-            return self._V
-        except AttributeError:
-            raise ODEsNotSolved("Missing call to solve. No solution exists.")
-
-    @ property
-    def Vm(self):
         try:
             return self._V
         except AttributeError:
