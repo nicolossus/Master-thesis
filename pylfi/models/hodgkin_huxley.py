@@ -33,11 +33,19 @@ class HodgkinHuxley:
     Solutions are available as class attributes after calling the class method
     :meth:`~pylfi.HodgkinHuxley.solve`.
 
+    :meth:`~solve`.
+
+    :meth:`solve`.
+
+    :func:`~solve`.
+
+    :func:`solve`.
+
     :obj:`~pylfi.HodgkinHuxley.solve`
 
     Parameters
     ----------
-    V_rest : :obj:`float`
+    V_rest : :term:`float`
         Resting potential of neuron in units :math:`mV`, default=`-65.0`.
     Cm : :obj:`float`
         Membrane capacitance in units :math:`\mu F/cm^2`, default=`1.0`.
@@ -253,30 +261,16 @@ class HodgkinHuxley:
         If multiple calls to solve are made, they are treated independently,
         with the newest one overwriting any old solution data.
 
-        :term:`array-like <array_like>`
-
-        :term:`array_like`
-
-        :term:`ndarray`
-
-        :term:`numpy.array_like`
-
-        `array_like`
-
-        `numpy.array_like`
-
-        :obj:`numpy.array_like`
-
         Parameters
         ----------
-        stimulus : :obj:`numpy.ndarray`, shape=(int(T/dt)+1,) or callable
+        stimulus : :term:`ndarray`, shape=(int(T/dt)+1,) or callable
             Input stimulus in units :math:`\mu A/cm^2`. If callable, the call
             signature must be ``(t)``.
         T : :obj:`float`
             End time in milliseconds (:math:`ms`).
         dt : :obj:`float`
             Time step where solutions are evaluated.
-        y0 : :obj:`numpy.array_like`, shape=(4,)
+        y0 : :term:`array_like`, shape=(4,)
             Initial state of state variables ``V``, ``n``, ``m``, ``h``. If None,
             the default Hodgkin-Huxley model's initial conditions will be used;
             :math:`y_0 = (V_0, n_0, m_0, h_0) = (V_{rest}, n_\infty(V_0), m_\infty(V_0), h_\infty(V_0))`.
@@ -299,7 +293,7 @@ class HodgkinHuxley:
         select an initial step size with the function ``select_initial_step``
         (found here https://github.com/scipy/scipy/blob/master/scipy/integrate/_ivp/common.py#L64).
 
-        :py:function:`scipy.integrate._ivp.common.select_initial_step`
+        :term:`scipy.integrate._ivp.common.select_initial_step`
 
         This function calculates two proposals and returns the smallest. It first
         calculates an intermediate proposal, ``h0``, that is based on the initial

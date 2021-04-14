@@ -99,8 +99,8 @@ if plot_directive.__version__ < 2:
     raise RuntimeError("You need a recent enough version of matplotlib")
 # Do some matplotlib config in case users have a matplotlibrc that will break
 # things
-matplotlib.use('agg')
-plt.ioff()
+# matplotlib.use('agg')
+# plt.ioff()
 
 
 # -----------------------------------------------------------------------------
