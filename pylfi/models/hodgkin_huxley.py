@@ -272,12 +272,12 @@ class HodgkinHuxley:
 
         Notes
         -----
-        The ODEs are solved numerically using the function ``scipy.integrate.solve_ivp``.
+        The ODEs are solved numerically using the function `scipy.integrate.solve_ivp`.
         For details, see SciPy documentaion https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.solve_ivp.html.
 
         If ``stimulus`` is passed as an array, it and the time array, defined by
         ``T`` and ``dt``, will be used to create an interpolation function via
-        ``scipy.interpolate.interp1d``.
+        `scipy.interpolate.interp1d`.
 
         Credits to supervisor Joakim Sundnes for helping unravel the following.
 
