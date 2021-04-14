@@ -20,6 +20,7 @@ Kernel density estimation
 
 .. autosummary::
    :nosignatures:
+   :recursive:
    :toctree: generated/
    :template: class.rst
 

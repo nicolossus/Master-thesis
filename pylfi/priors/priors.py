@@ -9,8 +9,6 @@ from pylfi.priors import ContinuousPrior, DiscretePrior
 class Uniform(ContinuousPrior):
     r"""A uniform continuous random variable.
 
-    Notes
-    -----
     In the standard form, the distribution is uniform on ``[0, 1]``. Using the
     parameters ``loc`` and ``scale``, one obtains the uniform distribution on
     ``[loc, loc + scale]``.
@@ -34,6 +32,34 @@ class Uniform(ContinuousPrior):
         variates. If seed is None the RandomState singleton is used.
         If seed is an int, a new RandomState instance is used, seeded
         with seed. Default is None.
+
+    Attributes
+    ----------
+    name : str
+        Name of random variate.
+    tex : str
+        LaTeX formatted name of random variate.
+
+    Notes
+    -----
+    The uniform distribution is a probability distribution that has constant
+    probability. The distribution describes an experiment where there is an
+    arbitrary outcome that lies between certain bounds. The bounds are defined
+    by the parameters, :math:`a` and :math:`b`, which are the minimum and
+    maximum values. :math:`a` is the location parameter and :math:`(b-a)` is
+    the scale parameter.
+
+    The probability density function for ``Uniform`` is:
+
+    .. math::
+        f(x) = \frac{1}{b - a}
+
+    for :math:`a \leq x \leq b`, and
+
+    .. math::
+        f(x) = 0
+
+    for :math:`x < a` or :math:`x > b`.
 
     Examples
     --------
@@ -114,12 +140,20 @@ class Normal(ContinuousPrior):
 
     Notes
     -----
+    The normal distribution is a continuous probability distribution that is
+    symmetrical at the center, i.e. around the mean. Normal distribution is
+    the proper term for a probability bell curve.
+
     The probability density function for ``Normal`` is:
 
     .. math::
-        f(x) = \frac{\exp(-x^2/2)}{\sqrt{2\pi}}
+        f(x) = \frac{1}{\sigma \sqrt{2\pi}} \exp\left(-\frac{1}{2} \left(\frac{x - \mu}{\sigma}\right)^2 \right)
 
-    for a real number :math:`x`.
+    for a real number :math:`x`, where the mean :math:`\mu` is the location parameter
+    and the standard deviation :math:`\sigma` the scale parameter.
+
+    The case where :math:`\mu=0` and :math:`\sigma=1` is called the standard
+    normal distribution.
 
     Examples
     --------
@@ -168,8 +202,14 @@ class Normal(ContinuousPrior):
 class Beta(ContinuousPrior):
     r"""A beta continuous random variable.
 
+    ``Beta`` takes ``a`` and ``b`` as shape parameters.
+
     Parameters
     ----------
+    a : float
+        Shape parameter
+    b : float
+        Shape parameter
     loc : array_like, optional
         Location parameter (default=0)
     scale : array_like, optional
@@ -197,6 +237,11 @@ class Beta(ContinuousPrior):
 
     Notes
     -----
+    The beta distribution is a family of continuous probability distributions
+    set on the interval [0, 1] parameterized by two positive shape parameters,
+    denoted by :math:`a` and :math:`b`, that appear as exponents of the random
+    variable and control the shape of the distribution.
+
     The probability density function for ``Beta`` is:
 
     .. math::
@@ -206,7 +251,22 @@ class Beta(ContinuousPrior):
     for :math:`0 <= x <= 1`, :math:`a > 0`, :math:`b > 0`, where
     :math:`\Gamma` is the gamma function (`scipy.special.gamma`).
 
-    ``Beta`` takes ``a`` and ``b`` as shape parameters.
+
+
+    Typically we define the general form of a distribution in terms of location
+    and scale parameters. The beta is different in that we define the general
+    distribution in terms of the lower and upper bounds. However, the location
+    and scale parameters can be defined in terms of the lower and upper limits
+    as follows:
+
+    .. math::
+        location = a
+
+    .. math::
+        scale = b - a
+
+    The case where :math:`a = 0` and :math:`b = 1` is called the standard beta
+    distribution.
     """
 
     def __init__(

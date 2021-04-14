@@ -47,36 +47,35 @@ class Prior(metaclass=ABCMeta):
 
     The base class also implements methods for evaluating the pdf, plotting the
     prior and getting class attributes as properties.
+
+    The constructor of a sub-class must accept the following arguments:
+
+    Parameters
+    ----------
+    shape : array_like
+        The shape parameter(s) for the distribution (see docstring of the
+         instance object for more information)
+    loc : array_like
+        Location parameter
+    scale: array_like
+        Scale parameter
+    name : str
+        Name of random variate
+    tex : raw str literal
+        LaTeX formatted name of random variate given as `r"foo"`
+    distr_name : str
+        Name of distribution that exisist in `scipy.distribution`
+    rng : Random number generator
+        Defines the random number generator to be used.
+    seed : {None, int}
+        This parameter defines the object to use for drawing random
+        variates. If seed is None the RandomState singleton is used.
+        If seed is an int, a new RandomState instance is used, seeded
+        with seed.
     """
 
     def __init__(self, shape, loc, scale, name, tex, distr_name, rng, seed):
-        r"""Constructor that must be overwritten by the sub-class.
-
-        The constructor of a sub-class must accept the following arguments:
-
-        Parameters
-        ----------
-        shape : array_like
-            The shape parameter(s) for the distribution (see docstring of the
-             instance object for more information)
-        loc : array_like
-            Location parameter
-        scale: array_like
-            Scale parameter
-        name : str
-            Name of random variate
-        tex : raw str literal
-            LaTeX formatted name of random variate given as `r"foo"`
-        distr_name : str
-            Name of distribution that exisist in `scipy.distribution`
-        rng : Random number generator
-            Defines the random number generator to be used.
-        seed : {None, int}
-            This parameter defines the object to use for drawing random
-            variates. If seed is None the RandomState singleton is used.
-            If seed is an int, a new RandomState instance is used, seeded
-            with seed.
-        """
+        """Constructor that must be overwritten by the sub-class."""
 
         self.distr_name = distr_name
         self.distr = getattr(stats.distributions, self.distr_name)
@@ -113,13 +112,11 @@ class Prior(metaclass=ABCMeta):
         raise NotImplementedError
 
     @ property
-    def name(self) -> str:
-        #r"""Name of random variate."""
+    def name(self):
         return self._name
 
     @ property
     def tex(self):
-        #r"""LaTeX formatted name of random variate."""
         return self._tex
 
 
