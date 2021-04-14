@@ -41,26 +41,48 @@ class HodgkinHuxley:
     Cm : float, default: 1.
         Membrane capacitance in units :math:`\mu F/cm^2`
     gbar_K : float, default: 36.
-        Potassium conductance in units: mS/cm**2
+        Potassium conductance in units :math:`mS/cm^2`
     gbar_Na : float, default: 120.
-        Sodium conductance in units: mS/cm**2
+        Sodium conductance in units :math:`mS/cm^2`
     gbar_L : float, default: 0.3.
-        Leak conductance in units: mS/cm**2
+        Leak conductance in units :math:`mS/cm^2`
     E_K : float, default: -77.
-        Potassium reversal potential in units: mV
+        Potassium reversal potential in units :math:`mV`
     E_Na : float, default: 50.
-        Sodium reversal potential in units: mV
+        Sodium reversal potential in units :math:`mV`
     E_L : float, default: -54.4
-        Leak reversal potential in units: mV
+        Leak reversal potential in units :math:`mV`
 
     Attributes
     ----------
     V_rest : float
-        Resting potential
+        **Model parameter:** Resting potential
     Cm : float
-        Membrane capacitance
+        **Model parameter:** Membrane capacitance
+    gbar_K : float
+        **Model parameter:** Potassium conductance
+    gbar_Na : float
+        **Model parameter:** Sodium conductance
+    gbar_L : float
+        **Model parameter:** Leak conductance
+    E_K : float
+        **Model parameter:** Potassium reversal potential
+    E_Na : float
+        **Model parameter:** Sodium reversal potential
+    E_L : float
+        **Model parameter:** Leak reversal potential
     t : ndarray
-        Array of time points ``t``
+        **Solution:** Array of time points ``t``
+    V : ndarray
+        **Solution:** Array of voltage values ``V`` at ``t``
+    Vm : ndarray
+        **Solution:** Alias for ``V``
+    n : ndarray
+        **Solution:** Array of state variable values ``n`` at ``t``
+    m : ndarray
+        **Solution:** Array of state variable values ``m`` at ``t``
+    h : ndarray
+        **Solution:** Array of state variable values ``h`` at ``t``
 
     Notes
     -----
@@ -130,38 +152,6 @@ class HodgkinHuxley:
 
     def __init__(self, V_rest=-65., Cm=1., gbar_K=36., gbar_Na=120.,
                  gbar_L=0.3, E_K=-77., E_Na=50., E_L=-54.4):
-        r"""Define the model parameters.
-
-        Parameters
-        ----------
-        V_rest : float, default: -65.
-            Resting potential of neuron in units: mV
-        Cm : float, default: 1.
-            Membrane capacitance in units: μF/cm**2
-        gbar_K : float, default: 36.
-            Potassium conductance in units: mS/cm**2
-        gbar_Na : float, default: 120.
-            Sodium conductance in units: mS/cm**2
-        gbar_L : float, default: 0.3.
-            Leak conductance in units: mS/cm**2
-        E_K : float, default: -77.
-            Potassium reversal potential in units: mV
-        E_Na : float, default: 50.
-            Sodium reversal potential in units: mV
-        E_L : float, default: -54.4
-            Leak reversal potential in units: mV
-
-        Notes
-        -----
-        Default parameter values as given by Hodgkin and Huxley (1952).
-
-        References
-        ----------
-        Hodgkin, A. L., Huxley, A.F. (1952).
-        "A quantitative description of membrane current and its application
-        to conduction and excitation in nerve".
-        J. Physiol. 117, 500-544.
-        """
 
         # Hodgkin-Huxley model parameters
         self._V_rest = V_rest      # resting potential [mV]
@@ -262,7 +252,7 @@ class HodgkinHuxley:
             Time step where solutions are evaluated
         y0 : array_like, shape (4,), default None
             Initial state of state variables V, n, m, h. If None, the default
-            Hodgkin-Huxley model's initial conditions will be used.
+            Hodgkin-Huxley model's initial conditions will be used;
         **kwargs
             Arbitrary keyword arguments are passed along to
             scipy.integrate.solve_ivp
@@ -371,12 +361,10 @@ class HodgkinHuxley:
     # getters and setters
     @property
     def V_rest(self):
-        #"""Get resting potential."""
         return self._V_rest
 
     @V_rest.setter
     def V_rest(self, V_rest):
-        #"""Set resting potential."""
         if not isinstance(V_rest, (int, float)):
             msg = (f"{V_rest=}".split('=')[0]
                    + " must be set as an int or float")
@@ -385,12 +373,10 @@ class HodgkinHuxley:
 
     @property
     def Cm(self):
-        #"""Get membrane capacitance."""
         return self._Cm
 
     @Cm.setter
     def Cm(self, Cm):
-        #"""Set membrane capacitance."""
         if not isinstance(Cm, (int, float)):
             msg = (f"{Cm=}".split('=')[0]
                    + " must be set as an int or float")
@@ -399,12 +385,10 @@ class HodgkinHuxley:
 
     @property
     def gbar_K(self):
-        """Get potassium conductance."""
         return self._gbar_K
 
     @gbar_K.setter
     def gbar_K(self, gbar_K):
-        """Set potassium conductance."""
         if not isinstance(gbar_K, (int, float)):
             msg = (f"{gbar_K=}".split('=')[0]
                    + " must be set as an int or float")
@@ -413,12 +397,10 @@ class HodgkinHuxley:
 
     @property
     def gbar_Na(self):
-        """Get sodium conductance."""
         return self._gbar_Na
 
     @gbar_Na.setter
     def gbar_Na(self, gbar_Na):
-        """Set sodium conductance."""
         if not isinstance(gbar_Na, (int, float)):
             msg = (f"{gbar_Na=}".split('=')[0]
                    + " must be set as an int or float")
@@ -427,12 +409,10 @@ class HodgkinHuxley:
 
     @property
     def gbar_L(self):
-        """Get leak conductance."""
         return self._gbar_L
 
     @gbar_L.setter
     def gbar_L(self, gbar_L):
-        """Set leak conductance."""
         if not isinstance(gbar_L, (int, float)):
             msg = (f"{gbar_L=}".split('=')[0]
                    + " must be set as an int or float")
@@ -441,12 +421,10 @@ class HodgkinHuxley:
 
     @property
     def E_K(self):
-        """Get potassium reversal potential."""
         return self._E_K
 
     @E_K.setter
     def E_K(self, E_K):
-        """Set potassium reversal potential."""
         if not isinstance(E_K, (int, float)):
             msg = (f"{E_K=}".split('=')[0]
                    + " must be set as an int or float")
@@ -455,12 +433,10 @@ class HodgkinHuxley:
 
     @property
     def E_Na(self):
-        """Get sodium reversal potential."""
         return self._E_Na
 
     @E_Na.setter
     def E_Na(self, E_Na):
-        """Set sodium reversal potential."""
         if not isinstance(E_Na, (int, float)):
             msg = (f"{E_Na=}".split('=')[0]
                    + " must be set as an int or float")
@@ -469,12 +445,10 @@ class HodgkinHuxley:
 
     @property
     def E_L(self):
-        """Get leak reversal potential."""
         return self._E_L
 
     @E_L.setter
     def E_L(self, E_L):
-        """Set leak reversal potential."""
         if not isinstance(E_L, (int, float)):
             msg = (f"{E_L=}".split('=')[0]
                    + " must be set as an int or float")
@@ -483,7 +457,6 @@ class HodgkinHuxley:
 
     @ property
     def t(self):
-        #"""Array of time points ``t``."""
         try:
             return self._time
         except AttributeError as e:
@@ -491,7 +464,6 @@ class HodgkinHuxley:
 
     @ property
     def V(self):
-        """Values of the solution of ``V`` at ``t``."""
         try:
             return self._V
         except AttributeError:
@@ -499,7 +471,6 @@ class HodgkinHuxley:
 
     @ property
     def Vm(self):
-        """Values of the solution of ``V`` at ``t``. (Alias for property ``V``)."""
         try:
             return self._V
         except AttributeError:
@@ -507,7 +478,6 @@ class HodgkinHuxley:
 
     @ property
     def n(self):
-        """Values of the solution of ``n`` at ``t``."""
         try:
             return self._n
         except AttributeError:
@@ -515,7 +485,6 @@ class HodgkinHuxley:
 
     @ property
     def m(self):
-        """Values of the solution of ``m`` at ``t``."""
         try:
             return self._m
         except AttributeError:
@@ -523,7 +492,6 @@ class HodgkinHuxley:
 
     @ property
     def h(self):
-        """Values of the solution of ``h`` at ``t``."""
         try:
             return self._h
         except AttributeError:
