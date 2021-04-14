@@ -36,7 +36,7 @@ class SpikingFeatures:
     threshold : float, optional
         Threshold potential; when depolarization reaches this critical
         level a neuron will initiate an action potential. Default value is
-        -55 mV.
+        -55 :math:`mV`.
 
     Attributes
     ----------
@@ -102,7 +102,7 @@ class SpikingFeatures:
     >>> threshold = -55  # AP threshold
     >>> stim_duration = stimulus["duration"]
     >>> t_stim_on = stimulus["t_stim_on"]
-    >>> features = SpikingFeatures(V, t, duration, t_stim_on, threshold)
+    >>> features = SpikingFeatures(V, t, stim_duration, t_stim_on, threshold)
 
     Extract features:
 
