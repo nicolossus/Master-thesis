@@ -209,12 +209,14 @@ class ContinuousPrior(Prior):
         ----------
         x : array_like
             Quantiles
-        show : bool, optional, default True
-            Calls plt.show() if True
-        filename : str, optional, default None
-            Saves the figure as filename if provided
-        dpi : int, optional, default 100
-            Set figure dpi
+        ax : Axes, optional
+            Axes object. Default is None.
+        show : bool, optional
+            Calls plt.show() if True. Default is True.
+        filename : str, optional
+            Saves the figure as filename if provided. Default is None.
+        dpi : int, optional
+            Set figure dpi, default=100.
         """
 
         pdf = self.pdf(x)
@@ -232,12 +234,12 @@ class ContinuousPrior(Prior):
         ax.fill_between(x, pdf, alpha=0.5, facecolor='lightblue')
         ax.set_ylabel('Density')
         ax.set_xlabel(x_handle)
-
-        plt.legend()
+        ax.legend()
         if show:
             plt.show()
         if filename is not None:
             fig.savefig(filename)
+        return ax
 
 
 class DiscretePrior(Prior):

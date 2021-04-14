@@ -119,6 +119,12 @@ Continuous priors
    priors.Uniform
    priors.Normal
    priors.Beta
+   priors.LogNormal
+   priors.NegativeBinomial
+   priors.Exponential
+   priors.Gamma
+   priors.InvGamma
+   priors.Dirichlet
 
 Discrete priors
 -----------------

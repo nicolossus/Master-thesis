@@ -9,6 +9,18 @@ from histogram import histogram
 def histplot(data, ax=None, bins=10, **kwargs):
     """
     Histogram plot
+
+    Parameters
+    ----------
+    data : array_like
+        data
+    ax : Axes, optional
+        Axes object. Default is None.
+
+    Returns
+    -------
+    ax : Axes
+        The new Axes object
     """
     if ax is None:
         ax = plt.gca()
@@ -20,6 +32,7 @@ def histplot(data, ax=None, bins=10, **kwargs):
 def rugplot(data, ax=None, **kwargs):
     """
     Rug plot
+
     """
     if ax is None:
         ax = plt.gca()
@@ -29,6 +42,8 @@ def rugplot(data, ax=None, **kwargs):
 def kdeplot(x, density, ax=None, fill=False, **kwargs):
     """
     KDE plot
+
+
     """
     if ax is None:
         ax = plt.gca()

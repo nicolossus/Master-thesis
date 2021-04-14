@@ -5,8 +5,8 @@ Welcome to pyLFI's documentation!
 :Release: |version|
 :Date: |today|
 
-pyLFI is a Python toolbox for likelihood-free inference (LFI) of model
-parameters tailored towards computational neuroscience.
+pyLFI is a Python toolbox for likelihood-free inference (LFI) for estimating
+the posterior distributions of model parameters.
 
 .. toctree::
    :maxdepth: 2
