@@ -31,21 +31,11 @@ class HodgkinHuxley:
 
     All model parameters can be accessed (get or set) as class attributes.
     Solutions are available as class attributes after calling the class method
-    :meth:`~pylfi.HodgkinHuxley.solve`.
-
-    :meth:`~solve`.
-
     :meth:`solve`.
-
-    :func:`~solve`.
-
-    :func:`solve`.
-
-    :obj:`~pylfi.HodgkinHuxley.solve`
 
     Parameters
     ----------
-    V_rest : :term:`float`
+    V_rest : :obj:`float`
         Resting potential of neuron in units :math:`mV`, default=`-65.0`.
     Cm : :obj:`float`
         Membrane capacitance in units :math:`\mu F/cm^2`, default=`1.0`.
@@ -80,15 +70,15 @@ class HodgkinHuxley:
         **Model parameter:** Sodium reversal potential.
     E_L : :obj:`float`
         **Model parameter:** Leak reversal potential.
-    t : :obj:`numpy.ndarray`
+    t : :term:`ndarray`
         **Solution:** Array of time points ``t``.
-    V : :obj:`ndarray`
+    V : :term:`ndarray`
         **Solution:** Array of voltage values ``V`` at ``t``.
-    n : :obj:`ndarray`
+    n : :term:`ndarray`
         **Solution:** Array of state variable values ``n`` at ``t``.
-    m : :obj:`ndarray`
+    m : :term:`ndarray`
         **Solution:** Array of state variable values ``m`` at ``t``.
-    h : :obj:`ndarray`
+    h : :term:`ndarray`
         **Solution:** Array of state variable values ``h`` at ``t``.
 
     Notes
