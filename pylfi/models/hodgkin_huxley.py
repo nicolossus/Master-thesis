@@ -36,7 +36,7 @@ class HodgkinHuxley:
     Parameters
     ----------
     V_rest : :obj:`float`
-        Resting potential of neuron in units :math:`mV`, default=`-65.0`.
+        Resting potential of neuron in units :math:`mV`, default=``-65.0``.
     Cm : :obj:`float`
         Membrane capacitance in units :math:`\mu F/cm^2`, default=`1.0`.
     gbar_K : :obj:`float`
@@ -253,7 +253,7 @@ class HodgkinHuxley:
 
         Parameters
         ----------
-        stimulus : :term:`ndarray`, shape=(int(T/dt)+1,) or callable
+        stimulus : :term:`ndarray`, shape=(int(T/dt)+1,) or :obj:`callable`
             Input stimulus in units :math:`\mu A/cm^2`. If callable, the call
             signature must be ``(t)``.
         T : :obj:`float`
@@ -282,8 +282,6 @@ class HodgkinHuxley:
         argument ``first_step`` is not specified, the solver will empirically
         select an initial step size with the function ``select_initial_step``
         (found here https://github.com/scipy/scipy/blob/master/scipy/integrate/_ivp/common.py#L64).
-
-        :term:`scipy.integrate._ivp.common.select_initial_step`
 
         This function calculates two proposals and returns the smallest. It first
         calculates an intermediate proposal, ``h0``, that is based on the initial
