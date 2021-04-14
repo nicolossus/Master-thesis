@@ -11,6 +11,7 @@ from scipy.signal import find_peaks, peak_widths
 class SpikingFeatures:
     """Extract spiking features of a voltage trace.
 
+
     The following features are available as class attributes:
 
     * ``spike_rate``
@@ -20,7 +21,7 @@ class SpikingFeatures:
     * ``average_AP_width``
     * ``accommodation_index``
 
-   Features are from Druckmann et al. (2007).
+    Features are from Druckmann et al. (2007).
 
     Parameters
     ----------
@@ -92,6 +93,42 @@ class SpikingFeatures:
     "A novel multiple objective optimization framework for constraining
     conductance-based neuron models by experimental data".
     Frontiers in Neuroscience 1, 7-18. doi:10.3389/neuro.01.1.1.001.2007
+
+    Examples
+    --------
+    >>> import matplotlib.pyplot as plt
+    >>> from pylfi.models import HodgkinHuxley, constant_stimulus
+    >>> from pylfi.features import SpikingFeatures
+
+    Generate voltage trace:
+
+    >>> T = 120
+    >>> dt = 0.01
+    >>> I_amp = 0.32
+    >>> stimulus = constant_stimulus(I_amp=0.32, T=T, dt=dt, t_stim_on=10,
+    ...                              t_stim_off=110, r_soma=40)
+    >>> hh.HodgkinHuxley()
+    >>> hh.solve(stimulus["I"], T, dt)
+    >>> t = hh.t
+    >>> V = hh.V
+
+    Initialize spike features extraction:
+
+    >>> threshold = -55  # AP threshold
+    >>> stim_duration = stimulus["duration"]
+    >>> t_stim_on = stimulus["t_stim_on"]
+    >>> features = SpikingFeatures(V, t, duration, t_stim_on, threshold)
+
+    Extract features:
+
+    # number of spikes
+    >>> n_spikes = features.n_spikes  # not strictly a feature
+    >>> spike_rate = features.spike_rate
+    >>> latency_to_first_spike = features.latency_to_first_spike
+    >>> average_AP_overshoot = features.average_AP_overshoot
+    >>> average_AHP_depth = features.average_AHP_depth
+    >>> average_AP_width = features.average_AP_width
+    >>> accommodation_index = features.accommodation_index
     """
 
     def __init__(self, V, t, stim_duration, t_stim_on, threshold=-55):
