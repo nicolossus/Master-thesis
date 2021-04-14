@@ -4,8 +4,11 @@
 ==================
 
 pyLFI is a Python toolbox for likelihood-free inference (LFI) for automated
-parameter identification with quantified uncertainty, and is tailored towards
-computational neuroscience.
+parameter identification in mechanistic models with quantified uncertainty, and
+is tailored towards computational neuroscience.
+
+Introduction
+~~~~~~~~~~~~
 
 Mechanistic models in neuroscience aim to explain neural or behavioral phenomena
 in terms of causal mechanisms, and candidate models are validated by investigating
@@ -29,14 +32,14 @@ to analyze the model in a fully Bayesian context.
 Here, we explain how to use pyLFI to estimate the posterior distributions of
 model parameters given some observed data. If you are new to parameter estimation
 using Approximate Bayesian Computation (ABC), we recommend you to start with the
-`Parameters as Random Variables`_ section.
+`The ABC of Approximate Bayesian Computation`_ section.
 
-Moreover, we also provide an interactive notebook on Binder guiding through the basics of ABC with pyLFI; without
-installing that on your machine.
-Please find it `here <https://mybinder.org/v2/gh/eth-cscs/abcpy/master?filepath=examples>`_.
+Moreover, we also provide an interactive notebook on Binder guiding through the
+basics of ABC with pyLFI; without installing that on your machine. Please find
+it `here <https://mybinder.org/v2/gh/eth-cscs/abcpy/master?filepath=examples>`_.
 
-Parameters as Random Variables
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The ABC of Approximate Bayesian Computation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 As an example, if we have measurements of the height of a group of grown up humans and it is also known that a Gaussian
 distribution is an appropriate probabilistic model for these kind of observations, then our observed dataset would be
