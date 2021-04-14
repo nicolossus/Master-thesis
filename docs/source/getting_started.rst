@@ -38,6 +38,12 @@ Moreover, we also provide an interactive notebook on Binder guiding through the
 basics of ABC with pyLFI; without installing that on your machine. Please find
 it `here <https://mybinder.org/v2/gh/eth-cscs/abcpy/master?filepath=examples>`_.
 
+.. plot::
+
+   import matplotlib.pyplot as plt
+   import numpy as np
+   plt.hist(np.random.randn(1000), 20)
+
 The ABC of Approximate Bayesian Computation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

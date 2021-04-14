@@ -14,7 +14,7 @@ class SpikingFeatures:
 
     The following features are available as class attributes:
 
-    * ``spike_rate``
+    * :attr:`spike_rate`
     * ``latency_to_first_spike``
     * ``average_AP_overshoot``
     * ``average_AHP_depth``
