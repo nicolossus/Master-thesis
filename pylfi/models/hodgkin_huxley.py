@@ -255,6 +255,8 @@ class HodgkinHuxley:
 
         Parameters
         ----------
+        :type p: :class:`~numpy:numpy.polynomial.polynomial.Polynomial`
+            test 
         stimulus : array, shape=(int(T/dt)+1,) or callable
             Input stimulus in units :math:`\mu A/cm^2`. If callable, the call
             signature must be ``(t)``.
