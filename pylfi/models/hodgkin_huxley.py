@@ -255,6 +255,12 @@ class HodgkinHuxley:
 
         :term:`array-like <array_like>`
 
+        :term:`array_like`
+
+        :term:`ndarray`
+
+        :term:`numpy.array_like`
+
         `array_like`
 
         `numpy.array_like`
