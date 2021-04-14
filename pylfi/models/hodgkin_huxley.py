@@ -31,7 +31,9 @@ class HodgkinHuxley:
 
     All model parameters can be accessed (get or set) as class attributes.
     Solutions are available as class attributes after calling the class method
-    :func:`~pylfi.HodgkinHuxley.solve`.
+    :meth:`~pylfi.HodgkinHuxley.solve`.
+
+    :obj:`~pylfi.HodgkinHuxley.solve`
 
     Parameters
     ----------
@@ -283,7 +285,7 @@ class HodgkinHuxley:
         select an initial step size with the function ``select_initial_step``
         (found here https://github.com/scipy/scipy/blob/master/scipy/integrate/_ivp/common.py#L64).
 
-        :obj:`scipy.integrate._ivp.select_initial_step`
+        :obj:`scipy.integrate._ivp.common.select_initial_step`
 
         This function calculates two proposals and returns the smallest. It first
         calculates an intermediate proposal, ``h0``, that is based on the initial
