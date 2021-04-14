@@ -45,6 +45,18 @@ As an example, if we have measurements of the height of a group of grown up huma
 distribution is an appropriate probabilistic model for these kind of observations, then our observed dataset would be
 measurement of heights and the probabilistic model would be Gaussian.
 
+.. plot::
+      :context: close-figs
+      :format: doctest
+      :include-source: False
+
+      >>> import matplotlib.pyplot as plt
+      >>> import numpy as np
+      >>> x = np.linspace(0, 2*np, 100)
+      >>> y = np.sin(x)
+      >>> plt.plot(x, y)
+      >>> plt.show()
+
 ..
   .. literalinclude:: ../../examples/extensions/models/gaussian_python/pmcabc_gaussian_model_simple.py
       :language: python
