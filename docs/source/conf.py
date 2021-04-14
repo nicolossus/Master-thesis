@@ -25,7 +25,7 @@ exec(open(os.path.join("..", "..", "pylfi", "_version.py")).read())
 #import pylfi
 
 #sys.path.insert(0, os.path.abspath(os.pardir))
-sys.path.insert(0, os.path.abspath('../sphinxext'))
+#sys.path.insert(0, os.path.abspath('../sphinxext'))
 sys.path.insert(0, os.path.abspath('../../'))
 
 
