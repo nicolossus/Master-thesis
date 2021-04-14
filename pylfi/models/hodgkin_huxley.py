@@ -72,7 +72,7 @@ class HodgkinHuxley:
         **Model parameter:** Sodium reversal potential.
     E_L : :obj:`float`
         **Model parameter:** Leak reversal potential.
-    t : :obj:`ndarray`
+    t : :obj:`numpy.ndarray`
         **Solution:** Array of time points ``t``.
     V : :obj:`ndarray`
         **Solution:** Array of voltage values ``V`` at ``t``.
@@ -255,14 +255,14 @@ class HodgkinHuxley:
 
         Parameters
         ----------
-        stimulus : :obj:`ndarray`, shape=(int(T/dt)+1,) or callable
+        stimulus : :obj:`numpy.ndarray`, shape=(int(T/dt)+1,) or callable
             Input stimulus in units :math:`\mu A/cm^2`. If callable, the call
             signature must be ``(t)``.
         T : :obj:`float`
             End time in milliseconds (:math:`ms`).
         dt : :obj:`float`
             Time step where solutions are evaluated.
-        y0 : :obj:`array_like`, shape=(4,)
+        y0 : :obj:`numpy.array_like`, shape=(4,)
             Initial state of state variables ``V``, ``n``, ``m``, ``h``. If None,
             the default Hodgkin-Huxley model's initial conditions will be used;
             :math:`y_0 = (V_0, n_0, m_0, h_0) = (V_{rest}, n_\infty(V_0), m_\infty(V_0), h_\infty(V_0))`.
@@ -285,7 +285,7 @@ class HodgkinHuxley:
         select an initial step size with the function ``select_initial_step``
         (found here https://github.com/scipy/scipy/blob/master/scipy/integrate/_ivp/common.py#L64).
 
-        :obj:`scipy.integrate._ivp.common.select_initial_step`
+        :py:function:`scipy.integrate._ivp.common.select_initial_step`
 
         This function calculates two proposals and returns the smallest. It first
         calculates an intermediate proposal, ``h0``, that is based on the initial
