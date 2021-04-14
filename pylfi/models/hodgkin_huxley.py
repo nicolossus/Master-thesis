@@ -255,16 +255,14 @@ class HodgkinHuxley:
 
         :scipy-optimize:func:`scipy.integrate.solve_ivp`
 
-        :obj:`scipy.integrate.solve_ivp`
+
 
         Parameters
         ----------
-        :param p: :type p: :class:`~numpy:numpy.polynomial.polynomial.Polynomial`
-            test
-        stimulus : array, shape=(int(T/dt)+1,) or callable
+        stimulus : ndarray, shape=(int(T/dt)+1,) or callable
             Input stimulus in units :math:`\mu A/cm^2`. If callable, the call
             signature must be ``(t)``.
-        T : float
+        T : :obj:`float`
             End time in milliseconds (:math:`ms`).
         dt : float
             Time step where solutions are evaluated.
@@ -274,7 +272,7 @@ class HodgkinHuxley:
             :math:`y_0 = (V_0, n_0, m_0, h_0) = (V_{rest}, n_\infty(V_0), m_\infty(V_0), h_\infty(V_0))`.
         **kwargs
             Arbitrary keyword arguments are passed along to
-            ``scipy.integrate.solve_ivp``.
+            :obj:`scipy.integrate.solve_ivp`.
 
         Notes
         -----
