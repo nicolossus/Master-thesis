@@ -37,52 +37,52 @@ class HodgkinHuxley:
     Parameters
     ----------
     V_rest : float, default: -65.
-        Resting potential of neuron in units :math:`mV`
+        Resting potential of neuron in units :math:`mV`.
     Cm : float, default: 1.
-        Membrane capacitance in units :math:`\mu F/cm^2`
+        Membrane capacitance in units :math:`\mu F/cm^2`.
     gbar_K : float, default: 36.
-        Potassium conductance in units :math:`mS/cm^2`
+        Potassium conductance in units :math:`mS/cm^2`.
     gbar_Na : float, default: 120.
-        Sodium conductance in units :math:`mS/cm^2`
+        Sodium conductance in units :math:`mS/cm^2`.
     gbar_L : float, default: 0.3.
-        Leak conductance in units :math:`mS/cm^2`
+        Leak conductance in units :math:`mS/cm^2`.
     E_K : float, default: -77.
-        Potassium reversal potential in units :math:`mV`
+        Potassium reversal potential in units :math:`mV`.
     E_Na : float, default: 50.
-        Sodium reversal potential in units :math:`mV`
+        Sodium reversal potential in units :math:`mV`.
     E_L : float, default: -54.4
-        Leak reversal potential in units :math:`mV`
+        Leak reversal potential in units :math:`mV`.
 
     Attributes
     ----------
     V_rest : float
-        **Model parameter:** Resting potential
+        **Model parameter:** Resting potential.
     Cm : float
-        **Model parameter:** Membrane capacitance
+        **Model parameter:** Membrane capacitance.
     gbar_K : float
-        **Model parameter:** Potassium conductance
+        **Model parameter:** Potassium conductance.
     gbar_Na : float
-        **Model parameter:** Sodium conductance
+        **Model parameter:** Sodium conductance.
     gbar_L : float
-        **Model parameter:** Leak conductance
+        **Model parameter:** Leak conductance.
     E_K : float
-        **Model parameter:** Potassium reversal potential
+        **Model parameter:** Potassium reversal potential.
     E_Na : float
-        **Model parameter:** Sodium reversal potential
+        **Model parameter:** Sodium reversal potential.
     E_L : float
-        **Model parameter:** Leak reversal potential
+        **Model parameter:** Leak reversal potential.
     t : ndarray
-        **Solution:** Array of time points ``t``
+        **Solution:** Array of time points ``t``.
     V : ndarray
-        **Solution:** Array of voltage values ``V`` at ``t``
+        **Solution:** Array of voltage values ``V`` at ``t``.
     Vm : ndarray
-        **Solution:** Alias for ``V``
+        **Solution:** Alias for ``V``.
     n : ndarray
-        **Solution:** Array of state variable values ``n`` at ``t``
+        **Solution:** Array of state variable values ``n`` at ``t``.
     m : ndarray
-        **Solution:** Array of state variable values ``m`` at ``t``
+        **Solution:** Array of state variable values ``m`` at ``t``.
     h : ndarray
-        **Solution:** Array of state variable values ``h`` at ``t``
+        **Solution:** Array of state variable values ``h`` at ``t``.
 
     Notes
     -----
@@ -169,9 +169,9 @@ class HodgkinHuxley:
         Parameters
         ----------
         t : float
-            The time point
+            The time point.
         y : tuple of floats
-            A tuple of the state variables, y = (V, n, m, h)
+            A tuple of the state variables, ``y = (V, n, m, h)``.
         """
 
         V, n, m, h = y
@@ -234,7 +234,7 @@ class HodgkinHuxley:
     def solve(self, stimulus, T, dt, y0=None, **kwargs):
         r"""Solve the Hodgkin-Huxley equations.
 
-        The equations are solved on the interval (0, T] and the solutions
+        The equations are solved on the interval ``(0, T]`` and the solutions
         evaluted at a given interval. The solutions are not returned, but
         stored as class attributes.
 
@@ -243,19 +243,20 @@ class HodgkinHuxley:
 
         Parameters
         ----------
-        stimulus : array, shape (int(T/dt)+1,) or callable
-            Input stimulus in units: μA/cm**2. If callable, the call signature
-            must be '(t)'
+        stimulus : array, shape=``(int(T/dt)+1,)`` or callable
+            Input stimulus in units :math:`\mu A/cm^2`. If callable, the call
+            signature must be ``(t)``.
         T : float
-            End time in milliseconds (ms)
+            End time in milliseconds (:math:`ms`).
         dt : float
             Time step where solutions are evaluated
-        y0 : array_like, shape (4,), default None
-            Initial state of state variables V, n, m, h. If None, the default
-            Hodgkin-Huxley model's initial conditions will be used;
+        y0 : array_like, shape=``(4,)``
+            Initial state of state variables ``V``, ``n``, ``m``, ``h``. If None,
+            the default Hodgkin-Huxley model's initial conditions will be used;
+            :math:`y_0 = (V_0, n_0, m_0, h_0) = (V_{rest}, n_\infty(V_0), m_\infty(V_0), h_\infty(V_0))`.
         **kwargs
             Arbitrary keyword arguments are passed along to
-            scipy.integrate.solve_ivp
+            ``scipy.integrate.solve_ivp``.
 
         Notes
         -----
