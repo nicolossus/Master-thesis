@@ -72,15 +72,15 @@ extensions = [
     'sphinx.ext.coverage',
     'sphinx.ext.doctest',
     'sphinx.ext.extlinks',
-    'sphinx.ext.githubpages',
-    'sphinx.ext.imgconverter',
+    # 'sphinx.ext.githubpages',
+    # 'sphinx.ext.imgconverter',
     'sphinx.ext.intersphinx',
     'sphinx.ext.inheritance_diagram',
     # 'sphinx.ext.linkcode',
     'sphinx.ext.mathjax',
     # 'sphinx.ext.napoleon',
-    'sphinx-prompt',
-    'sphinx.ext.todo',
+    # 'sphinx-prompt',
+    # 'sphinx.ext.todo',
     'sphinx.ext.viewcode',
     # 'sphinx_gallery.gen_gallery',
     # 'sphinx_issues',
@@ -92,11 +92,6 @@ extensions = [
     'matplotlib.sphinxext.plot_directive',
 ]
 
-# Determine if the matplotlib has a recent enough version of the
-# plot_directive.
-
-if plot_directive.__version__ < 2:
-    raise RuntimeError("You need a recent enough version of matplotlib")
 # Do some matplotlib config in case users have a matplotlibrc that will break
 # things
 # matplotlib.use('agg')
@@ -106,7 +101,7 @@ if plot_directive.__version__ < 2:
 # -----------------------------------------------------------------------------
 # Numpy extensions
 # -----------------------------------------------------------------------------
-numpydoc_use_plots = True
+#numpydoc_use_plots = True
 
 
 # this is needed for some reason...
@@ -163,6 +158,14 @@ intersphinx_mapping = {
         "https://matplotlib.org/",
         (None, "http://www.astropy.org/astropy-data/intersphinx/matplotlib.inv"),
     ),
+    'pandas': (
+        'https://pandas.pydata.org/pandas-docs/stable/',
+        (None),
+    ),
+    'seaborn': (
+        'https://seaborn.pydata.org/',
+        (None),
+    ),
 }
 
 # inheritance_diagram configuration
@@ -200,7 +203,7 @@ autosummary_imported_members = True
 # ------------------------------------------------------------------------------
 # Matplotlib plot_directive options
 # ------------------------------------------------------------------------------
-
+'''
 plot_pre_code = """
 import numpy as np
 np.random.seed(123)
@@ -229,6 +232,7 @@ plot_rcparams = {
     'figure.subplot.wspace': 0.4,
     'text.usetex': False,
 }
+'''
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

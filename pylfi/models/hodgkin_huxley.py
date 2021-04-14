@@ -36,21 +36,21 @@ class HodgkinHuxley:
     Parameters
     ----------
     V_rest : :obj:`float`
-        Resting potential of neuron in units :math:`mV`, default=``-65.0``.
+        Resting potential of neuron in units :math:`mV`, default=-65.0.
     Cm : :obj:`float`
-        Membrane capacitance in units :math:`\mu F/cm^2`, default=`1.0`.
+        Membrane capacitance in units :math:`\mu F/cm^2`, default=1.0.
     gbar_K : :obj:`float`
-        Potassium conductance in units :math:`mS/cm^2`, default=`36.0`.
+        Potassium conductance in units :math:`mS/cm^2`, default=36.0.
     gbar_Na : :obj:`float`
-        Sodium conductance in units :math:`mS/cm^2`, default=`120.0`.
+        Sodium conductance in units :math:`mS/cm^2`, default=120.0.
     gbar_L : :obj:`float`
-        Leak conductance in units :math:`mS/cm^2`, default=`0.3`.
+        Leak conductance in units :math:`mS/cm^2`, default=0.3.
     E_K : :obj:`float`
-        Potassium reversal potential in units :math:`mV`, default=`-77.0`.
+        Potassium reversal potential in units :math:`mV`, default=-77.0.
     E_Na : :obj:`float`
-        Sodium reversal potential in units :math:`mV`, default=`50.0`.
+        Sodium reversal potential in units :math:`mV`, default=50.0.
     E_L : :obj:`float`
-        Leak reversal potential in units :math:`mV`, default=`-54.4`.
+        Leak reversal potential in units :math:`mV`, default=-54.4.
 
     Attributes
     ----------
@@ -253,7 +253,7 @@ class HodgkinHuxley:
 
         Parameters
         ----------
-        stimulus : :term:`ndarray`, shape=(int(T/dt)+1,) or :obj:`callable`
+        stimulus : :obj:`callable` or :term:`ndarray`, shape=(int(T/dt)+1,)
             Input stimulus in units :math:`\mu A/cm^2`. If callable, the call
             signature must be ``(t)``.
         T : :obj:`float`
