@@ -133,7 +133,7 @@ autodoc_typehints = 'none'
 # -----------------------------------------------------------------------------
 # Intersphinx configuration
 # -----------------------------------------------------------------------------
-
+'''
 intersphinx_mapping = {
     'python': ('https://docs.python.org/{.major}'.format(
         sys.version_info), None),
@@ -143,6 +143,26 @@ intersphinx_mapping = {
     'pandas': ('https://pandas.pydata.org/pandas-docs/stable/', None),
     'joblib': ('https://joblib.readthedocs.io/en/latest/', None),
     'seaborn': ('https://seaborn.pydata.org/', None),
+}
+'''
+
+intersphinx_mapping = {
+    "python": (
+        "https://docs.python.org/3/",
+        (None, "http://www.astropy.org/astropy-data/intersphinx/python3.inv"),
+    ),
+    "numpy": (
+        "https://numpy.org/doc/stable/",
+        (None, "http://www.astropy.org/astropy-data/intersphinx/numpy.inv"),
+    ),
+    "scipy": (
+        "https://docs.scipy.org/doc/scipy/reference/",
+        (None, "http://www.astropy.org/astropy-data/intersphinx/scipy.inv"),
+    ),
+    "matplotlib": (
+        "https://matplotlib.org/",
+        (None, "http://www.astropy.org/astropy-data/intersphinx/matplotlib.inv"),
+    ),
 }
 
 # inheritance_diagram configuration
