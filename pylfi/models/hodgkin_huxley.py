@@ -253,6 +253,14 @@ class HodgkinHuxley:
         If multiple calls to solve are made, they are treated independently,
         with the newest one overwriting any old solution data.
 
+        :term:`array-like <array_like>`
+
+        `array_like`
+
+        `numpy.array_like`
+
+        :obj:`numpy.array_like`
+
         Parameters
         ----------
         stimulus : :obj:`numpy.ndarray`, shape=(int(T/dt)+1,) or callable
