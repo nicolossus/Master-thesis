@@ -30,7 +30,6 @@ class HodgkinHuxley:
     to describe their dynamics in terms of differential equations.
 
     All model parameters can be accessed (get or set) as class attributes.
-
     Solutions are available as class attributes after calling the class method
     ``solve``.
 
@@ -243,14 +242,14 @@ class HodgkinHuxley:
 
         Parameters
         ----------
-        stimulus : array, shape=``(int(T/dt)+1,)`` or callable
+        stimulus : array, shape=(int(T/dt)+1,) or callable
             Input stimulus in units :math:`\mu A/cm^2`. If callable, the call
             signature must be ``(t)``.
         T : float
             End time in milliseconds (:math:`ms`).
         dt : float
-            Time step where solutions are evaluated
-        y0 : array_like, shape=``(4,)``
+            Time step where solutions are evaluated.
+        y0 : array_like, shape=(4,)
             Initial state of state variables ``V``, ``n``, ``m``, ``h``. If None,
             the default Hodgkin-Huxley model's initial conditions will be used;
             :math:`y_0 = (V_0, n_0, m_0, h_0) = (V_{rest}, n_\infty(V_0), m_\infty(V_0), h_\infty(V_0))`.
