@@ -42,21 +42,6 @@ class SpikingFeatures:
     ----------
     n_spikes : int
         The number of spikes during stimulus period in voltage trace.
-    spikes_position : array_like
-        Array of spike peak positions in terms of indices.
-    V_spikes_height : array_like
-        Array of voltage values at the peak of the spikes.
-    width_lines : 3-tuple of ndarrays
-        Data for contour lines at which the widths where calculated. Can
-        be used for plotting the located spike widths via e.g.:
-            >>> features = SpikingFeatures(V, t, stim_duration, t_stim_on)
-            >>> plt.hlines(*features.width_lines)
-    AHP_depth_pos : array_like
-        Array of positions of after hyperpolarization depths in terms of
-        indices.
-    ISIs : array_like
-        Interspike intervals (ISIs). ISI is the time between subsequent
-        action potentials.
     spike_rate : float
         **Feature:** Action potential firing rate, which is the number of
         action potentials divided by stimulus duration. Typical unit is ``mHz``.
@@ -121,7 +106,6 @@ class SpikingFeatures:
 
     Extract features:
 
-    # number of spikes
     >>> n_spikes = features.n_spikes  # not strictly a feature
     >>> spike_rate = features.spike_rate
     >>> latency_to_first_spike = features.latency_to_first_spike
@@ -198,22 +182,52 @@ class SpikingFeatures:
     def n_spikes(self):
         return self._n_spikes
 
-    @property
     def spikes_position(self):
+        """Array of spike peak positions in terms of indices.
+
+        Returns
+        -------
+        spikes_position : array_like
+            Spike peak positions.
+        """
         return self._spikes_ind
 
-    @property
     def V_spikes_height(self):
+        """Array of voltage values at the peak of the spikes.
+
+        Returns
+        -------
+        V_spikes_height : array_like
+            Peak voltage values.
+        """
         return self._V_spikes_height
 
-    @property
     def width_lines(self):
+        """Data for contour lines at which the widths where calculated.
+
+        Can be used for plotting the located spike widths via e.g.:
+            >>> features = SpikingFeatures(V, t, stim_duration, t_stim_on)
+            >>> plt.hlines(*features.width_lines)
+
+        Returns
+        -------
+        width_lines : 3-tuple of ndarrays
+            Contour lines.
+        """
         return self._spikes_width_data_physical
 
-    @property
-    def AHP_depth_pos(self):
+    def AHP_depth_position(self):
+        """Array of positions of after hyperpolarization depths in terms of
+        indices.
 
-        ahp_depth_pos = []
+        Returns
+        -------
+        AHP_depth_position : array_like
+            The positions of the minimum voltage values between consecutive
+            action potentials.
+        """
+
+        ahp_depth_position = []
         for i in range(self._n_spikes - 1):
             # search for minimum value between two spikes
             spike1_ind = self._spikes_ind[i]
@@ -224,12 +238,20 @@ class SpikingFeatures:
             min_rel_pos = np.argmin(V_slice)
             # the position in total voltage trace
             min_pos = spike1_ind + min_rel_pos
-            ahp_depth_pos.append(min_pos)
+            ahp_depth_position.append(min_pos)
 
-        return ahp_depth_pos
+        return ahp_depth_position
 
-    @property
     def ISIs(self):
+        """Interspike intervals (ISIs).
+
+        ISI is the time between subsequent action potentials.
+
+        Returns
+        -------
+        ISIs : array_like
+            Interspike intervals.
+        """
 
         ISIs = []
         for i in range(self.n_spikes - 1):
@@ -297,7 +319,7 @@ class SpikingFeatures:
         if self.n_spikes < 2:
             return np.inf
 
-        ISIs = self.ISIs
+        ISIs = self.ISIs()
         k = min(4, int(len(ISIs) / 5))
 
         A = 0
@@ -390,10 +412,10 @@ if __name__ == "__main__":
     print(f"{accommodation_index=:.4f}")
 
     # plot voltage trace with features
-    spike_pos = features.spikes_position
-    V_spikes_height = features.V_spikes_height
-    width_lines = features.width_lines
-    ahp_depth_pos = features.AHP_depth_pos
+    spike_pos = features.spikes_position()
+    V_spikes_height = features.V_spikes_height()
+    width_lines = features.width_lines()
+    ahp_depth_pos = features.AHP_depth_position()
 
     fig = plt.figure(figsize=(8, 6), tight_layout=True, dpi=140)
     gs = gridspec.GridSpec(2, 1, height_ratios=[4, 1])
