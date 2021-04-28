@@ -1,13 +1,484 @@
 % For style examples, see e.g. https://verbosus.com/bibtex-style-examples.html                    or                    https://www.economics.utoronto.ca/osborne/latex/BIBTEX.HTM
 
+%==========================================================
+%----------------------- TEMPLATES ------------------------
+%==========================================================
+
 @book
 {
     Sakurai,
-    AUTHOR = {Sakurai, J. J. and Napolitano, J.},
-     TITLE = {Modern Quantum Mechanics},
- PUBLISHER = {Cambridge University Press},
-      YEAR = {2017},
-      EDITION = {2},
-      ISBN = {978-1-108-42241-3 Hardback},
-      ADDRESS = {Cambridge, United Kingdom}
+    AUTHOR      = {Sakurai, J. J. and Napolitano, J.},
+    TITLE       = {Modern Quantum Mechanics},
+    PUBLISHER   = {Cambridge University Press},
+    YEAR        = {2017},
+    EDITION     = {2},
+    ISBN        = {978-1-108-42241-3 Hardback},
+    ADDRESS     = {Cambridge, United Kingdom}
+} 
+
+@article
+{
+    article,
+    AUTHOR      = {Einstein, Albert and Newton, Isaac},
+    TITLE       = {The title of the work},
+    PUBLISHER   = {Science},
+    ADDRESS     = {Earth, Solar System},
+    JOURNAL     = {The name of the journal},
+    VOLUME      = {4},
+    YEAR        = {1993},
+    MONTH       = {7},
+    NUMBER      = {2},
+    PAGES       = {201--213},
+    ISSN        = {0929-5313},
+    DOI         = {10.1101/838383},
+    URL         = {https://www.google.com/},
+    %note        = {An optional note}, 
+}
+
+
+%==========================================================
+%----------------------- ARTICLES -------------------------
+%==========================================================
+
+%--------- Approximate Bayesian Computation Primer --------
+@article
+{
+    ABCprimer,
+    AUTHOR      = {Sunnåker, Mikael and Busetto, Alberto Giovanni and Numminen, Elina and Corander, Jukka and Foll, Matthieu and Dessimoz, Christophe},
+    TITLE       = {Approximate Bayesian Computation},
+    PUBLISHER   = {Public Library of Science},
+    ADDRESS     = {San Francisco, USA},
+    JOURNAL     = {PLOS Computational Biology},
+    VOLUME      = {9},
+    YEAR        = {2013},
+    MONTH       = {1},
+    NUMBER      = {1},
+    PAGES       = {1--10},
+    ISSN        = {1553-7358},
+    DOI         = {10.1371/journal.pcbi.1002803},
+    URL         = {https://doi.org/10.1371/journal.pcbi.1002803},
+    %note        = {An optional note}, 
+}
+
+%---------------------- Brunel 2000 -----------------------
+@article{
+    BrunelNet,
+    issn        = {0929-5313},
+    journal     = {Journal of Computational Neuroscience},
+    pages       = {183--208},
+    volume      = {8},
+    publisher   = {Kluwer Academic Publishers},
+    number      = {3},
+    year        = {2000},
+    title       = {Dynamics of Sparsely Connected Networks of Excitatory and Inhibitory Spiking Neurons},
+    address     = {Boston},
+    author      = {Brunel, Nicolas},
+}
+
+
+%==========================================================
+%------------------------- BOOKS --------------------------
+%==========================================================
+
+%----------------- Bayesian Data Analysis -----------------
+@book
+{
+    BDA,
+    AUTHOR      = {Gelman, Andrew and Carlin, John B. and Stern, Hal S. and Dunson, David B. and Vehtari, Aki and Rubin, Donald B.},
+    TITLE       = {Bayesian Data Analysis},
+    SERIES      = {Texts in statistical science},
+    PUBLISHER   = {CRC Press}, 
+    YEAR        = {2014},
+    EDITION     = {3}, 
+    ISBN        = {978-1-4398-9820-8},
+    ADDRESS     = {Boca Raton, Fl},
+}
+
+% - Principles of Computational Modelling in Neuroscience -
+@book
+{
+    Sterratt,
+    AUTHOR      = {Sterratt, David and Graham, Bruce and Gillies, Andrew and Willshaw, David},
+    TITLE       = {Principles of Computational Modelling in Neuroscience},
+    PUBLISHER   = {Cambridge University Press}, 
+    YEAR        = {2011},
+    EDITION     = {1}, 
+    ISBN        = {978-0-521-87795-4 Hardback},
+    ADDRESS     = {Cambridge, UK},
+}
+
+%---- Modern Mathematical Statistics with Applications ----
+@book
+{
+    STK, 
+    AUTHOR      = {Devore, Jay and Berk, Kenneth},
+    TITLE       = {Modern Mathematical Statistics with Applications},
+    SERIES      = {Springer Texts in Statistics},
+    PUBLISHER   = {Springer New York}, 
+    YEAR        = {2012},
+    EDITION     = {2}, 
+    ISBN        = {978-1-4614-0390-6},
+    ADDRESS     = {New York, NY},
+}
+
+%------------- Elements of Statistical Learning -----------
+@book
+{
+    ESL, 
+    AUTHOR      = {Hastie, Trevor and Tibshirani, Robert and Friedman, Jerome},
+    TITLE       = {The Elements of Statistical Learning: Data Mining, Inference, and Prediction},
+    SERIES      = {Springer Series in Statistics},
+    PUBLISHER   = {Springer New York}, 
+    YEAR        = {2009},
+    EDITION     = {2}, 
+    ISBN        = {978-0-387-84857-0},
+    ADDRESS     = {New York, NY},
+}
+
+%--------- Introduction to Statistical Learning -----------
+@book
+{
+    ISL, 
+    AUTHOR      = {James, Gareth and Witten, Daniela and Hastie, Trevor and Tibshirani, Robert},
+    TITLE       = {An Introduction to Statistical Learning with Applications in R},
+    SERIES      = {Springer Texts in Statistics},
+    PUBLISHER   = {Springer New York}, 
+    YEAR        = {2013},
+    EDITION     = {1}, 
+    ISBN        = {978-1-4614-7137-0},
+    ADDRESS     = {New York, NY},
+}
+
+%--------- Advanced Data Analysis in Neuroscience ---------
+@book
+{
+    ADA_neuro, 
+    AUTHOR      = {Durstewitz, Daniel},
+    TITLE       = {Advanced Data Analysis in Neuroscience: Integrating Statistical and Computational Models},
+    SERIES      = {Bernstein Series in Computational Neuroscience},
+    PUBLISHER   = {Springer International Publishing}, 
+    YEAR        = {2017},
+    EDITION     = {1}, 
+    ISBN        = {978-3-319-59974-8},
+    ADDRESS     = {Cham, Switzerland},
+}
+
+%---------- Data Analysis - A Bayesian Tutorial -----------
+@book
+{
+    Sivia, 
+    AUTHOR      = {Sivia, D. S. and Skilling, J.},
+    TITLE       = {Data Analysis - A Bayesian Tutorial},
+    SERIES      = {Oxford Science Publications},
+    PUBLISHER   = {Oxford University Press}, 
+    YEAR        = {2006},
+    EDITION     = {2}, 
+    ISBN        = {978-0-19-856831-5},
+    ADDRESS     = {New York, NY},
+}
+
+%---------- Introduction to Probability Models ------------
+@book
+{
+    ProbModels, 
+    AUTHOR      = {Ross, Sheldon M.},
+    TITLE       = {Introduction to Probability Models},
+    PUBLISHER   = {Academic Press}, 
+    YEAR        = {2014},
+    EDITION     = {11}, 
+    ISBN        = {978-0-12-407948-9},
+    ADDRESS     = {Amsterdam, The Netherlands},
+}
+
+%-------------------- Handbook of ABC --------------------- 
+% Chapter 1 
+@incollection
+{
+    ABC_ch1,
+    AUTHOR      = {Sisson, Scott A. and Fan, Yanan and Beaumont, Mark A.},
+    TITLE       = {Overview of ABC},
+    CHAPTER     = {1},
+    PAGES       = {3--54},
+    EDITOR      = {Sisson, Scott A. and Fan, Yanan and Beaumont, Mark A.},
+    BOOKTITLE   = {Handbook of Approximate Bayesian Computation},
+    SERIES      = {Handbooks of Modern Statistical Methods},
+    PUBLISHER   = {CRC Press}, 
+    YEAR        = {2019},
+    EDITION     = {1}, 
+    ISBN        = {978-1-4398-8150-7 Hardback},
+    ADDRESS     = {Boca Raton, Fl},
+}
+
+
+% Chapter 2
+@incollection
+{
+    ABC_ch2,
+    AUTHOR      = {Tavaré, Simon},
+    TITLE       = {On the History of ABC},
+    CHAPTER     = {2},
+    PAGES       = {55--69},
+    EDITOR      = {Sisson, Scott A. and Fan, Yanan and Beaumont, Mark A.},
+    BOOKTITLE   = {Handbook of Approximate Bayesian Computation},
+    SERIES      = {Handbooks of Modern Statistical Methods},
+    PUBLISHER   = {CRC Press}, 
+    YEAR        = {2019},
+    EDITION     = {1}, 
+    ISBN        = {978-1-4398-8150-7 Hardback},
+    ADDRESS     = {Boca Raton, Fl},
+}
+
+% Chapter 3
+@incollection
+{
+    ABC_ch3,
+    AUTHOR      = {Blum, Michael G.B.},
+    TITLE       = {Regression Approaches for ABC},
+    CHAPTER     = {3},
+    PAGES       = {71--85},
+    EDITOR      = {Sisson, Scott A. and Fan, Yanan and Beaumont, Mark A.},
+    BOOKTITLE   = {Handbook of Approximate Bayesian Computation},
+    SERIES      = {Handbooks of Modern Statistical Methods},
+    PUBLISHER   = {CRC Press}, 
+    YEAR        = {2019},
+    EDITION     = {1}, 
+    ISBN        = {978-1-4398-8150-7 Hardback},
+    ADDRESS     = {Boca Raton, Fl},
+}
+
+
+% Chapter 4
+@incollection
+{
+    ABC_ch4,
+    AUTHOR      = {Sisson, Scott A. and Fan, Yanan},
+    TITLE       = {ABC Samplers},
+    CHAPTER     = {4},
+    PAGES       = {87--123},
+    EDITOR      = {Sisson, Scott A. and Fan, Yanan and Beaumont, Mark A.},
+    BOOKTITLE   = {Handbook of Approximate Bayesian Computation},
+    SERIES      = {Handbooks of Modern Statistical Methods},
+    PUBLISHER   = {CRC Press}, 
+    YEAR        = {2019},
+    EDITION     = {1}, 
+    ISBN        = {978-1-4398-8150-7 Hardback},
+    ADDRESS     = {Boca Raton, Fl},
+}
+
+% Chapter 5
+@incollection
+{
+    ABC_ch5,
+    AUTHOR      = {Prangle, Dennis},
+    TITLE       = {Summary Statistics},
+    CHAPTER     = {5},
+    PAGES       = {125--152},
+    EDITOR      = {Sisson, Scott A. and Fan, Yanan and Beaumont, Mark A.},
+    BOOKTITLE   = {Handbook of Approximate Bayesian Computation},
+    SERIES      = {Handbooks of Modern Statistical Methods},
+    PUBLISHER   = {CRC Press}, 
+    YEAR        = {2019},
+    EDITION     = {1}, 
+    ISBN        = {978-1-4398-8150-7 Hardback},
+    ADDRESS     = {Boca Raton, Fl},
+}
+
+% Chapter 6
+@incollection
+{
+    ABC_ch6,
+    AUTHOR      = {Marin, Jean-Michel and Pudlo, Pierre and Estoup, Arnaud and Robert, Christian},
+    TITLE       = {Likelihood-Free Model Choice},
+    CHAPTER     = {6},
+    PAGES       = {153--178},
+    EDITOR      = {Sisson, Scott A. and Fan, Yanan and Beaumont, Mark A.},
+    BOOKTITLE   = {Handbook of Approximate Bayesian Computation},
+    SERIES      = {Handbooks of Modern Statistical Methods},
+    PUBLISHER   = {CRC Press}, 
+    YEAR        = {2019},
+    EDITION     = {1}, 
+    ISBN        = {978-1-4398-8150-7 Hardback},
+    ADDRESS     = {Boca Raton, Fl},
+}
+
+% Chapter 7
+@incollection
+{
+    ABC_ch7,
+    AUTHOR      = {Drovandi, Christopher C.},
+    TITLE       = {ABC and Indirect Inference},
+    CHAPTER     = {7},
+    PAGES       = {179--209},
+    EDITOR      = {Sisson, Scott A. and Fan, Yanan and Beaumont, Mark A.},
+    BOOKTITLE   = {Handbook of Approximate Bayesian Computation},
+    SERIES      = {Handbooks of Modern Statistical Methods},
+    PUBLISHER   = {CRC Press}, 
+    YEAR        = {2019},
+    EDITION     = {1}, 
+    ISBN        = {978-1-4398-8150-7 Hardback},
+    ADDRESS     = {Boca Raton, Fl},
+}
+
+% Chapter 8
+@incollection
+{
+    ABC_ch8,
+    AUTHOR      = {Nott, David J. and Ong, Victor M.-H. and Sisson, Scott A. and Fan, Yanan},
+    TITLE       = {High-Dimensional ABC},
+    CHAPTER     = {8},
+    PAGES       = {211--241},
+    EDITOR      = {Sisson, Scott A. and Fan, Yanan and Beaumont, Mark A.},
+    BOOKTITLE   = {Handbook of Approximate Bayesian Computation},
+    SERIES      = {Handbooks of Modern Statistical Methods},
+    PUBLISHER   = {CRC Press}, 
+    YEAR        = {2019},
+    EDITION     = {1}, 
+    ISBN        = {978-1-4398-8150-7 Hardback},
+    ADDRESS     = {Boca Raton, Fl},
+}
+
+% Chapter 9
+@incollection
+{
+    ABC_ch9,
+    AUTHOR      = {Andrieu, Christophe and Lee, Anthony and Vihola, Matti},
+    TITLE       = {Theoretical and Methodological Aspects of Markov Chain Monte Carlo Computations with Noisy Likelihoods},
+    CHAPTER     = {9},
+    PAGES       = {243--268},
+    EDITOR      = {Sisson, Scott A. and Fan, Yanan and Beaumont, Mark A.},
+    BOOKTITLE   = {Handbook of Approximate Bayesian Computation},
+    SERIES      = {Handbooks of Modern Statistical Methods},
+    PUBLISHER   = {CRC Press}, 
+    YEAR        = {2019},
+    EDITION     = {1}, 
+    ISBN        = {978-1-4398-8150-7 Hardback},
+    ADDRESS     = {Boca Raton, Fl},
+}
+
+% Chapter 10
+@incollection
+{
+    ABC_ch10,
+    AUTHOR      = {Fearnhead, Paul},
+    TITLE       = {Asymptotics of ABC},
+    CHAPTER     = {10},
+    PAGES       = {269--288},
+    EDITOR      = {Sisson, Scott A. and Fan, Yanan and Beaumont, Mark A.},
+    BOOKTITLE   = {Handbook of Approximate Bayesian Computation},
+    SERIES      = {Handbooks of Modern Statistical Methods},
+    PUBLISHER   = {CRC Press}, 
+    YEAR        = {2019},
+    EDITION     = {1}, 
+    ISBN        = {978-1-4398-8150-7 Hardback},
+    ADDRESS     = {Boca Raton, Fl},
+}
+
+
+% Chapter 11
+@incollection
+{
+    ABC_ch11,
+    AUTHOR      = {Ratmann, Oliver and Camacho, Anton and Hu, Sen and Colijn, Caroline},
+    TITLE       = {Informed Choices: How to Calibrate ABC with Hypothesis Testing},
+    CHAPTER     = {11},
+    PAGES       = {289--319},
+    EDITOR      = {Sisson, Scott A. and Fan, Yanan and Beaumont, Mark A.},
+    BOOKTITLE   = {Handbook of Approximate Bayesian Computation},
+    SERIES      = {Handbooks of Modern Statistical Methods},
+    PUBLISHER   = {CRC Press}, 
+    YEAR        = {2019},
+    EDITION     = {1}, 
+    ISBN        = {978-1-4398-8150-7 Hardback},
+    ADDRESS     = {Boca Raton, Fl},
+}
+
+% Chapter 12
+@incollection
+{
+    ABC_ch12,
+    AUTHOR      = {Drovandi, Christopher C. and Grazian, Clara and Mengersen, Kerrie and Robert, Christian},
+    TITLE       = {Approximating the Likelihood in ABC},
+    CHAPTER     = {12},
+    PAGES       = {321--368},
+    EDITOR      = {Sisson, Scott A. and Fan, Yanan and Beaumont, Mark A.},
+    BOOKTITLE   = {Handbook of Approximate Bayesian Computation},
+    SERIES      = {Handbooks of Modern Statistical Methods},
+    PUBLISHER   = {CRC Press}, 
+    YEAR        = {2019},
+    EDITION     = {1}, 
+    ISBN        = {978-1-4398-8150-7 Hardback},
+    ADDRESS     = {Boca Raton, Fl},
+}
+
+% Chapter 13
+@incollection
+{
+    ABC_ch13,
+    AUTHOR      = {Kousathanas, Athanasios and Duchen, Pablo and Wegmann, Daniel},
+    TITLE       = {A Guide to General-Purpose ABC Software},
+    CHAPTER     = {13},
+    PAGES       = {369--413},
+    EDITOR      = {Sisson, Scott A. and Fan, Yanan and Beaumont, Mark A.},
+    BOOKTITLE   = {Handbook of Approximate Bayesian Computation},
+    SERIES      = {Handbooks of Modern Statistical Methods},
+    PUBLISHER   = {CRC Press}, 
+    YEAR        = {2019},
+    EDITION     = {1}, 
+    ISBN        = {978-1-4398-8150-7 Hardback},
+    ADDRESS     = {Boca Raton, Fl},
+}
+
+% Chapter 14
+@incollection
+{
+    ABC_ch14,
+    AUTHOR      = {Barthelmé, Simon and Chopin, Nicolas and Cottet, Vincent},
+    TITLE       = {Divide and Conquer in ABC: Expectation-Propagation Algorithms for Likelihood-Free Inference},
+    CHAPTER     = {14},
+    PAGES       = {415--434},
+    EDITOR      = {Sisson, Scott A. and Fan, Yanan and Beaumont, Mark A.},
+    BOOKTITLE   = {Handbook of Approximate Bayesian Computation},
+    SERIES      = {Handbooks of Modern Statistical Methods},
+    PUBLISHER   = {CRC Press}, 
+    YEAR        = {2019},
+    EDITION     = {1}, 
+    ISBN        = {978-1-4398-8150-7 Hardback},
+    ADDRESS     = {Boca Raton, Fl},
+}
+
+
+% Chapter 17
+@incollection
+{
+    ABC_ch17,
+    AUTHOR      = {Liepe, Juliane and Stumpf, Michael P.H.},
+    TITLE       = {ABC in Systems Biology},
+    CHAPTER     = {17},
+    PAGES       = {513--539},
+    EDITOR      = {Sisson, Scott A. and Fan, Yanan and Beaumont, Mark A.},
+    BOOKTITLE   = {Handbook of Approximate Bayesian Computation},
+    SERIES      = {Handbooks of Modern Statistical Methods},
+    PUBLISHER   = {CRC Press}, 
+    YEAR        = {2019},
+    EDITION     = {1}, 
+    ISBN        = {978-1-4398-8150-7 Hardback},
+    ADDRESS     = {Boca Raton, Fl},
+}
+
+% Chapter 20
+@incollection
+{
+    ABC_ch20,
+    AUTHOR      = {Fasiolo, Matteo and Wood, Simon N.},
+    TITLE       = {ABC in Ecological Modelling},
+    CHAPTER     = {20},
+    PAGES       = {597--622},
+    EDITOR      = {Sisson, Scott A. and Fan, Yanan and Beaumont, Mark A.},
+    BOOKTITLE   = {Handbook of Approximate Bayesian Computation},
+    SERIES      = {Handbooks of Modern Statistical Methods},
+    PUBLISHER   = {CRC Press}, 
+    YEAR        = {2019},
+    EDITION     = {1}, 
+    ISBN        = {978-1-4398-8150-7 Hardback},
+    ADDRESS     = {Boca Raton, Fl},
 }

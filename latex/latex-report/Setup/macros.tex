@@ -7,8 +7,8 @@
 \renewcommand\thepart{\Roman{part}}
 
 %----- fig & table numbering -----
-\counterwithin{figure}{section}
-\counterwithin{table}{section}
+\counterwithin{figure}{chapter}
+\counterwithin{table}{chapter}
 
 % Easily insert sources in images
 \newcommand{\source}[1]{\vspace{-4pt} \caption*{\hfill \footnotesize{Source: {#1}} } } 
@@ -60,6 +60,6 @@
 \newcommand{\dash}{\textthreequartersemdash\xspace}
 
 \NewDocumentCommand{\cw}{v}{%
-\textbf{\texttt{\textcolor{Blue}{#1}}}%
+\textbf{\texttt{\textcolor{Black}{#1}}}%
 }
 

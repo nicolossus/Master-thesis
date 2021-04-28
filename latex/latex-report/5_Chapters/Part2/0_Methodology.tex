@@ -6,6 +6,21 @@
 \section{Post-Processing of Posterior Samples}\label{sec:post_processing}
 %================================================================
 
+Post-sampling Adjustment
+
+\alglanguage{pseudocode}
+\begin{algorithm}[H]
+\caption{Feed forward algorithm}
+\label{alg:FeedForward}
+\begin{algorithmic}[1] 
+
+\For{sample $\mathbf{x}_j$ in data set}
+        \State $\mathbf{a}^0 = \mathbf{x}_j$\;
+\EndFor
+
+\end{algorithmic}
+\end{algorithm}
+
 %================================================================
 \subsection{Regression Adjustment}\label{sec:reg_adjust}
 %================================================================
