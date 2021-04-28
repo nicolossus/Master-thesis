@@ -42,6 +42,7 @@
 
 %------ sections layout --------
 \usepackage{appendix}
+\usepackage{epigraph}
 %\usepackage{sectsty}
 %\sectionfont{\fontsize{12}{15}\selectfont}
 %\subsectionfont{\fontsize{10}{15}\selectfont}
@@ -56,7 +57,9 @@
 \usepackage{multirow}
 \usepackage{array}
 \usepackage{caption} % figure & table caption
-\captionsetup{labelfont={normal, bf}, font={sl}}  
+\captionsetup{labelfont={normal, bf}, width=.9\linewidth, font={rm}}  % sc, sf, rm,   
+% \bf, \md, \it, \sl, \sc, \sf, \tt or \rm
+%\captionsetup{labelfont={normal, bf}, font={sl}}  
 \usepackage{chngcntr}
 \usepackage{booktabs} % top- & midrule
 \usepackage{longtable} % tables that can span several pages
@@ -92,7 +95,6 @@
     innerleftmargin=10pt,
     backgroundcolor=gray!10!white}
 
-\usepackage{tikz}
 \usepackage[listings,theorems,skins,breakable]{tcolorbox}
 \tcbset{highlight math style={enhanced,
   colframe=red,colback=white,arc=0pt,boxrule=2pt}} 

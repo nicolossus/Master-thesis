@@ -1,3 +1,42 @@
 %================================================================
 \section{Objective of the Study}
-%================================================================
+%================================================================ 
+
+\begin{itemize}
+    \item Explore LFI methods, ABC in particular, on toy problems
+    \item Find optimal ABC "settings", i.e.: 
+    \begin{itemize}
+        \item Best overall algorithm 
+        \item Threshold schedules
+        \item Post-sampling regression method 
+    \end{itemize}
+    \item KDE on toy problems
+    \item Same with neural density estimators 
+    \item Apply on neuro models; Hodgkin-Huxley, multicompartment, Brunel network
+    \item Different stimuli 
+    \item Compare performance between domain knowledge features and automatically learned features 
+    \begin{itemize}
+        \item Weight summary statistics; general procedure can be to find correlation between feature and model parameter and use correlation coefficient as weight
+        \item Plot number of spikes vs $\bar{g}_X$
+        \item Perhaps different sum stats are better for different thetas
+        \item See uncertainpy sobol indices
+    \end{itemize}
+    \item Bayesian analysis, sensitivity etc. 
+    \item Insights the ABC methods can give, especially with regards to network models
+    \item Test on real experimental data?
+\end{itemize}
+
+Biological neural networks are complex nonlinear dynamical systems, and hence do nonlinear dynamical models play a crucial role in neuroscience as explanatory tools. Computational neuroscience has seen a rapid development over the last decades. With the advent of modern computers it is now possible to simulate large networks of neurons. 
+
+In this thesis, the aim is to study the aforementioned likelihood-free methods for identifying the parametrization of mechanistic neural models that makes contact with observed data from experiments in a Bayesian context. In particular, the \textit{Brunel network model} is of interest. The Brunel Network model exhibits a high diversity of spiking network dynamics depending on the value of only three synaptic weight parameters.
+
+One of the principal topics of research in likelihood-free inference is how to obtain state-of-the-art results with fewer simulations. By dissecting and studying the methods in great detail, another aim is to contribute to this research within the time and scope a master thesis permits. 
+
+
+Domain knowledge vs learned
+
+
+Dynamical systems pose considerable inferential challenges, and a rich literature [30–32] has been building up around concepts such as identifiability, inferability, and sloppiness. Common to these three closely related notions – even though the relationship is rarely if ever explored – is that local, point- estimates are: (i) potentially poor representations of the true parameter and (ii) hide the fact that many similar parameters would be capable of describ- ing the data equally well. This should be reason enough to consider interval estimators and, in particular, Bayesian methods from the outset. While no- tions such as identifiability and sloppiness have been considered in depth – though perhaps not always satisfactorily – in the context of ODE models, many of the same problems will also carry through to stochastic modelling approaches [33]. \cite{ABC_ch17} 
+
+
+The choice of summary statistics is crucial for the performance of ABC meth- ods, hence, the topic has been the subject of much research. See Blum et al. (2013) for a comprehensive review of methods for dimension reduction or statistics selection. SL and ABC methods share some requirements regarding the choice of summary statistics. More specifically, in parameter, estimation problems, the summary statistics should contain as much information as possi- ble about the parameters, so that $\pi \qty(\theta \mid y_\mathrm{obs})$ will be approximately proportional to $\pi \qty(\theta \mid y_\mathrm{obs})$. \cite{ABC_ch20} (see also table 20.1 for inspiration).

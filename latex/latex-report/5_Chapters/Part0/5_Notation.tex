@@ -1,0 +1,25 @@
+%================================================================
+\section{Notation}\label{sec:notation}
+%================================================================ 
+
+In general, only standard and common mathematical notation will be used in this thesis, and special symbols will always be introduced where necessary. The notational convention in this thesis is based on a combination of the ones used in \cite{BDA} and \cite{ABC_ch1}.
+
+\subsubsection{General Notation}
+
+
+As general notation, we let $\theta$ denote unobservable vector quantities or population \textit{parameters} of interest, $y$ denote the observed data, and $\tilde{y}$ denote unknown, but potentially observable, quantities. In general these symbols represent multivariate quantities. Observed or observable scalars and vectors are generally denoted by lower case Roman letters, and observed or observable matrices by upper case Roman letters. Parameters of models and distributions will mostly be denoted by Greek letters. However, due to notational conventions in the field, this will not be strictly followed when dealing with neuroscientific models. For example, a conductance of a neuroscientific model is usually indicated by $g$, although it may represent a model parameter from a statistical perspective. When using matrix notation, we consider vectors as column vectors throughout; for example, if $u$ is a vector with $n$ components, then $u^T u$ is a scalar and $uu^T$ an $n\times n$ matrix.
+
+%\textit{Statistical estimates} of model parameters are indicated by a hat "\^{}", as standard in statistics, e.g., $\hat{\theta}$. Sometimes the hat symbol is also used to indicate a \textit{predicted} value as in $\hat{y} = f(x)$
+
+\subsubsection{Probability Notation}
+
+We let $p(\cdot \mid \cdot)$ denote a \textit{conditional probability density} and $p(\cdot)$ a \textit{marginal distribution}. The conditional probability $p(A \mid B)$ is the likelihood of event $A$ occurring given that $B$ is true, and the marginal probability $p(A)$ is the probability of observing $A$. The terms \textit{distribution} and \textit{density} are used interchangeably. For brevity, the term \textit{probability density} will often be condensed into \textit{density}. A \textit{probability mass function}, which gives the probability that a discrete random variable is exactly equal to some value, is abbreviated \textit{pmf}. Similarly, a \textit{probability density function}, associated with continuous rather than discrete random variables, is abbreviated \textit{pdf}. The same notation is used for continuous density functions and discrete probability mass functions. Furthermore, we refer to both pdf and pmf as pdf, when the nomenclature makes no difference. 
+
+In a statistical analysis, the assumption is usually that the $n$ values $y_i$ may be regarded as \textit{exchangeable}, meaning that we express uncertainty as a joint density $p \qty(y_1, ..., y_n)$ that is invariant to permutations of the indices. We commonly model data from an exchangeable distribution as \textit{independently and identically distributed} (iid) given some parameter vector $\theta$ with distribution $p(\theta)$. The tilde symbol “$\sim$” is used in the sense of “distributed according to”, as common in statistics. When using a standard distribution, we use notation based on the name of the distribution. For example, if $\theta$ is distributed according to a normal distribution with mean $\mu$ and variance $\sigma^2$, we write $\theta \sim \mathrm{N} \qty(\mu, \sigma^2)$ or $p(\theta) = \mathrm{N}\qty(\mu, \sigma^2)$. 
+
+
+Notation and formulas for a selection of standard distributions can be found in \autoref{sec:Appendix A}.
+
+\subsubsection{Bayesian Inference}
+
+In Bayesian inference we encounter conditional densities called \textit{posterior} and \textit{likelihood}. In order to make the distinction clear, we will denote the former by $\pi(\cdot \mid \cdot)$ and the latter by $p(\cdot \mid \cdot)$. We also encounter a marginal density called \textit{prior}, which we will denote by $\pi(\cdot)$.  
