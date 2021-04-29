@@ -2,17 +2,187 @@
 \chapter{Density Estimation}\label{chap:dens_est}
 %================================================================
 
+The probability density function (pdf) is a fundamental concept in statistics. In the following, we will discuss \textit{density estimation}, i.e., how to construct an estimate of the pdf from sample data. The likelihood-free inference methods are based on sampling parameters and estimating the posterior from the samples, and hence is density estimation a crucial topic to address. As we will see, density estimation can give representations that have qualitatively different features and lead to entirely different interpretation of the data. 
+
 %================================================================
 \section{Histograms}\label{sec:histograms}
-%================================================================
+%================================================================ 
+
+The most basic density estimator is the histogram [1]. A histogram is an approximate representation of data that divides the data into discrete bins and counts the number of points that fall in each bin. In a more general mathematical sense, a histogram is defined as follows [[1]](#references). We denote the density estimator by $\hat{f}$ and assume we are given a sample of $n$ observations $X_1, ..., X_n$ whose underlying density is to be estimated. Given an origin $x_0$ and a bin width $h$, the bins of the histogram are defined as the intervals $[x_0 + mh, x_0 + (m+1)h)$ for $m$ positive and negative integers. The histogram is then defined by
+
+\begin{equation*}
+    \hat{f}(x) = \frac{1}{nh} \times (\text{no. of } X_i \text{ in the same bin as } x)
+\end{equation*}
+
+The histogram can be generalized by allowing the bin widths to vary. Then the estimate becomes 
+
+\begin{equation*}
+    \hat{f}(x) = \frac{1}{n} \times \frac{(\text{no. of } X_i \text{ in the same bin as } x)}{\text{width of bin containing }x}
+\end{equation*}
+
+For instance, if we create some data that is drawn from a mixture density of two normal distributions, a simple  histogram, that is normalized such that the height of the bins reflects density instead of counts and have equal-width bins, will give the following representation of the data: 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.6]{bimodal_data.pdf}
+    \caption{Density estimation by the histogram density estimator of 1000 observed data samples drawn from a mixed density of two normal distributions divided into 30 bins.}
+    \label{fig:bimodal_data}
+    \source{jakevdp book}
+\end{figure}
+
+The preceding figure illustrates why histograms are an immensely useful class of density estimates; they visualize data in an intuitive manner which is key for the presentation and exploration of data. The histogram makes clear that the data is drawn from a bimodal normal distribution.
+
+One of the issues with using a histogram as a density estimator, however, is that the exact visual appearance depends on the choice of bin width (or number of bins) [2]. Different bin widths can give representations that have qualitatively different features and lead to entirely different interpretation of the data. Consider the following example where we draw 20 samples from the same distribution as before and use two histograms with different bin widths as density estimators:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.6]{bimodal_bins.pdf}
+    \caption{These histograms are built from the same data, but with different bin widths. Together they illustrate one of the issues with using histograms as density estimators; the choice of bin widths can lead to vastly different representations of the data.}
+    \label{fig:bimodal_bins}
+    \source{jakevdp book}
+\end{figure}
+
+Without knowing that these two histograms were built from the same data, we probably would not have guessed so. The histogram on the left indicates a bimodal distribution as before, but the histogram on the right only shows a unimodal distribution with a long tail.   
+
 
 %================================================================
-\subsection{Binning}\label{sec:binning}
-%================================================================
+\subsection{Number of Bins and Width }\label{sec:binning}
+%================================================================ 
 
 
+There are no hard-and-fast rules concerning the bin width, and in extension the number of bins [3, p. 16]. The number of bins $k$ can be assigned directly or can be calculated from a suggested bin width $h$ as:
+
+\begin{equation}
+    k = \left \lceil \frac{\mathrm{max}\, x - \mathrm{min}\, x}{h} \right \rceil, 
+\end{equation}
+
+where $x$ is the sample data with $n$ observations. The braces indicate the ceiling function.
+
+Smaller bin widths can make the histogram cluttered and larger bin widths may obscure nuances in the data. There are however some commonly-used rules-of-thumb, each of which has its own strengths and weaknesses. 
+
+\subsubsection{The Square-root Rule}
+
+Generally, the larger the number of observations in the sample data, the more bins should be used [3, p. 16]. A reasonable rule of thumb is to take the square root of the number of observations in the sample and round to the next integer:
+
+\begin{equation}
+    k = \left \lceil \sqrt{n} \right \rceil 
+\end{equation}
+
+\textbf{Pros and Cons:} TODO
+
+\subsubsection{Sturges' Rule}
+
+\textbf{Rewrite, borrowed in it's entirety from Wikipedia}
+
+Sturges' formula is derived from a binomial distribution and implicitly assumes an approximately normal distribution.
+
+\begin{equation}
+    k = \left \lceil \log_2 n \right \rceil + 1 
+\end{equation}
+
+It implicitly bases the bin sizes on the range of the data and can perform poorly if $n < 30$, because the number of bins will be small — less than seven — and unlikely to show trends in the data well. It may also perform poorly if the data are not normally distributed.
+
+\subsubsection{Scott's Rule}
+
+\begin{equation}
+    h = \frac{3.49 \hat{\sigma}}{\sqrt[3]{n}},
+\end{equation}
+
+where $\hat{\sigma}$ is the sample standard deviation. Scott's normal reference rule is optimal for random samples of normally distributed data, in the sense that it minimizes the integrated mean squared error of the density estimate. 
+
+\subsubsection{Freedman-Diaconis Rule}
+
+\begin{equation}
+    h = 2 \frac{\mathrm{IQR}(x)}{\sqrt[3]{n}},
+\end{equation}
+
+which is based on the interquartile range, denoted by $\mathrm{IQR}$. It replaces $3.5\sigma$ of Scott's rule with $2\,\mathrm{IQR}$, which is less sensitive than the standard deviation to outliers in data.
+
+\subsubsection{Knuth's Rule}
+
+Knuth's rule is a fixed-width, Bayesian approach to determining the optimal bin width of a histogram. The optimal number of bins is the value $M$ which maximizes the function 
+
+\begin{equation}
+    F(M \mid x, I) = n \log(M) + \log \Gamma \left(\frac{M}{2} \right) - \log \Gamma \left(\frac{1}{2} \right) - \log \Gamma \left(\frac{2n + M}{2} \right) + \sum_{k=1}^{M} \log \Gamma \left(n_k \frac{1}{2} \right),
+\end{equation}
+
+where $\Gamma$ is the gamma function, $n$ is the number of data points, $n_k$ is the number of measurements in bin $k$.
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.6]{histogram_rules.pdf}
+    \caption{Histograms with binning as dictated by the rule specified in the subplot titles.}
+    \label{fig:histogram_rules}
+\end{figure}
+
+
+\subsection{References}
+
+[1] \url{https://ned.ipac.caltech.edu/level5/March02/Silverman/paper.pdf}
+
+[2] Python Data Science Handbook by Jake VanderPlas
+
+[3] STK bok
+
+[4] \url{https://clauswilke.com/dataviz/histograms-density-plots.html}
+
+\subsubsection{Original papers:} 
+
+Scott, D. (1979). On optimal and data-based histograms \url{http://biomet.oxfordjournals.org/content/66/3/605}
+
+Freedman, D. & Diaconis, P. (1981). On the histogram as a density estimator: L2 theory \url{http://www.springerlink.com/content/mp364022824748n3/}
+
+\textbf{See also SNL thesis:} Primer on density estimation (parametric/non-parametric) and includes neural density estimators. 
+
+\subsubsection{Misc. sources:}
+
+\begin{itemize}
+    \item Python Data Science Handbook by Jake VanderPlas
+    \item \url{https://clauswilke.com/dataviz/histograms-density-plots.html}
+    \item \url{https://ned.ipac.caltech.edu/level5/March02/Silverman/paper.pdf}
+    \item \url{http://users.stat.ufl.edu/~rrandles/sta6934/smhandout.pdf}
+    \item \url{https://jakevdp.github.io/PythonDataScienceHandbook/04.05-histograms-and-binnings.html}
+    \item \url{https://jakevdp.github.io/PythonDataScienceHandbook/05.13-kernel-density-estimation.html}
+    \item \url{https://towardsdatascience.com/histograms-and-density-plots-in-python-f6bda88f5ac0}
+    \item \url{https://seaborn.pydata.org/tutorial/distributions.html}
+    \item \url{https://www.astroml.org/user_guide/density_estimation.html#kernel-density-estimation}
+    \item \url{https://docs.astropy.org/en/stable/visualization/histogram.html#bayesian-models}
+    \item \url{https://machinelearningmastery.com/probability-density-estimation/}
+    \item \url{https://stackoverflow.com/questions/33458566/how-to-choose-bins-in-matplotlib-histogram/33459231}
+    \item \url{https://stackoverflow.com/questions/30145957/plotting-2d-kernel-density-estimation-with-python}
+\end{itemize}
+
+
+
+\subsection{Notes}
+
+Histograms give a rough sense of the density of the underlying distribution of the data, and often for density estimation: estimating the probability density function of the underlying variable. The total area of a histogram used for probability density is always normalized to 1. If the length of the intervals on the x-axis are all 1, then a histogram is identical to a relative frequency plot.
+
+A histogram can be thought of as a simplistic kernel density estimation, which uses a kernel to smooth frequencies over the bins. This yields a smoother probability density function, which will in general more accurately reflect distribution of the underlying variable. The density estimate could be plotted as an alternative to the histogram, and is usually drawn as a curve rather than a set of boxes. Histograms are nevertheless preferred in applications, when their statistical properties need to be modeled. The correlated variation of a kernel density estimate is very difficult to describe mathematically, while it is simple for a histogram where each bin varies independently. 
+
+Though rules-of-thumb like Scott’s rule and the Freedman-Diaconis rule are fast and convenient, their strong assumptions about the data make them suboptimal for more complicated distributions. Other methods of bin selection use fitness functions computed on the actual data to choose an optimal binning. Astropy implements two of these examples: Knuth’s rule (implemented in knuth\_bin\_width()) and Bayesian Blocks (implemented in bayesian\_blocks()).
+
+\url{https://docs.astropy.org/en/stable/visualization/histogram.html?fbclid=IwAR1qgq-CS2YLA3ui_03P9oRDcKiHXf7XE5lLYuglSjtLEXjtDSp7QBAKYag#bayesian-models}
+
+\url{https://www.astroml.org/user_guide/density_estimation.html?fbclid=IwAR24wrXL_hTLJ8iLkzfMczUc7nUAc5elXgxpimT-A341NVaYuNKHJalXKsA#kernel-density-estimation}
+
+\url{https://seaborn.pydata.org/tutorial/distributions.html?fbclid=IwAR3VjoNoDOcWeaERXvICVx_NL9DJ-tqhd1gBW6emPrrffgD1-0sZwtzn91I}
+
+
+A rug plot is a plot of data for a single quantitative variable, displayed as marks along an axis. It is used to visualise the distribution of the data. As such it is analogous to a histogram with zero-width bins, or a one-dimensional scatter plot.
+
+Rug plots are often used in combination with two-dimensional scatter plots by placing a rug plot of the x values of the data along the x-axis, and similarly for the y values. This is the origin of the term "rug plot", as these rug plots with perpendicular markers look like tassels along the edges of the rectangular "rug" of the scatter plot.
 
 %================================================================
 \section{Kernel Density Estimation}\label{sec:kde}
 %================================================================
 
+Histograms have been a popular visualization option since at least the 18th century, in part because they are easily generated by hand. More recently, as extensive computing power has become available in everyday devices such as laptops and cell phones, we see them increasingly being replaced by density plots. In a density plot, we attempt to visualize the underlying probability distribution of the data by drawing an appropriate continuous curve (Figure 7.3). This curve needs to be estimated from the data, and the most commonly used method for this estimation procedure is called kernel density estimation. In kernel density estimation, we draw a continuous curve (the kernel) with a small width (controlled by a parameter called bandwidth) at the location of each data point, and then we add up all these curves to obtain the final density estimate
+
+Analogous to the binwidth of a histogram, a density plot has a parameter called the bandwidth that changes the individual kernels and significantly affects the final result of the plot. The plotting library will choose a reasonable value of the bandwidth for us (by default using the ‘scott’ estimate)
+
+With many data points the rug plot can become overcrowded, but for some datasets, it can be helpful to view every data point. The rug plot also lets us see how the density plot “creates” data where none exists because it makes a kernel distribution at each data point. These distributions can leak over the range of the original data and give the impression that Alaska Airlines has delays that are both shorter and longer than actually recorded. We need to be careful about this artifact of density plots and point it out to viewers!
+
+
+\url{https://github.com/COINtoolbox/CosmoABC/blob/master/cosmoabc/weighted_gaussian_kde.py} see set bandwidth function 
