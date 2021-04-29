@@ -7,6 +7,17 @@ import numpy as np
 from pylfi.inferences import ABCBase
 from pylfi.journal import Journal
 
+'''
+from numba import int32, float32    # import the types
+from numba.experimental import jitclass
+
+spec = [
+    ('value', int32),               # a simple scalar field
+    ('array', float32[:]),          # an array field
+]
+@jitclass(spec)
+'''
+
 
 class RejectionABC(ABCBase):
 
@@ -63,10 +74,10 @@ class RejectionABC(ABCBase):
 
         # draw thetas from priors
         thetas = np.array([prior.rvs(size=(n_sims,))
-                          for prior in self._priors])
+                           for prior in self._priors])
         # simulated
         sims = np.array([self._simulator(*thetas)
-                        for thetas in np.stack(thetas, axis=-1)])
+                         for thetas in np.stack(thetas, axis=-1)])
         # distances
         distances = np.array([self._distance(self._obs, sim) for sim in sims])
         # acceptance criterion
