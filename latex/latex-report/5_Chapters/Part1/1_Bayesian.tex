@@ -14,16 +14,24 @@ This chapter introduces the fundamentals of Bayesian inference, with a particula
 \section{Bayesian Inference}\label{sec:bayes_paradigm}
 %================================================================
 
-In terms of parameter inference, the Bayesian approach differ from the frequentist in that unknown parameters $\theta$ are treated as random variables rather than fixed quantities. In the Bayesian paradigm, all available information about an unknown parameter is incorporated in a \textit{prior probability distribution}, expressing our beliefs before some evidence is taken into account. We usually have a prior pdf $\prior$, since there will typically be a continuum of possible values of a parameter rather than just a discrete set. In the case of substantial prior knowledge about a parameter $\theta$, the prior pdf is narrow and concentrated about some central value, whereas a lack of information yield a wider and relatively flat prior pdf as shown in \autoref{fig:prior_illustration}. The prior is often specified by a particular distribution among a set of well-known and tractable distributions, with the purpose of making evaluation of prior probabilities and random generation of $\theta$ values straightforward.
+In terms of parameter inference, the Bayesian approach differ from the frequentist in that unknown parameters $\theta$ are treated as random variables rather than fixed quantities. In the Bayesian paradigm, all available information about an unknown parameter is incorporated in a \textit{prior probability distribution}, expressing our beliefs before some evidence is taken into account. We usually have a prior pdf $\prior$, since there will typically be a continuum of possible values of a parameter rather than just a discrete set. In the case of substantial prior knowledge about a parameter $\theta$, the prior pdf is narrow and concentrated about some central value, whereas a lack of information yield a wider and relatively flat prior pdf as shown in \autoref{fig:prior_illustration}. The prior is often specified by a particular distribution among a set of well-known and tractable distributions (see \autoref{sec:Appendix A}), with the purpose of making evaluation of prior probabilities and random generation of $\theta$ values straightforward.
+
+%\begin{figure}[H]
+%    \centering
+%    \includegraphics[scale=0.6]{./3_Images/prior_illustration.png}
+%    \caption{A narrow concentrated prior about some central value and a wider less informative prior.}
+%    \label{fig:prior_illustration}
+%    \source{Figure 14.3 in \cite{STK}.}
+%\end{figure}
+
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.6]{./3_Images/prior_illustration.png}
+    \includegraphics[scale=0.7]{prior_plot}
     \caption{A narrow concentrated prior about some central value and a wider less informative prior.}
     \label{fig:prior_illustration}
-    \source{Figure 14.3 in \cite{STK}.}
+    %\source{Figure 14.3 in \cite{STK}.}
 \end{figure}
-
 
 Our prior state of knowledge is modified by data $y$, obtained by performing experiments, through the conditional \textit{sampling distribution} $\lhood$. When regarded as a function of $\theta$, for fixed $y$, $\lhood$ is called the \textit{likelihood function}. In order to make probability statements about $\theta$ given sample data $y$, a probabilistic model representing the joint probability distribution for $\theta$ and $y$ must be provided. The joint pmf or pdf can be written as a product of the prior distribution $\prior$ and the likelihood function $\lhood$:
 
@@ -37,7 +45,7 @@ At this point, Bayes' theorem is used to produce the \textit{posterior distribut
     \posterior = \frac{\joint}{p(y)}  = \frac{\lhood \prior}{p(y)},
 \end{equation}
 
-where $p(y) = \int \lhood \prior \dd \theta$ in the case of continuous parameters, or, in the case of a discrete set of parameters, $p(y) = \sum_\theta \lhood \prior$, where the sum is over all possible values of $\theta$.
+where the marginal probability of the data $p(y) = \int \lhood \prior \dd \theta$ in the case of continuous parameters, or, in the case of a discrete set of parameters, $p(y) = \sum_\theta \lhood \prior$, where the sum is over all possible values of $\theta$.
 
 $p(y)$ is the same for all possible $\theta$, as it does not depend on $\theta$. With fixed $y$, this factor can thus be omitted in parameter inference since it constitutes a normalizing constant and does not enter into determining the relative posterior probabilities of different values of $\theta$. Omitting the factor $p(y)$ yields the unnormalized posterior distribution: 
 
