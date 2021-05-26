@@ -8,7 +8,7 @@ The probability density function (pdf) is a fundamental concept in statistics. I
 \section{Histograms}\label{sec:histograms}
 %================================================================ 
 
-The most basic density estimator is the histogram [1]. A histogram is an approximate representation of data that divides the data into discrete bins and counts the number of points that fall in each bin. In a more general mathematical sense, a histogram is defined as follows [[1]](#references). We denote the density estimator by $\hat{f}$ and assume we are given a sample of $n$ observations $X_1, ..., X_n$ whose underlying density is to be estimated. Given an origin $x_0$ and a bin width $h$, the bins of the histogram are defined as the intervals $[x_0 + mh, x_0 + (m+1)h)$ for $m$ positive and negative integers. The histogram is then defined by
+The most basic density estimator is the histogram [1]. A histogram is an approximate representation of data that divides the data into discrete bins and counts the number of points that fall in each bin. In a more general mathematical sense, a histogram is defined as follows [1]. We denote the density estimator by $\hat{f}$ and assume we are given a sample of $n$ observations $X_1, ..., X_n$ whose underlying density is to be estimated. Given an origin $x_0$ and a bin width $h$, the bins of the histogram are defined as the intervals $[x_0 + mh, x_0 + (m+1)h)$ for $m$ positive and negative integers. The histogram is then defined by
 
 \begin{equation*}
     \hat{f}(x) = \frac{1}{nh} \times (\text{no. of } X_i \text{ in the same bin as } x)
@@ -46,7 +46,7 @@ Without knowing that these two histograms were built from the same data, we prob
 
 
 %================================================================
-\subsection{Number of Bins and Width }\label{sec:binning}
+\subsection{Number of Bins and Width}\label{sec:binning}
 %================================================================ 
 
 
@@ -131,7 +131,7 @@ where $\Gamma$ is the gamma function, $n$ is the number of data points, $n_k$ is
 
 Scott, D. (1979). On optimal and data-based histograms \url{http://biomet.oxfordjournals.org/content/66/3/605}
 
-Freedman, D. & Diaconis, P. (1981). On the histogram as a density estimator: L2 theory \url{http://www.springerlink.com/content/mp364022824748n3/}
+Freedman, D. and Diaconis, P. (1981). On the histogram as a density estimator: L2 theory \url{http://www.springerlink.com/content/mp364022824748n3/}
 
 \textbf{See also SNL thesis:} Primer on density estimation (parametric/non-parametric) and includes neural density estimators. 
 

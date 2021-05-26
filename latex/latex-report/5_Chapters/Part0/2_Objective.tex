@@ -32,14 +32,129 @@ In this thesis, the aim is to study the aforementioned likelihood-free methods f
 
 One of the principal topics of research in likelihood-free inference is how to obtain state-of-the-art results with fewer simulations. By dissecting and studying the methods in great detail, another aim is to contribute to this research within the time and scope a master thesis permits. 
 
+Dynamical systems pose considerable inferential challenges, and a rich literature [30–32] has been building up around concepts such as identifiability, inferability, and sloppiness. Common to these three closely related notions – even though the relationship is rarely if ever explored – is that local, point-estimates are: (i) potentially poor representations of the true parameter and (ii) hide the fact that many similar parameters would be capable of describing the data equally well. This should be reason enough to consider interval estimators and, in particular, Bayesian methods from the outset. While notions such as identifiability and sloppiness have been considered in depth – though perhaps not always satisfactorily – in the context of ODE models, many of the same problems will also carry through to stochastic modelling approaches [33]. \cite{ABC_ch17} 
 
-\begin{itemize}
-    \item Improve sample efficiency
-    \item Domain knowledge vs learned
-\end{itemize}
+The choice of summary statistics is crucial for the performance of ABC methods, hence, the topic has been the subject of much research. See Blum et al. (2013) for a comprehensive review of methods for dimension reduction or statistics selection. SL and ABC methods share some requirements regarding the choice of summary statistics. More specifically, in parameter, estimation problems, the summary statistics should contain as much information as possible about the parameters, so that $\pi \qty(\theta \mid y_\mathrm{obs})$ will be approximately proportional to $\pi \qty(\theta \mid y_\mathrm{obs})$. \cite{ABC_ch20} (see also table 20.1 for inspiration).
 
-
-Dynamical systems pose considerable inferential challenges, and a rich literature [30–32] has been building up around concepts such as identifiability, inferability, and sloppiness. Common to these three closely related notions – even though the relationship is rarely if ever explored – is that local, point- estimates are: (i) potentially poor representations of the true parameter and (ii) hide the fact that many similar parameters would be capable of describ- ing the data equally well. This should be reason enough to consider interval estimators and, in particular, Bayesian methods from the outset. While no- tions such as identifiability and sloppiness have been considered in depth – though perhaps not always satisfactorily – in the context of ODE models, many of the same problems will also carry through to stochastic modelling approaches [33]. \cite{ABC_ch17} 
+Bayesian modeling offers a systematic framework for reasoning about model uncertainty. Instead of just learning point estimates, we’re going to learn a distribution over parameters that are consistent with the observed data. \url{https://pyro.ai/examples/bayesian_regression.html}
 
 
-The choice of summary statistics is crucial for the performance of ABC meth- ods, hence, the topic has been the subject of much research. See Blum et al. (2013) for a comprehensive review of methods for dimension reduction or statistics selection. SL and ABC methods share some requirements regarding the choice of summary statistics. More specifically, in parameter, estimation problems, the summary statistics should contain as much information as possi- ble about the parameters, so that $\pi \qty(\theta \mid y_\mathrm{obs})$ will be approximately proportional to $\pi \qty(\theta \mid y_\mathrm{obs})$. \cite{ABC_ch20} (see also table 20.1 for inspiration).
+\subsubsection{Threshold effects}
+Many introductory textbooks of neuroscience state that neurons fire an action potential if the membrane potential reaches a threshold. Since the onset of an action potential is characterized by a rapid rise of the voltage trace, the onset points can be detected in experiment recordings (Fig. 4.1A). Intuitively, the onset of an action potential occurs when the membrane potential crosses the firing threshold.
+
+The firing threshold is not only a useful concept for experimental neuroscience, it is also at the heart of most integrate-and-fire models and therefore central for Parts II and III of this book. But does a firing threshold really exist?
+
+Experimentalists inject currents into a single neuron to probe its firing characteristics. There is a large choice of potential current wave forms, but only few of these are routinely used in many labs. In this section we use current pulses and steps in order to explore the threshold behavior of the Hodgkin-Huxley model.
+
+\url{https://neuronaldynamics.epfl.ch/online/Ch4.S1.html}
+
+%================================================================ 
+\subsubsection{Overall Objectives} 
+%================================================================  
+
+\begin{enumerate}
+    \item Explore LFI methods and develop a Python toolbox -- \cw{pyLFI}
+    \item Of particular interest: Compare summary statistics obtained via domain knowledge vs statistical learning methods
+    \item Sensitivity analysis
+    \item Insights the LFI methods can provide to neuroscientific models, especially network models
+\end{enumerate}
+
+%================================================================ 
+\subsubsection{In more detail} 
+%================================================================  
+
+\begin{enumerate}
+    \item Dissect LFI methods, ABC in particular
+    \begin{itemize}
+        \item Goal:
+        \begin{itemize}
+            \item Develop a Python toolbox 
+            \item Find robust ABC settings, i.e. which improves sampling efficiency and accuracy
+        \end{itemize}
+        \item Use tractable probability models:
+        \begin{itemize}
+            \item Binomial 
+            \item Gaussian with unknown mean and variance 
+        \end{itemize}
+        \item Inference schemes:
+        \begin{itemize}
+            \item Rejection 
+            \item MCMC
+            \item SMC 
+            \item PMC
+        \end{itemize}
+        \item Summary statistics:  
+        \begin{itemize}
+            \item Sufficient
+            \item Informative (approximate)
+        \end{itemize}
+        \item Weighting summary statistics:
+        \begin{itemize}
+            \item Correlation
+            \item AIC and BIC? 
+            \item Weighted Euclidean distance. weight=1/scale. Possible scales (obtained from prior predictive distribution):
+            \begin{itemize}
+                \item Standard deviation 
+                \item Median absolute deviation (MAD)
+                \item Standard deviation of residuals (linear regression - sdreg)
+                \item Absolute deviation to observation (ADO)
+                \item See \url{https://github.com/dennisprangle/ABCDistances.jl/blob/master/src/distances.jl}
+            \end{itemize}
+        \end{itemize}
+        \item Learning summary statistics:
+        \begin{itemize}
+            \item See \cw{ABCpy} and \cw{sbi} 
+            \item CNN 
+        \end{itemize}
+        \item Threshold:
+        \begin{itemize}
+            \item Fixed
+            \item Adaptive
+        \end{itemize}
+        \item Regression adjustment:
+        \begin{itemize}
+            \item Linear
+            \item Local linear
+            \item Ridge
+            \item Lasso 
+            \item FFNN
+            \item Scedasticity? 
+        \end{itemize}
+        \item Density Estimation:
+        \begin{itemize}
+            \item Histogram
+            \begin{itemize}
+                \item Bin rules
+            \end{itemize}
+            \item KDE
+            \begin{itemize}
+                \item Bandwidth rules
+                \item Bandwidth selection with cross-validation
+                \item Algorithm?
+            \end{itemize}
+        \end{itemize}
+        \item Neural Density Estimators
+        \begin{itemize}
+            \item Implement simple MDN to get a feel 
+            \item Will mainly use \cw{sbi} (SNPE) for this
+        \end{itemize}
+    \end{itemize}
+    \item Neuro Models 
+    \begin{itemize}
+        \item Hodgkin-Huxley
+        \begin{itemize}
+            \item Inferential study on conductance's with mock-up data
+            \item Overall aim: Use LFI methods to investigate the identifiability of the HH model by refitting the ODEs to the author's original published data
+            \item Can also look at different voltage protocols and the effect they have on constraining the model 
+        \end{itemize}
+        \item Multi-compartment model? 
+        \item Brunel network 
+        \begin{itemize}
+            \item Inferential study on synaptic connection weights with mock-up data
+            \item Compare identifiability of model parameters based on high-frequency part of extracellular electrical potentials, i.e. neuronal spikes, and low-frequency part of the signal, i.e. the local field potential (LFP)
+             \item For the latter, see analysis in 'Estimation of neural network model parameters from local field potentials'
+             \item Overal aim: Assessing performance and validity of LFI methods for inverse modelling of brain network dynamics
+        \end{itemize}
+    \end{itemize}
+\end{enumerate}
+

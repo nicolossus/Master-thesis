@@ -22,3 +22,43 @@ The \cw{pyLFI} package documentation can be found at:
 \begin{center}
     \url{https://pylfi.readthedocs.io/en/latest/}
 \end{center}
+
+
+\textbf{Justify why pyLFI was made} 
+
+\begin{itemize}
+    \item computational science master: programming and software development are central aspects
+    \item Useful to obtain "under the hood" knowledge in order to find strengths, weaknesses, improvements etc. as well as a thorough understanding 
+    \item flexibility. the standardized toolboxes does not necessarily facilitate the means for analyses we want to carry out 
+    \item we will however use standard toolboxes for both comparison and analyses, as they have several years of development behind them and offers more complex/refined and efficient software
+\end{itemize} 
+
+\begin{lstlisting}[language=python]
+class ABCBase(metaclass=ABCMeta):
+    def __init__(self, observation, simulator, priors, distance, rng, seed):
+        """
+        simulator : callable
+            simulator model
+        summary_calculator : callable, defualt None
+            summary statistics calculator. If None, simulator should output
+            sum stat
+        distance : str
+            Can be a custom function or one of l1, l2, mse
+        distance_metric : callable
+            discrepancy measure
+        """
+        self._obs = observation
+        self._simulator = simulator
+        self._priors = priors
+        self._rng = rng
+        self._seed = seed
+
+        # Select distance function.
+        if callable(distance):
+            self._distance = distance
+        elif isinstance(distance, str):
+            check_distance_str(distance)
+            self._distance = self._choose_distance(distance)
+        else:
+            raise TypeError()
+\end{lstlisting}
