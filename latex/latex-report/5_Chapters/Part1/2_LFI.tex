@@ -1,4 +1,20 @@
 %================================================================
+\chapter{Inference Engines}\label{chap:infeng}
+%================================================================
+
+While conceptually simple, Bayesian methods can be mathematically and numerically challenging. The main reason is that the marginal likelihood, the denominator in Bayes' theorem (see equation 1.4), usually takes the form of an intractable or computationally-expensive integral to solve. For this reason, the posterior is usually estimated numerically using algorithms from the Markov Chain Monte Carlo (MCMC) family or, more recently, variational algorithms. These methods are sometimes called inference engines, because, at least in principle, they are capable of approximating the posterior distribution for any probabilistic model. 
+
+There are several methods to numerically compute the posterior. I have ordered them into two broad groups: Non-Markovian methods (Grid computing, Quadratic approximation, Variational methods) and Markovian methods (Metropolis-Hastings, Hamiltonian Monte Carlo, Sequential Monte Carlo). We will not discuss non-Markovian methods as the focus of this thesis is MCMC methods.
+
+\section{Markov Chain Monte Carlo Methods}
+
+There is a family of related methods, collectively known as MCMC methods. These stochastic methods allow us to get samples from the true posterior distribution as long as we are able to compute the likelihood and the prior point-wise. While this is the same condition that we need for the grid-approach, MCMC methods outperform the grid approximation. The is because MCMC methods are capable of taking more samples from higher-probability regions than lower ones. In fact, an MCMC method will visit each region of the parameter-space in accordance to their relative probabilities.
+
+To understand what MCMC methods are, we are going to split the method into the two MC parts; the Monte Carlo part and the Markov Chain part.
+
+
+
+%================================================================
 \chapter{Likelihood-Free Inference}\label{chap:LFI}
 %================================================================
 
@@ -23,11 +39,6 @@ Approximate Bayesian Computation (ABC) constitutes a class of computational meth
 
 ABC methods have been successfully applied to a wide range of real-world problems, and have also paved the way for a range of other likelihood-free approaches. However, even though ABC methods are mathematically well-founded, they inevitably make assumptions and approximations whose impact needs to be carefully assessed \cite{ABCprimer}. In the following, three types of ABC methods will be discussed: the vanilla \textit{rejection ABC}, and the more sophisticated variant \textit{Markov chain Monte Carlo (MCMC) ABC}.
 
-%================================================================
-\subsection{The ABC of Approximate Bayesian Computation}\label{sec:abc_of_abc}
-%================================================================
-
-Perhaps this should be the section name
 
 %================================================================
 \subsection{Rejection ABC}\label{sec:rejection_abc}
@@ -145,3 +156,76 @@ Clearly, deciding how to characterize the data is an important choice in the lik
 \url{https://github.com/vuolleko/abclib/blob/master/abclib.pyx}
 
 \url{https://github.com/Neojume/pythonABC/blob/master/algorithms.py}
+
+
+%================================================================
+\section{The ABC of Approximate Bayesian Computation}\label{sec:abc_of_abc}
+%================================================================
+
+Content from notebook, source: ABC handbook
+
+For discrete data $\mathcal{D}$, probability model $\mathcal{M}$ with parameters $\theta$ having prior $\pi(\theta)$, we can simulate observations from: 
+
+\begin{equation}
+    \pi (\theta \mid \mathcal{D}) \propto p(\mathcal{D} \mid \theta) \pi(\theta),
+\end{equation}
+
+via:
+
+\begin{itemize}
+    \item[A1] Generate $\theta \sim \pi(\theta)$
+    \item[A2] Accept $\theta$ with probability proportional to the likelihood $p(\mathcal{D}\mid \theta)$
+\end{itemize}
+    
+Algorithm A can be extended dramatically in its usefulness using the following, stochastically equivalent, version:
+
+\begin{itemize}
+    \item[B1] Generate $\theta \sim \pi(\theta)$
+    \item[B2] Simulate an observation $\mathcal{D}'$ from model $\mathcal{M}$ with parameter $\theta$
+    \item[B3] Accept $\theta$ if $\mathcal{D}' = \mathcal{D}$
+\end{itemize}
+    
+
+While algorithms A and B are probabilistically identical, B is much more general in that one does not need to compute probabilities explicitly to make it work; only simulation is needed. Version B is due to Rubin (1984). 
+
+The drawback of B is clear. It will typically be the case that for a given value of $\theta$, the chance of the outcome $\mathcal{D}'=\mathcal{D}$, namely $p(\mathcal{D} \mid \theta)$, is either vanishingly small or very time consuming to compute, resulting in an algorithm that does not work effectively. This is where ABC finally comes into play, in the form of the following scheme. We start with a discrepancy metric $\rho$ to compare datasets and a tolerance $\epsilon \geq 0$, and then: 
+
+\begin{itemize}
+    \item[C1] Generate $\theta \sim \pi(\theta)$
+    \item[C2] Simulate an observation $\mathcal{D}'$ from model $\mathcal{M}$ with parameter $\theta$
+    \item[C3] Compute $\rho \equiv \rho (\mathcal{D}', \mathcal{D})$, and accept $\theta$ as an appropriate draw from $\pi (\theta \mid \mathcal{D})$ if $\rho \leq \epsilon$
+\end{itemize}
+    
+The parameter $\epsilon$ measures the tension between computability and accuracy. If $\rho$ is a metric, then 
+
+\begin{equation*}
+    \rho = 0 \quad \implies \quad \mathcal{D}'=\mathcal{D},
+\end{equation*}
+
+so that such an accepted $\theta$ is indeed an observation from the true posterior. 
+
+Pritchard et al. (1999) were the first to describe a version of this scheme, in which the datasets in C3 were compared through a choice of summary statistics. Thus, $\rho$ compares how well a set of simulated summary statistics matches the observed summary statistics. If the statistics are sufficient for $\theta$, then when $\epsilon=0$, the accepted values of $\theta$ are still from the true posterior based on the full data. 
+
+\textbf{This begs the question of how one might identify 'approximately sufficient' statistics, a topic covered in CHAPTER X.}
+
+\subsection{Goodness of Fit}
+
+\begin{itemize}
+    \item Assessing performance 
+    \item Expected quadratic loss
+    \item \url{https://en.wikipedia.org/wiki/Loss_function}
+    \item Expected loss
+    \item In some contexts, the value of the loss function itself is a random quantity because it depends on the outcome of a random variable X.
+    \item Both frequentist and Bayesian statistical theory involve making a decision based on the expected value of the loss function; however, this quantity is defined differently under the two paradigms.
+\end{itemize}
+
+\subsection{TODOs}
+
+\begin{itemize}
+    \item Sufficient vs insufficient statistics 
+    \item $p(\theta \mid \rho (\hat{D}, D) \leq \epsilon)$ and $p(\theta |D)$ as a function of $\epsilon$. 
+    \item The accuracy of the posterior (defined as the expected quadratic loss) delivered by ABC as a function of $\epsilon$
+    \item Accuracy as a function of the number of data points in observed data
+    \item KL divergence
+    \item Accuracy vs number of posterior samples
+\end{itemize}
