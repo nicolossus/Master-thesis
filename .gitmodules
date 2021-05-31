@@ -1,3 +1,6 @@
 [submodule "neuromodels"]
 	path = neuromodels
 	url = https://github.com/nicolossus/neuromodels.git
+[submodule "pylfi"]
+	path = pylfi
+	url = https://github.com/nicolossus/pylfi.git
