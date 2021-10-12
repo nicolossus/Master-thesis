@@ -33,18 +33,171 @@ Post-sampling Adjustment
 \chapter{Computational Approach}\label{chap:computational}
 %================================================================
 
+See: Automatically Selecting a Suitable Integration Scheme for Systems of Differential Equations in Neuron Models
+
+2.2. Choice of a Suitable Numeric Integration Scheme
+
+3. REFERENCE IMPLEMENTATION
+
+The use of the toolbox as a Python module is explained in detail in the README.md file of the git repository at \url{http://github.com/ nest/ode-toolbox}. Here, we demonstrate the use of the analysis toolbox by executing the script file ode\_analyzer.py in a stand-alone fashion for generating a solver specification for a conductance-based integrate-and-fire neuron with alpha-shaped postsynaptic conductances
+
+
+Our presented framework is re-usable independently of NESTML and NEST. The source code is available under the terms of the GNU General Public License version 2 or later on GitHub at \url{https://github.com/nest/ode-toolbox/} and we hope that the code can serve both as a useful tool for neuroscientists today, and as a basis for a future community effort in developing a simulator-independent system for the analysis of neuronal model equations.
+
+
+To simulate (1) as efficiently as possible, one wishes to minimize the number of evaluations
+of the nonlinear functions ai and bi
+. (This becomes especially important when d is large,
+as is the case for large biological neural networks.) It is therefore desirable to use an
+explicit numerical integrator that allows for large time step sizes while still producing
+sufficiently accurate dynamics. One of the main obstacles to doing so is stiffness: when ai
+is
+a large negative number, a traditional explicit Runge–Kutta method (like Euler’s method)
+becomes numerically unstable unless the time step size is very small. 
+
+
+However, there is another obstacle to taking large time step sizes, having to do with
+preserving the qualitative dynamics of neuronal spiking in the Hodgkin–Huxley model.
+When the input current into a neuron is low, the membrane voltage is attracted to a
+resting equilibrium; however, when the input current exceeds a threshold, the voltage begins
+rapidly rising and falling periodically. These voltage spikes, called action potentials, are the
+mechanism by which neurons send signals to one another. From a dynamical systems point
+of view, this corresponds to a bifurcation: the “resting” fixed point becomes unstable, and
+the system is attracted to a stable “spiking” limit cycle lying on a two-dimensional center
+manifold (Hassard [12], Izhikevich [16]). In order to simulate these dynamics faithfully and
+efficiently, it is therefore desirable that a numerical integrator be able to preserve these limit
+cycles at large time step sizes. Yet, Euler’s method does a poor job of preserving limit cycles
+in nonlinear dynamical systems, even for simple systems like the Van der Pol oscillator,
+unless one takes very small time steps—even smaller than one would need for numerical
+stability (Hairer and Lubich [8]).
+
 %================================================================
 \section{pyLFI}\label{sec:pylfi}
 %================================================================
-
-
-
 
 ... example code ...
 
 Most well-tested implementations will do a bit more than this under the hood, but the preceding function gives the gist of the expectation–maximization approach.
 
 An ABC software should be flexible enough to accommodate the new developments of the field. Here, we introduce a generalist Python package \cw{pyLFI}. The price to pay for the generality and flexibility is that the simulation of data and the calculation of summary statistics are left to the users. 
+
+
+
+\textbf{Simulation-based inference} 
+
+%[Adapted from SNPE paper 2, need to rewrite this a bit in order to not plagiarize]
+
+To perform Bayesian parameter identification with pyLFI, four types of input need to be specified: 
+
+\begin{enumerate}
+    \item A mechanistic model. The model only needs to be specified through a simulator, that is that one can generate a simulation result $x$ for any parameters $\theta$. We do not assume access to the likelihood $p(x | \theta)$ or the equations or internals of the code defining the model, nor do we require the model to be differentiable. 
+    \item A summary statistics calculator. The ABC algorithms require the use of summary statistics $S(x)=s$ calculated from the raw data $x$. 
+    \item Observed data $x_0$ of the same form as the results $x$ produced by model simulations
+    \item A prior distribution $\pi (\theta)$ describing the range of possible parameters. $\pi (\theta)$ could consist of upper and lower bounds for each parameter, or a more complex distribution incorporating mechanistic first principles or knowledge gained from previous inference procedures on other data. In our applications, we chose priors deemed reasonable or informed by previous studies (see Materials and methods), although setting such priors is an open problem in itself, and outside of the scope of this study.
+\end{enumerate}
+
+For each problem, the goal is to estimate the posterior distribution $\pi(\theta | x_0)$. Setting up the inference procedure requires three design choices: 
+\begin{enumerate}
+    \item A distance metric
+    \item Tuning parameters. The number of tuning parameters depends on which ABC algorithm is being used. The central tuning parameter for all algorithms is the threshold $\epsilon$. For MCMC algorithms, there are additional tuning parameters like proposal density scale, burn-in iterations ++. 
+    \item A simulation budget, i.e. the number of samples to generate. Running the simulator is generally the most time consuming part of the procedure, and the ABC methods require many simulator runs to accurately produce the posterior. 
+\end{enumerate}
+
+We emphasize that pyLFI is highly modular, that is, that the the inputs (data, the prior over parameters, the mechanistic model, the summary statistic calculator), and algorithmic components (distance metric, optimization approach) can all be modified and chosen independently. This allows neuroscientists to work with models which are designed with mechanistic principles–—and not convenience of inference–—in mind.
+Furthermore, pyLFI is extendable and more powerful algorithms or optimization strategies can be seamlessly incorporated into the framework (though the actual implementation of the algorithms might be a challenge).
+
+
+
+%================================================================
+\section{Software Development}
+%================================================================ 
+
+\textbf{Why Python?}
+
+\begin{enumerate}
+    \item Open source
+    \item Easy, flexible coding
+    \item Plethora of available packages for visualizations and analysis
+    \item Interfacing other programs/languages:
+    \begin{itemize}
+        \item NEURON (\url{www.neuron.yale.edu})
+        \item NEST (\url{www.nest-initiative.org})
+        \item BRIAN (\url{http://briansimulator.org})
+    \end{itemize}
+\end{enumerate}
+
+
+%================================================================
+\subsection{pyLFI}
+%================================================================
+
+\textbf{ABC samplers} 
+
+\begin{enumerate}
+    \item Pathos used for parallel mapping
+    \item Parallel Random Number Generation: Pool and seeding \url{https://numpy.org/doc/stable/reference/random/parallel.html} 
+    \item 
+\end{enumerate}
+
+implementing something random means relying on a pseudo Random Number Generator (RNG).
+
+Advancing a RNG updates the underlying RNG state as-if a given number of calls to the underlying RNG have been made. In general there is not a one-to-one relationship between the number output random values from a particular distribution and the number of draws from the core RNG. This occurs for two reasons:
+
+1. The random values are simulated using a rejection-based method and so, on average, more than one value from the underlying RNG is required to generate an single draw.
+
+2. Not relevant
+
+Parallel Random Number Generation (PRNG) 
+
+Advancing the PRNG’s state
+
+Most of the cryptographic PRNGs are counter-based, and so support advancing which increments the counter. Advancing a PRNG updates the underlying PRNG state as if a given number of calls to the underlying PRNG have been made. In general there is not a one-to-one relationship between the number output random values from a particular distribution and the number of draws from the core PRNG. This occurs for two reasons:
+
+1. The random values are simulated using a rejection-based method and so, on average, more than one value from the underlying PRNG is required to generate a single draw.
+
+2. The number of bits required to generate a simulated value differs from the number of bits generated by the underlying PRNG. For example, two 16-bit integer values can be simulated from a single draw of a 32-bit PRNG.
+
+Advancing the PRNG state resets any pre-computed random numbers. This is required to ensure exact reproducibility.
+
+A major advantage of this scheme is its amenability to parallelization. Because rejection sampling (lines 7–14) is performed independently for each particle, sampling can be divided between different threads/processes. The calculation of weights (lines 20–22) can also be parallelized once rejection sampling for the current posterior estimate has completed. In our Python implementation, this parallelization was accomplished through the use of the Pathos multiprocessing module
+
+%================================================================
+\subsection{NeuroModels}
+%================================================================
+
+\textbf{Hodgkin-Huxley}
+
+\begin{enumerate}
+    \item about solve\_ivp and choices 
+    \item arrays and interp1d
+    \item vtrap 
+    \item Q10 correction
+\end{enumerate}
+
+\textbf{Extracting spiking features}
+
+\begin{enumerate}
+    \item find\_peaks: prominence etc 
+    \item algorithms for finding features from peaks 
+\end{enumerate} 
+
+brunel net
+
+parameters are specified as Quantity objects: these are essentially arrays or numbers with a unit of measurement attached.
+
+The nice thing about Quantities is that once the unit is specified you don’t need to worry about rescaling the values to a common unit ‘cause Quantities takes care of this for you
+
+\url{https://python-quantities.readthedocs.io/en/latest/}
+
+%================================================================
+\subsection{Documentation and Unit Testing}
+%================================================================
+
+Uses continuous integration (CI) workflows, facilitated by GitHub Actions, to build and test the projects directly.
+
+Sphinx to build the documentation. Readthedocs hosts the documentation and build environment. 
+
+PyPI to publish packages. 
 
 %================================================================
 \section{Method}\label{sec:Method}

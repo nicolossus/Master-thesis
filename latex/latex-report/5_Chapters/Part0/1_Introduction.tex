@@ -4,6 +4,23 @@
 
 %================================================================ 
 
+Simulation-based inference (SBI) seeks to identify parameter sets that a)
+are compatible with prior knowledge and b) match empirical observations. Importantly,
+SBI does not seek to recover a single ‘best’ data-compatible parameter set, but rather
+to identify all high probability regions of parameter space that explain observed data,
+and thereby to quantify parameter uncertainty. In Bayesian terminology, SBI aims to retrieve the posterior distribution over the parameters of interest. In contrast to conventional
+Bayesian inference, SBI is also applicable when one can run model simulations, but no
+formula or algorithm exists for evaluating the probability of data given parameters, i.e.
+the likelihood.
+
+\url{https://github.com/EliseJ/astroABC/blob/master/examples/intro.ipynb}
+
+Computational modelling is fundamental to the scientific method providing a link between real world empirical evidence and conceptual predictions
+
+All brains are composed of a huge variety of neuron and synapse types. In computational neuroscience we use models for mimicking the behavior of these elements and to gain an understanding of the brain's behavior by conducting simulation experiments in neural simulators. These models are usually defined by a set of variables which have either concrete values or use functions and differential equations that describe the temporal evolution of the variables.
+
+\url{https://www.frontiersin.org/articles/10.3389/fninf.2018.00068/full}
+
 organisms are algorithms
 
 infohazard - https://www.nickbostrom.com/information-hazards.pdf
@@ -22,6 +39,129 @@ Computational neuroscience ... junction between biology, physics and numerical m
 Computational neuroscience and machine learning. 
 
 The following introduces the fundamental problem and objective of the master project and the methodology that will be applied as well.
+
+
+With the LFI approach, we will examine two widely studied neuroscientific models; the Hodgkin-Huxley model and the Brunel network model. 
+
+
+Inverse modelling, that is, the process of gathering information on a model and its parameters from measurements of what is being modelled, is important because it tell us about parameters that we cannot directly observe.  
+
+
+DRUKCMANN, 2007 
+
+Traditionally, by a process of educated guesswork and intuition, a set of values for the parameters describing the different ion channels that may exist in the neuron membrane is suggested and the model performance is compared to the actual experimental data. This process is repeated until a satisfactory match between the model and the experiment is attained.
+
+As computers become more powerful and clusters of processors increasingly common, the computational resources available to a modeler steadily increase. Thus, the possibility of harnessing these resources to the task of constraining parameters of conductance-based compartmental models seems very lucrative. However, the crux of the matter is that now the evaluation of the quality of a simulation is left to an algorithm. The highly sophisticated comparison between a model performance and experimental trace(s) that the trained modeler performs by eye must be reduced to some formula.
+
+
+% Computational neuroscience is driven by the development of models describing neuronal activity on different temporal and spatial scales, ranging from single cells (e.g., Koch and Segev, 2000; Izhikevich, 2004) to spiking activity in mesoscopic neural networks (e.g., Potjans and Diesmann, 2014; Markram et al., 2015), to whole-brain activity (e.g., Sanz Leon et al., 2013; Schmidt et al., 2018). In order to quantify the accuracy and credibility of the models they must be routinely validated against experimental data. \url{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6305903/}
+
+% We formally implement the workflow using a generic Python library that we introduce for validation tests on neural network activity data.
+
+% To bridge the gap between the theory of neuronal networks and findings obtained by the analysis of experimental data, advances in computational neuroscience rely heavily on simulations of neuronal network models. 
+
+require numerical evaluation of likelihoods
+
+Likelihood-free inference provides a framework for performing rigorous Bayesian infer- ence using only forward simulations
+
+there have been developed a suite of methods that bypass the evaluation of the likelihood function, called likelihood-free inference methods. These methods seek to directly estimate either the posterior or the likelihood, and require only the ability to generate data from the simulator to analyze the model in a fully Bayesian context.
+
+
+However, 
+
+most mechanistic models have intractable likelihoods, making traditional methods in the toolkit of statistical inference inaccessible.
+
+Simulation-based inference, in particular Approximate Bayesian Computation,
+
+
+All brains are composed of a huge variety of neuron and synapse types. In computational neuroscience we use models for mimicking the behavior of these elements and to gain an understanding of the brain's behavior by conducting simulation experiments in neural simulators. These models are usually defined by a set of variables which have either concrete values or use functions and differential equations that describe the temporal evolution of the variables.
+
+Advances in computational neuroscience rely on the development of mechanistic models describing neural phenomena, and candidate models are validated by comparing with experiments. A central challenge in building a mechanistic model is to identify the parametrization of the system which gives the best fit to experimental data. The Bayesian paradigm of statistical inference provides a robust approach to identify parameters consistent with data. However, most mechanistic models have intractable likelihoods, making traditional methods in the toolkit of statistical inference inaccessible. Recent advances in probabilistic modelling have led to a large number of simulation-based inference algorithms 
+
+ simulation-based inference algorithms which do not require numerical evaluation of likelihoods. for such likelihood-free algorithms ...
+
+Approximate Bayesian Computation (ABC) are a family of likelihood-free inference methods that require only the ability to generate data from the model to analyze the model in a fully Bayesian context.
+
+Approximate Bayesian Computation (ABC) are a family of likelihood-free inference algorithms which does not require numerical evaluation of likelihoods, only the ability 
+
+using only forward simulations
+
+Likelihood-free inference provides a framework for performing rigorous Bayesian infer- ence using only forward simulations,
+
+A central challenge is to identify the parameters of the model which give the best fit to experimental data. 
+
+
+While rejection ABC (REJ-ABC) uses the prior as a proposal distribution, the efficiency can be improved by using sequentially refined proposal distributions (SMC) (can be said about MCMC also?). We implemented REJ-ABC with quantile-based rejection. 
+We extensively varied hyperparameters. We investigated linear regression adjustment (Blum and François, 2010) and the summary statistics approach
+by Prangle et al. (2014). [SBI Benchmark]
+
+
+
+Advances in computational neuroscience rely on the development of simulator models describing neural phenomena, and candidate models are validated by comparing with experiments. The principal challenge is often not to set up the model equations, but rather identifying the parametrization of the system which achieves an agreement between the model and experimental data. The Bayesian paradigm of statistical inference provides a robust approach to identify parameters consistent with data. Most simulator models have intractable likelihoods, making traditional methods in the toolkit of statistical inference inaccessible. 
+
+
+Likelihood-free inference provides a framework for performing rigorous Bayesian infer- ence using only forward simulations, properly accounting for all physical and observa- tional effects that can be successfully included in the simulations. The key challenge for likelihood-free applications in cosmology, where simulation is typically expensive
+
+
+tool identifies all parameters consistent with data
+
+provide a way constraining
+22 and selecting models of large scale brain networks from empirical data
+
+The aim of mechanistic models in neuroscience is to explain neural phenomena in terms of causal mechanisms, and candidate models are validated by comparing with experiments. The main challenge is often not to set up the model equations, but rather identifying the parametrization of the system which achieves an agreement between the model and experimental data. The Bayesian paradigm of statistical inference provides a robust approach to parameter identification with quantified uncertainty. Most mechanistic models have intractable likelihoods, making traditional methods in the toolkit of statistical inference inaccessible. Approximate Bayesian Computation (ABC) are a family of likelihood-free inference methods that require only the ability to generate data from the model to analyze the model in a fully Bayesian context.
+
+Approximate Bayesian Computation (ABC) are a family of likelihood-free inference algorithms which does not require numerical evaluation of likelihoods, only the ability 
+
+Recent advances in probabilistic modelling have led to a large number of simulation-based inference algorithms which do not require nu- merical evaluation of likelihoods. 
+
+but instead of
+83 filtering out simulations,
+
+While rejection ABC (REJ-ABC) uses the prior as a proposal distribution, the efficiency can be improved by using sequentially refined proposal distributions (SMC) (can be said about MCMC also?). We implemented REJ-ABC with quantile-based rejection. 
+We extensively varied hyperparameters. We investigated linear regression adjustment (Blum and François, 2010) and the summary statistics approach
+by Prangle et al. (2014). [SBI Benchmark]
+
+
+
+Because of the curse of dimensionality, ABC requires a compression of the data into low-dimensional summary statistics. We use various summary statistics of neural data obtained from domain knowledge.  expert-crafted summary statistics of spiking activity. If powerful low-dimensional summary statistics are established, traditional techniques can still offer a reasonable performance.
+
+MCMC ABC, which improves the sample efficiency compared to Rej ABC by being guided by a proposal distribution ... MCMC ABC has improved sample efficiency 
+
+
+
+In this thesis, we have used ABC with rejection sampling (Rejection ABC) and
+
+In this thesis we implement the generic Python library pyLFI which uses ABC with both rejection and Markov chain Monte Carlo (MCMC) sampling for parameter inference/identification. In particular, we infer the conductance parameters in the Hodgkin-Huxley model for initiation and propagation of action potentials and the synaptic weight parameters in the Brunel network model for activity dynamics in local cortical networks. 
+
+In this thesis, we have used (rejection) ABC (rejection sampling) and (MCMC) ABC (importance sampling) for identifying the conductance parameters in the Hodgkin-Huxley model for initiation and propagation of action potentials and the synaptic weight parameters in the Brunel network model for activity dynamics in local cortical networks. 
+
+The Hodgkin-Huxley formalism is used as basis for many biophysically detailed cell models ...
+
+Many cell models are built on the Hodgkin-Huxley formalism ... so being able to accurately constrain model parameters
+
+using Markov chain Monte Carlo (MCMC) sampling
+
+%Mechanistic models in neuroscience aim to explain neural or behavioral phenomena in terms of causal mechanisms, and candidate models are validated by comparing with experiments. The main challenge is often not set up the model equations, but rather identifying the parametrization of the system which achieves an agreement between the model and experimental data. The Bayesian paradigm of statistical inference provides a robust approach to parameter identification with quantified uncertainty. Due to (having) intractable likelihoods, traditional methods in the toolkit of statistical inference are inaccessible for many mechanistic models. Approximate Bayesian Computation (ABC) is/are a family of likelihood-free inference methods that require only the ability to generate data from the model to analyze the model in a fully Bayesian context.
+
+%To overcome intractable likelihoods, there have been developed a suite of methods that bypass the evaluation of the likelihood function, called likelihood-free inference methods. These methods seek to directly estimate either the posterior or the likelihood, and require only the ability to generate data from the simulator to analyze the model in a fully Bayesian context.
+
+
+
+%Mechanistic models in neuroscience aim to explain neural or behavioral phenomena in terms of causal mechanisms, and candidate models are validated by investigating whether proposed mechanisms can explain how experimental data manifest(s). Many mechanistic models are defined implicitly through simulators, i.e. a set of dynamical equations, which can be run forward to generate data. A central challenge in building a mechanistic model is to identify the parametrization of the system which achieves an agreement between the model and experimental data. Due to intractable likelihoods, traditional methods in the toolkit of statistical inference are inaccessible for many mechanistic models. To overcome intractable likelihoods, there have been developed a suite of methods that bypass the evaluation of the likelihood function, called likelihood-free inference methods. These methods seek to directly estimate either the posterior or the likelihood, and require only the ability to generate data from the simulator to analyze the model in a fully Bayesian context.
+
+%The Bayesian paradigm of statistical inference provides a robust approach to parameter identification with quantified uncertainty. Statistical inference uses the likelihood function to quantify the match between parameters and data by deriving estimators of the parameters from the data. Likelihoods can be derived for purely statistical models, but are generally intractable or computationally infeasible for simulation-based models. Hence are traditional methods in the toolkit of statistical inference inaccessible for many mechanistic models.
+
+
+
+
+%Mechanistic models in neuroscience aim to explain neural or behavioral phenomena in terms of causal mechanisms, and candidate models are validated by investigating whether proposed mechanisms can explain how experimental data manifests. The mechanistic modelling is generally through the use of differential equations, and these models often have non-measurable parameters. A central challenge in building a mechanistic model is to identify the parametrization of the system which achieves an agreement between the model and experimental data.
+
+%The Bayesian paradigm of statistical inference provides a robust approach to parameter identification with quantified uncertainty. Statistical inference uses the likelihood function to quantify the match between parameters and data by deriving estimators of the parameters from the data. In Bayesian inference, posterior beliefs about parameters are updated according to Bayes' theorem upon observing data.
+
+%Many mechanistic models are defined implicitly through simulators, i.e. a set of dynamical equations, which can be run forward to generate data. Likelihoods can be derived for purely statistical models, but are generally intractable or computationally infeasible for simulation-based models. Hence are traditional methods in the toolkit of statistical inference inaccessible for many mechanistic models.
+
+%To overcome intractable likelihoods, a suite of methods that bypass the evaluation of the likelihood function, called likelihood-free inference methods, have been developed. These methods seek to directly estimate either the posterior or the likelihood, and require only the ability to generate data from the simulator to analyze the model in a fully Bayesian context.
+
 
 %================================================================
 \section{Motivation}\label{sec:Motivation}
@@ -43,11 +183,23 @@ ABC has been successfully applied to a wide range of problems with an complex or
 
 Recently, there have been several successful studies using\textit{neural network-based conditional density estimators} to perform likelihood-free inference in simulation-based models. One such method, called \textit{Sequential Neural Posterior Estimation} (SNPE), target parametrically learning the posterior by using simulations instead of likelihood calculations. More specifically, the method trains a mixed density network (MDN) for posterior density estimation. Instead of filtering out simulations, as ABC methods do, it uses \textit{all} simulations to train the neural network to identify admissible parameters. 
 
+We will use the classical Beta-Binomial model to build intuition. (analytic, inference engines, lfi)
  
 
+\section{Performance Metrics}
+
+sbi benchmark 
 
 
 
+Choice of a suitable performance metric is central to any benchmark. As the goal of SBI algorithms is to perform full inference, the ‘gold standard’ would be to quantify the similarity between the true posterior and the inferred one with a suitable distance (or di- vergence) measure on probability distributions. This would require both access to the ground-truth posterior, and a reliable means of estimating similarity between (potentially) richly structured distributions. Several performance metrics have been used in past research, depending on the constraints imposed by knowledge about ground-truth and the inference algorithm (see Table 1). In real-world applications, typically only the observation x0 is known. However, in a benchmarking setting, it is reasonable to assume that one has at least access to the ground-truth parameters theta0. There are two commonly used metrics which only require theta0 and
+x0, but suffer severe drawbacks for our purposes:
 
+
+Bayesian inference is a principled approach for determining parameters consistent with empirical observations: Given a prior over parameters, a stochastic simulator, and observations, it returns a posterior distribution. In cases where the simulator likelihood can be evaluated, many methods for approximate Bayesian
+inference exist (e.g., [1, 2, 3, 4, 5]). For more general simulators, however, evaluating the likelihood of data
+given parameters might be computationally intractable. Traditional algorithms for this ‘likelihood-free’
+setting [6] are based on Monte-Carlo rejection [7, 8], an approach known as Approximate Bayesian Computation (ABC). More recently, algorithms based on neural networks have been developed [9, 10, 11, 12, 13].
+These algorithms are not based on rejecting simulations, but rather train deep neural conditional density estimators or classifiers on simulated data. 
 
 

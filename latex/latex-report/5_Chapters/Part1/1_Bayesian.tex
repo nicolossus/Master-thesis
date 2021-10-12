@@ -5,16 +5,18 @@
 \epigraph{A decision was wise, even though it led to disastrous consequences, if the evidence at hand indicated it was the best one to make; and a decision was foolish, even though it led to the happiest possible con-\\sequences, if it was unreasonable to expect those consequences.}{Herodotus, around 500 BC}
 
 
-The aim of statistical inference is to learn about underlying properties of a population from observed data.  In statistical inference, there are, broadly speaking, two paradigms for the analysis of observed data: \textit{frequentist} inference and \textit{Bayesian} inference. These often differ with each other on the fundamental interpretation of probability. In the frequentist view, the probabilities of events are defined as their relative frequencies in a repeatable objective process, and are thus ideally devoid of opinion. The Bayesian view of probability, on the other hand, is based on the degree of belief about the state of the world, and probabilities can be assigned to any statement, even when a random process is not involved. Bayesian inference is the process of revising beliefs about the state of the world in the light of new evidence.   
+The aim of statistical inference is to learn about underlying properties of a population from observed data.  In statistical inference, there are, broadly speaking, two paradigms for the analysis of observed data: \textit{frequentist} inference and \textit{Bayesian} inference. These often differ with each other on the fundamental interpretation of probability. In the frequentist view, the probabilities of events are defined as their relative frequencies in a repeatable objective process, and are thus ideally devoid of opinion. From a Bayesian perspective, probabilities are measures that quantifies the uncertainty level of statements based on the degree of belief about the state of the world. Probabilities can be assigned to any statement, even when a random process is not involved. Bayesian inference is the process of revising beliefs about the state of the world in the light of new evidence.     
 
-This chapter introduces the fundamentals of Bayesian inference, with a particular focus on parameter inference. The content of this chapter is mainly based on the material in the Bayesian textbooks \cite{BDA}, [BAP] and \cite{Sivia}. %BDA, BAP, Sivia.
+%The Bayesian view of probability, on the other hand, is based on the degree of belief about the state of the world, and probabilities can be assigned to any statement, even when a random process is not involved. Bayesian inference is the process of revising beliefs about the state of the world in the light of new evidence.   
+
+This chapter introduces the fundamentals of Bayesian inference, with a particular focus on parameter inference. The content of this chapter is mainly based on the material in the Bayesian textbooks \cite{BDA}, \cite{BAP} and \cite{Sivia}.
 
 
 %================================================================
 \section{Bayesian Inference}\label{sec:bayes_paradigm}
 %================================================================
 
-In terms of parameter inference, the Bayesian approach differ from the frequentist in that unknown parameters $\theta$ are treated as random variables rather than fixed quantities. In the Bayesian paradigm, all available information about an unknown parameter is incorporated in a \textit{prior probability distribution}, expressing our beliefs before some evidence is taken into account. We usually have a prior pdf $\prior$, since there will typically be a continuum of possible values of a parameter rather than just a discrete set. In the case of substantial prior knowledge about a parameter $\theta$, the prior pdf is narrow and concentrated about some central value, whereas a lack of information yield a wider and relatively flat prior pdf as shown in \autoref{fig:prior_illustration}. The prior is often specified by a particular distribution among a set of well-known and tractable distributions (see \autoref{sec:Appendix A}), with the purpose of making evaluation of prior probabilities and random generation of $\theta$ values straightforward.
+In terms of parameter inference, the Bayesian approach differs from the frequentist in that unknown parameters $\theta$ are treated as random variables rather than fixed quantities. In the Bayesian paradigm, all available information about an unknown parameter is incorporated in a \textit{prior probability distribution}, expressing our beliefs before some evidence is taken into account. We usually have a prior pdf $\prior$, since there will typically be a continuum of possible values of a parameter rather than just a discrete set. In the case of substantial prior knowledge about a parameter $\theta$, the prior pdf is narrow and concentrated about some central value, whereas a lack of information yield a wider and relatively flat prior pdf as shown in \autoref{fig:prior_illustration}. The prior is often specified by a particular distribution among a set of well-known and tractable distributions (see \autoref{sec:Appendix A}), with the purpose of making evaluation of prior probabilities and random generation of $\theta$ values straightforward.
 
 %\begin{figure}[H]
 %    \centering
@@ -28,7 +30,7 @@ In terms of parameter inference, the Bayesian approach differ from the frequenti
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.7]{prior_plot}
-    \caption{A narrow concentrated prior about some central value and a wider less informative prior.}
+    \caption{Two prior distributions $\pi (\theta)$. A narrow concentrated prior (more certainty) about some central value and a wider less informative prior (less certainty).}
     \label{fig:prior_illustration}
     %\source{Figure 14.3 in \cite{STK}.}
 \end{figure}
@@ -58,39 +60,40 @@ In this formulation, $\lhood$ is taken as a function of $\theta$ and not $y$.
 The core of Bayesian inference is encapsulated in \autoref{eq:bayes_theorem} and \autoref{eq:bayes_unnorm}. The principal task is to develop the joint probability model $\joint$ and perform the computations to summarize the posterior $\posterior$.
 
 
-
-
-%================================================================
-\subsection{The Prior and Posterior Predictive Distributions}\label{sec:predictive}
-%================================================================
-
-BDA, side 7
-
-%================================================================
-\section{Summarizing the Posterior}
-%================================================================
-
-- mean, median, mode: point estimates
-
-- variance and standard deviation: spread -> uncertainty 
-
-- credible intervals, highest density posterior (hdp) 
-
 %================================================================
 \section{Parameter Inference}\label{sec:param_inference}
 %\section{Single-parameter Models}\label{sec:single_inference}
-%================================================================ 
+%================================================================  
 
-The way in which Bayes's theorem operates is best seen through examples. 
+The way in which Bayes' theorem operates is best seen through examples. In the following we discuss Bayesian inference in the context of statistical models where closed forms are available. Such models are sometimes unrealistic, but their analysis often provides a useful starting point when it comes to constructing more realistic models. The focus of this section will be on how we can summarize the obtained posteriors with various graphical checks and numerical measures. 
 
-The way in which Bayes’s theorem operates is best seen through examples. In the following we develop some problem formulations to apply Bayesian analysis on for parameter inference. We will focus on situations where closed forms are available, that is, situations where we can use probability models based on the standard distributions. In particular, we will look at probability models based on the binomial and normal distributions. The binomial distribution is motivated from counting exchangeable outcomes, and the normal distribution applies to a random variable that is the sum of many exchangeable or independent terms. Such models are sometimes unrealistic, but their analysis often provides a useful starting point when it comes to constructing more realistic models. 
+%The way in which Bayes’s theorem operates is best seen through examples. In the following we develop some problem formulations to apply Bayesian analysis on for parameter inference. We will focus on situations where closed forms are available, that is, situations where we can use probability models based on the standard distributions. In particular, we will look at probability models based on the binomial and normal distributions. The binomial distribution is motivated from counting exchangeable outcomes, and the normal distribution applies to a random variable that is the sum of many exchangeable or independent terms. Such models are sometimes unrealistic, but their analysis often provides a useful starting point when it comes to constructing more realistic models. The toy problems developed in this section will later serve as benchmark problems. 
 
-The toy problems developed in this section will later serve as benchmark problems. 
+%================================================================
+\subsection{Single-Parameter Inference}\label{sec:coin_flipping}
+%===============================================================
+
+The beta-binomial model is one of the simplest Bayesian models, and useful for introducing important concepts and computational methods in Bayesian analysis. The model is often illustrated in the context of the classical coin-flipping problem, where only a single scalar parameter, the success probability $\theta$, is to be estimated. 
+
+In the coin-flipping problem, we toss a coin $n$ times and record the observations: either \textit{heads} or \textit{tails}. Based on this data, we try to answer questions such as “is the coin fair?”. In order to estimate the fairness of a coin in a Bayesian setting, we need observed data, a probabilistic model of the data generating process, i.e., the likelihood, and priors placed on the unknown model parameters. For this example, we assume that the data-gathering part is already done and we have recorded $y_0$ heads. The fairness of the coin is represented by the $\theta$ parameter, and we say that a coin with $\theta=1$ will always land heads, one with $\theta=0$ always tails and one with $\theta=0.5$ have an equal chance of landing either heads or tails. Assuming that only two outcomes are possible, heads or tails, and the random variable \textit{coin toss} is independent and identically distributed (iid), a candidate for the likelihood is the binomial distribution: 
+
+% p \qty(y \mid \theta)
+\begin{equation}\label{eq:coin_flip_likelihood}
+    \lhood = \binom{n}{y} \theta^y \qty(1 - \theta)^{n-y}.
+\end{equation}
+
+This is a discrete distribution returning the probability of getting $y$ heads (or in general, successes) out of $n$ coin tosses (or in general, trials or experiments) given a fixed value of $\theta$ (probability of success).
+
+
+
+
+
 
 %================================================================
 %\subsection{The Coin-Flipping Problem}\label{sec:coin_flipping}
-\subsection{The Beta-Binomial Model}\label{sec:coin_flipping}
 %================================================================ 
+
+... after some algebra (see appendix X for details) .. we obtain the posterior:
 
 The beta-binomial model is one of the simplest interesting Bayesian models, and basic building
 
@@ -187,6 +190,12 @@ The comprehensive derivation can be found in appendix B.
 \subsection{Conjugate Prior Distributions}
 %================================================================
 
+In Bayesian probability theory, if posterior
+distributions are in the same family as the prior
+distributions, then both prior and posterior are called
+conjugate distributions and the prior is called
+conjugate prior.
+
 Conjugacy is formally defined as follows. If $\mathcal{F}$ is a class of sampling distributions $p \left(y | \theta \right)$, and $\mathcal{P}$ is a class of prior distributions for $\theta$, then the class $\mathcal{P}$ is \textit{conjugate} for $\mathcal{F}$ if
 
 \begin{equation}
@@ -231,7 +240,25 @@ Energy
 
 
 %================================================================
+\subsection{The Prior and Posterior Predictive Distributions}\label{sec:predictive}
+%================================================================
+
+BDA, side 7
+
+%================================================================
+\section{Summarizing the Posterior}
+%================================================================
+
+- mean, median, mode: point estimates
+
+- variance and standard deviation: spread -> uncertainty 
+
+- credible intervals, highest density posterior (hdp) 
+
+
+
+%================================================================
 \section{Why Bayes?}
 %================================================================
 
-End chapter with this?
+End chapter with this? No, move to introduction
