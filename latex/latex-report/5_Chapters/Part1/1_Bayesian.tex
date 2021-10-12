@@ -38,7 +38,7 @@ In terms of parameter inference, the Bayesian approach differs from the frequent
 Our prior state of knowledge is modified by data $y$, obtained by performing experiments, through the conditional \textit{sampling distribution} $\lhood$. When regarded as a function of $\theta$, for fixed $y$, $\lhood$ is called the \textit{likelihood function}. In order to make probability statements about $\theta$ given sample data $y$, a probabilistic model representing the joint probability distribution for $\theta$ and $y$ must be provided. The joint pmf or pdf can be written as a product of the prior distribution $\prior$ and the likelihood function $\lhood$:
 
 \begin{equation*}
-    \joint = \lhood \prior 
+    \joint = \lhood \prior .
 \end{equation*}
 
 At this point, Bayes' theorem is used to produce the \textit{posterior distribution}, which represents our state of knowledge about $\theta$ in the light of $y$. A common incarnation of Bayes' theorem is:
@@ -52,7 +52,7 @@ where the marginal probability of the data $p(y) = \int \lhood \prior \dd \theta
 $p(y)$ is the same for all possible $\theta$, as it does not depend on $\theta$. With fixed $y$, this factor can thus be omitted in parameter inference since it constitutes a normalizing constant and does not enter into determining the relative posterior probabilities of different values of $\theta$. Omitting the factor $p(y)$ yields the unnormalized posterior distribution: 
 
 \begin{equation}\label{eq:bayes_unnorm}
-    \posterior \propto p(\theta, y) =  \lhood \prior 
+    \posterior \propto p(\theta, y) =  \lhood \prior .
 \end{equation}
 
 In this formulation, $\lhood$ is taken as a function of $\theta$ and not $y$.  
@@ -82,23 +82,65 @@ In the coin-flipping problem, we toss a coin $n$ times and record the observatio
     \lhood = \binom{n}{y} \theta^y \qty(1 - \theta)^{n-y}.
 \end{equation}
 
-This is a discrete distribution returning the probability of getting $y$ heads (or in general, successes) out of $n$ coin tosses (or in general, trials or experiments) given a fixed value of $\theta$ (probability of success). \autoref{fig:binom_distribution} illustrates the binomial distribution for different $\theta$. From the figure we see that $\theta$ indicates how likely it is to obtain a head when tossing a coin, making the binomial distribution a reasonable choice for the likelihood. 
+This is a discrete distribution returning the probability of getting $y$ heads (or in general, successes) out of $n$ coin tosses (or in general, trials or experiments) given a fixed value of $\theta$ (probability of success). 
+
+\autoref{fig:binom_distribution} illustrates the binomial distribution for different $\theta$. From the figure we see that $\theta$ indicates how likely it is to obtain a head when tossing a coin, making the binomial distribution a reasonable choice for the likelihood. 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.7]{binomial_distribution}
+    \includegraphics[scale=1]{binomial_distribution}
     \caption{Binomial distributions with $n=40$ coin flips and different success probabilities $\theta$. The coin is biased towards tails when $\theta < 0.5$ and heads when $\theta > 0.5$. For $\theta=0.5$ the coin is unbiased (or fair). The legend indicates the values of the $\theta$.}
     \label{fig:binom_distribution}
     %\source{Figure 14.3 in \cite{STK}.}
 \end{figure} 
 
-For mathematical convenience, we construct a family of prior densities that lead to simple posterior densities. 
+If the value of $\theta$ is known, the binomial distribution tells us the expected distribution of heads. However, $\theta$ is an unknown model parameter, and thus we need to place a prior on it. For mathematical convenience, we choose a family of prior densities that lead to simple posterior densities. Considered as a function of $\theta$, \autoref{eq:coin_flip_likelihood} is of the form: 
+\begin{equation*}
+    \lhood \propto \theta^a \qty(1 - \theta)^b.
+\end{equation*} 
 
-Considered as a function of $\theta$, \autoref{eq:coin_flip_likelihood} is of the form: 
-\begin{equation}\label{eq:coin_flip_likelihood_theta}
-    \lhood = \theta^a \qty(1 - \theta)^b.
+If the prior density is of the same form, with its own parametrization of $a$ and $b$, then the posterior will also be of this form. Such a prior density can be parameterized as: 
+
+\begin{equation*}
+    \prior \propto \theta^{\alpha - 1} \qty(1 - \theta)^{\beta -1},
+\end{equation*}
+
+which is the a beta distribution with shape parameters $\alpha>0$ and $\beta>0$. The parameters of the prior distribution are often called \textit{hyperparameters}. In order to ensure that the total probability is 1, the beta function:
+
+\begin{equation*}
+    B (\alpha, \beta) = \frac{\Gamma(\alpha)\Gamma(\beta)}{\Gamma(\alpha + \beta)},
+\end{equation*}
+
+where $\Gamma (z)$ is the gamma function, can be used as a normalizing constant:
+
+\begin{equation}\label{eq:beta_prior}
+    \prior = \frac{1}{B(\alpha, \beta)} \theta^{\alpha -1} (1-\theta)^{\beta -1}.
 \end{equation}
 
+The beta distribution is defined on the interval $[0, 1]$. .. shows the beta distribution with different shape parameters. 
+
+%%%
+PLOT OF BETA DIST
+
+
+
+\begin{equation}
+    \pi (\theta) = \frac{\Gamma (\alpha + \beta)}{\Gamma (\alpha)\Gamma (\beta)} \theta^{\alpha -1} (1-\theta)^{\beta -1} = \frac{1}{B(\alpha, \beta)} \theta^{\alpha -1} (1-\theta)^{\beta -1},
+\end{equation} 
+    
+where $\alpha>0$ and $\beta>0$ are the shape parameters, and $\Gamma (z)$ is the gamma function. The beta function, 
+
+\begin{equation*}
+    B (\alpha, \beta) = \frac{\Gamma(\alpha)\Gamma(\beta)}{\Gamma(\alpha + \beta)},
+\end{equation*}
+
+is a normalization constant to ensure that the total probability is 1. The beta distribution is defined on the interval $[0, 1]$. 
+
+
+However, we do not know $\theta$. In the Bayesian paradigm, when we do not know the value of a parameter, we put a prior on it. As a prior, we will use a **beta distribution**, which looks as follows: 
+
+
+The factor $\binom{n}{y}$ does not depend on the unknown parameter $\theta$, and can be treated as a constant when calculating the posterior distribution of $\theta$ when we regard $n$ and $y$ as part of the experimental design that is considered fixed. 
 
 The property that the posterior distribution follows the same parametric form as the prior distribution is called \textit{conjugacy}; the beta prior distribution is a \textit{conjugate family} for the binomial likelihood. 
 
