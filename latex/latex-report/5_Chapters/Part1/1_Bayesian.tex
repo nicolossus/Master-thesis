@@ -9,7 +9,9 @@ The aim of statistical inference is to learn about underlying properties of a po
 
 %The Bayesian view of probability, on the other hand, is based on the degree of belief about the state of the world, and probabilities can be assigned to any statement, even when a random process is not involved. Bayesian inference is the process of revising beliefs about the state of the world in the light of new evidence.   
 
-This chapter introduces the fundamentals of Bayesian inference, with a particular focus on parameter inference. The content of this chapter is mainly based on the material in the Bayesian textbooks \cite{BDA}, \cite{BAP} and \cite{Sivia}.
+%This chapter introduces the fundamentals of Bayesian inference, with a particular focus on parameter inference. The content of this chapter is mainly based on the material in the Bayesian textbooks \cite{BDA}, \cite{BAP} and \cite{Sivia}.
+
+This chapter introduces the fundamentals of Bayesian inference, with a particular focus on parameter inference. The content of this chapter is based on the material in the Bayesian textbooks \cite{BDA}, \cite{BAP} and \cite{Sivia}.
 
 
 %================================================================
@@ -99,13 +101,13 @@ If the value of $\theta$ is known, the binomial distribution tells us the expect
     \lhood \propto \theta^a \qty(1 - \theta)^b.
 \end{equation*} 
 
-If the prior density is of the same form, with its own parametrization of $a$ and $b$, then the posterior will also be of this form. Such a prior density can be parameterized as: 
+If the prior density is of the same form, with its own parameterization of $a$ and $b$, then the posterior will also be of this form. Such a prior density can be parameterized as: 
 
 \begin{equation*}
     \prior \propto \theta^{\alpha - 1} \qty(1 - \theta)^{\beta -1},
 \end{equation*}
 
-which is the a beta distribution with shape parameters $\alpha>0$ and $\beta>0$. The parameters of the prior distribution are often called \textit{hyperparameters}. In order to ensure that the total probability is 1, the beta function:
+which is the a beta distribution with shape parameters $\alpha>0$ and $\beta>0$. The parameters of the prior distribution are often called \textit{hyperparameters}. In order to ensure that the total probability is 1, the beta function,
 
 \begin{equation*}
     B (\alpha, \beta) = \frac{\Gamma(\alpha)\Gamma(\beta)}{\Gamma(\alpha + \beta)},
@@ -117,45 +119,74 @@ where $\Gamma (z)$ is the gamma function, can be used as a normalizing constant:
     \prior = \frac{1}{B(\alpha, \beta)} \theta^{\alpha -1} (1-\theta)^{\beta -1}.
 \end{equation}
 
-The beta distribution is defined on the interval $[0, 1]$. .. shows the beta distribution with different shape parameters. 
+The beta distribution is defined on the interval $[0, 1]$. \autoref{fig:beta_distribution} shows the beta distribution with different shape parameters. The figure displays the versatility of the beta distribution; the distribution adopts several shapes, determined by the shape parameters, including the uniform distribution with $\alpha = \beta = 1$. 
 
-%%%
-PLOT OF BETA DIST
+\begin{figure}[ht]
+    \centering
+    \includegraphics[scale=1]{beta_distribution}
+    \caption{The beta prior probability distribution with different parameterizations by the two positive shape parameters. The legend indicates the values of the corresponding shape parameters $\alpha$ and $\beta$. The beta distribution adopts several shapes controlled by the shape parameters; $\alpha=\beta=1$ gives a uniform distribution, $\alpha=\beta=20$ gives a bell curve centered at $\theta=0.5$ and finally $\alpha=1$ and $\beta=2$ gives a reverse J-shaped distribution with a right tail.
+    }
+    \label{fig:beta_distribution}
+    %\source{Figure 14.3 in \cite{STK}.}
+\end{figure} 
 
 
 
-\begin{equation}
-    \pi (\theta) = \frac{\Gamma (\alpha + \beta)}{\Gamma (\alpha)\Gamma (\beta)} \theta^{\alpha -1} (1-\theta)^{\beta -1} = \frac{1}{B(\alpha, \beta)} \theta^{\alpha -1} (1-\theta)^{\beta -1},
-\end{equation} 
-    
-where $\alpha>0$ and $\beta>0$ are the shape parameters, and $\Gamma (z)$ is the gamma function. The beta function, 
+Bayes' theorem, \autoref{eq:bayes_unnorm}, states that the posterior is proportional to the product of the likelihood and the prior. Thus, for our problem the posterior density for $\theta$ is given as: 
 
 \begin{equation*}
-    B (\alpha, \beta) = \frac{\Gamma(\alpha)\Gamma(\beta)}{\Gamma(\alpha + \beta)},
+    \pi (\theta \mid y) \propto \binom{n}{y} \theta^y (1-\theta)^{n-y} \frac{1}{B(\alpha, \beta)} \theta^{\alpha-1}(1-\theta)^{\beta -1}.
 \end{equation*}
 
-is a normalization constant to ensure that the total probability is 1. The beta distribution is defined on the interval $[0, 1]$. 
+With fixed $n$ and $y$, the factor $\binom{n}{y}$ does not depend on the unknown parameter $\theta$, and neither does the beta function $B(\alpha, \beta)$. Thus can both be treated as constants when calculating the posterior distribution of $\theta$:
+
+\begin{align*}
+    \posterior &\propto \theta^y (1-\theta)^{n-y} \theta^{\alpha-1}(1-\theta)^{\beta -1} \\
+    &= \theta^{\alpha + y -1} (1-\theta)^{\beta + n-y -1},
+\end{align*}
+
+or, more concisely:
+
+\begin{equation}\label{eq:coin_posterior}
+    \posterior \propto \theta^{\alpha' -1} (1-\theta)^{\beta' -1},
+\end{equation}
+
+with $\alpha'=\alpha+y$ and $\beta' = \beta + n - y$. We recognize that the expression above has the same functional form as the unnormalized beta distribution. The property that the posterior distribution follows the same parametric form as the prior distribution is called \textit{conjugacy}, and we say that the beta prior distribution is a \textit{conjugate prior} for the binomial likelihood.  
+
+fig illustrates how our posterior beliefs are updated in the light of observed data.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[scale=1]{coin_flip_posterior}
+    \caption{The beta prior probability distribution with different parameterizations by the two positive shape parameters. The legend indicates the values of the corresponding shape parameters $\alpha$ and $\beta$. The beta distribution adopts several shapes controlled by the shape parameters; $\alpha=\beta=1$ gives a uniform distribution, $\alpha=\beta=20$ gives a bell curve centered at $\theta=0.5$ and finally $\alpha=1$ and $\beta=2$ gives a reverse J-shaped distribution with a right tail.
+    }
+    \label{fig:beta_distribution}
+    %\source{Figure 14.3 in \cite{STK}.}
+\end{figure} 
+
+shows how the posterior pdfs for the different priors evolve, as more and more data become available;
 
 
-However, we do not know $\theta$. In the Bayesian paradigm, when we do not know the value of a parameter, we put a prior on it. As a prior, we will use a **beta distribution**, which looks as follows: 
+We find that when there are few data, the resulting posteriors are different in detail; as the number of data increases, they all become more sharply peaked and converge to the same answer. This seems quite reasonable. The outcome of only a few flips tells us little about the fairness of the coin. Our state of knowledge after the analysis of these data is, therefore, strongly dependent on what we knew or assumed before the results; hence, the posteriors are somewhat different. As the empirical evidence grows, we are eventually led to the same conclusions irrespective of our initial beliefs; the posterior pdf is then dominated by the likelihood function, and the choice of the prior becomes largely irrelevant.
+
+Two further curious points may be noted: (i) it takes quite a lot of flips to be able to estimate the bias-weighting with some degree of confidence (about a thousand to pin it down between 0.2 and 0.3); (ii) the posterior pdfs for the solid and dotted lines converge together quite quickly, but the dashed case takes much longer. The answer to the first observation is that it just does, but the number of flips required will depend on the actual bias-weighting of the coin. If the coin was tossed ten times and came up tails on every occasion, we would rapidly conclude that it was biased; on the other hand, the result of 45 heads and 55 tails in a hundred flips would still leave us somewhat uncertain as to whether the coin was fair. With regard to the second point, both the flat (solid) and the spiky (dotted) priors encode a large degree of ignorance about the nature of the coin. Despite the peculiar shape of the latter, it is fairly flat for most values of H; the strange-looking spikes at H = 0 and H = 1 disappear as soon as a head and a tail have been observed. The ‘fair-minded’ prior (dashed line), however, claims to be moderately well-informed about the character of the coin regardless of the data. It, therefore, takes much more to be convinced that the coin is not fair. Even though the prior probability for H = 0.5 was about a million times greater than that of H = 0.25, a thousand flips were enough to drag it (kicking and screaming, perhaps) to the conclusion that the value of H was less than 0.3 (but more than 0.2).
 
 
-The factor $\binom{n}{y}$ does not depend on the unknown parameter $\theta$, and can be treated as a constant when calculating the posterior distribution of $\theta$ when we regard $n$ and $y$ as part of the experimental design that is considered fixed. 
+FIG text 
 
-The property that the posterior distribution follows the same parametric form as the prior distribution is called \textit{conjugacy}; the beta prior distribution is a \textit{conjugate family} for the binomial likelihood. 
+Theeffectofdifferentpriors,prob(H|I),ontheposteriorpdfforthebias-weightingof a coin. The solid line is the same as in Fig. 2.1, and is included for ease of comparison. The case for two alternative priors, reflecting slightly different assumptions in the conditioning information I, are shown with dashed and dotted lines.
 
-%================================================================
-%\subsection{The Coin-Flipping Problem}\label{sec:coin_flipping}
-%================================================================ 
+Theevolutionoftheposteriorpdfforthebias-weightingofacoin,prob(H|{data},I), as the number of data available increases. The figure on the top right-hand corner of each panel shows the number of data analysed; in the early panels, the H or T in the top left-hand corner shows whether the result of that (last) flip was a head or a tail.
 
-... after some algebra (see appendix X for details) .. we obtain the posterior:
+%%%
 
 
-The binomial distribution provides a natural model for data that arise from a sequence of $n$ exchangeable trials or draws from a large population, where each trial gives rise to one of two possible outcomes, conventionally labeled 'success' or 'failure'. Because of the exchangeability, the data can be summarized by the total number of successes in the $n$ trials, which we denote here by $y$. Converting from a formulation in terms of exchangeable trials to one using independent and identically distributed random variables is achieved naturally by letting the parameters $\theta$ represent the proportion of successes in the population or, equivalently, the probability of success in each trial. The binomial sampling model is 
 
-...
 
-where on the left side we suppress the dependence on $n$ because it is regarded as part of the experimental design that is considered fixed; all the probabilities discussed for this problem are assumed to be conditional on $n$.
+%%%
+%%%
+
+
 
 
 
