@@ -158,10 +158,9 @@ fig illustrates how our posterior beliefs are updated in the light of observed d
 \begin{figure}[ht]
     \centering
     \includegraphics[scale=1]{coin_flip_posterior}
-    \caption{The beta prior probability distribution with different parameterizations by the two positive shape parameters. The legend indicates the values of the corresponding shape parameters $\alpha$ and $\beta$. The beta distribution adopts several shapes controlled by the shape parameters; $\alpha=\beta=1$ gives a uniform distribution, $\alpha=\beta=20$ gives a bell curve centered at $\theta=0.5$ and finally $\alpha=1$ and $\beta=2$ gives a reverse J-shaped distribution with a right tail.
+    \caption{The posterior
     }
-    \label{fig:beta_distribution}
-    %\source{Figure 14.3 in \cite{STK}.}
+    \label{fig:coin_flip_posterior}
 \end{figure} 
 
 shows how the posterior pdfs for the different priors evolve, as more and more data become available;
@@ -171,6 +170,13 @@ We find that when there are few data, the resulting posteriors are different in 
 
 Two further curious points may be noted: (i) it takes quite a lot of flips to be able to estimate the bias-weighting with some degree of confidence (about a thousand to pin it down between 0.2 and 0.3); (ii) the posterior pdfs for the solid and dotted lines converge together quite quickly, but the dashed case takes much longer. The answer to the first observation is that it just does, but the number of flips required will depend on the actual bias-weighting of the coin. If the coin was tossed ten times and came up tails on every occasion, we would rapidly conclude that it was biased; on the other hand, the result of 45 heads and 55 tails in a hundred flips would still leave us somewhat uncertain as to whether the coin was fair. With regard to the second point, both the flat (solid) and the spiky (dotted) priors encode a large degree of ignorance about the nature of the coin. Despite the peculiar shape of the latter, it is fairly flat for most values of H; the strange-looking spikes at H = 0 and H = 1 disappear as soon as a head and a tail have been observed. The ‘fair-minded’ prior (dashed line), however, claims to be moderately well-informed about the character of the coin regardless of the data. It, therefore, takes much more to be convinced that the coin is not fair. Even though the prior probability for H = 0.5 was about a million times greater than that of H = 0.25, a thousand flips were enough to drag it (kicking and screaming, perhaps) to the conclusion that the value of H was less than 0.3 (but more than 0.2).
 
+\begin{figure}[ht]
+    \centering
+    \includegraphics[scale=1]{coin_flip_posterior2}
+    \caption{The posterior
+    }
+    \label{fig:coin_flip_posterior2}
+\end{figure} 
 
 FIG text 
 
