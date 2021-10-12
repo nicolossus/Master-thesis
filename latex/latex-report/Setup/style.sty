@@ -14,7 +14,7 @@
 
 
 %--------- color ------------
-\usepackage[usenames,dvipsnames,svgnames,table]{xcolor} 
+\usepackage[usenames,dvipsnames,svgnames,table,cmyk]{xcolor} 
 
 %----- document formatting ---- 
 % Begin paragraphs with an empty line rather than an indent:
@@ -52,12 +52,19 @@
 
 %---------- figure & tables ---------------
 \usepackage{graphicx}
-\usepackage{subfig}
+%\usepackage{subfig}  % cannot be used with subcaption
 \usepackage{float}
 \usepackage{multirow}
 \usepackage{array}
 \usepackage{caption} % figure & table caption
-\captionsetup{labelfont={normal, bf}, width=.9\linewidth, font={rm}}  % sc, sf, rm,   
+\usepackage{subcaption}  % cannot be used with subfig
+\captionsetup{labelfont={normal, bf}, 
+              width=.9\linewidth, 
+              font={rm},
+              %singlelinecheck=off,
+              %justification=justified %raggedright %centering
+}  % sc, sf, rm,
+
 % \bf, \md, \it, \sl, \sc, \sf, \tt or \rm
 %\captionsetup{labelfont={normal, bf}, font={sl}}  
 \usepackage{chngcntr}
@@ -107,9 +114,20 @@
 \hypersetup{          % set color of referenced items
     colorlinks=true,
     linkcolor=blue, % black
-    citecolor=red,  % black
+    %citecolor=magenta,  % black
     filecolor=blue, % black     
-    urlcolor=blue,} % black 
+    urlcolor=blue,} % black  
+    
+%\hypersetup{
+%    colorlinks=true,
+%    linkcolor=blue,
+%    filecolor=magenta,      
+%    urlcolor=cyan,
+%    pdftitle={Overleaf Example},
+%    pdfpagemode=FullScreen,
+%    }
+\urlstyle{same}    
+
     
 \usepackage[nameinlink,capitalize]{cleveref} % must be loaded after hyperref  
 
@@ -168,6 +186,9 @@
 
 %--------- bibliography -----------
 \usepackage{csquotes}
+
+% Numerical bibstyle
+
 \usepackage[
     backend=biber,
     style=numeric,
@@ -176,5 +197,18 @@
     natbib,
     hyperref
 ]{biblatex}
+
+
+% Author-year bib style
+
+%\usepackage[style=authoryear-comp,
+%            maxnames=2,
+%            maxbibnames=10,
+%            uniquelist=false, 
+%            uniquename=false]{biblatex}
+
+
+%Includes "References" in the table of contents
+%\usepackage[nottoc]{tocbibind}
 
 %-------------------- end style ---------------------------

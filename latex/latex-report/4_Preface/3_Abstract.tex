@@ -5,20 +5,50 @@
 \addcontentsline{toc}{chapter}{Abstract}
 \thispagestyle{plain}
 
-%Limit the abstract to as few words as possible. The abstract should always be less than one page long, and less than 400 words. Be aware that many online referencing systems only allow the first 200 words to be included. No figures or references should be presented.Avoid extensive technical and method details where possible. Should be readable to a literate science reader familiar with your general area, but not necessarily experts-only material.
+%Limit the abstract to as few words as possible. The abstract should always be less than one page long, and less than 400 words. Be aware that many online referencing systems only allow the first 200 words to be included. No figures or references should be presented.Avoid extensive technical and method details where possible. Should be readable to a literate science reader familiar with your general area, but not necessarily experts-only material. 
 
 
-Mechanistic models in neuroscience aim to explain neural or behavioral phenomena in terms of causal mechanisms, and candidate models are validated by investigating whether proposed mechanisms can explain how experimental data manifests. Many mechanistic models are defined implicitly through simulators, i.e. a set of dynamical equations, which can be run forward to generate data. A central challenge in building a mechanistic model is to identify the parametrization of the system which achieves an agreement between the model and experimental data. Due to intractable likelihoods, traditional methods in the toolkit of statistical inference are inaccessible for many mechanistic models. To overcome intractable likelihoods, there have been developed a suite of methods that bypass the evaluation of the likelihood function, called likelihood-free inference methods. These methods seek to directly estimate either the posterior or the likelihood, and require only the ability to generate data from the simulator to analyze the model in a fully Bayesian context.
+A central challenge in building a mechanistic model of neural dynamics is to identify the model parameters consistent with experimental data. Due to intractable likelihoods, traditional methods in the toolkit of statistical inference are inaccessible for many mechanistic models. To overcome intractable likelihoods, simulation-based inference provides a framework for performing rigorous Bayesian inference without requiring numerical evaluation of likelihoods by using only forward simulations. The objective of this thesis is to investigate the viability of simulation-based inference, in particular approximate Bayesian computation (ABC) algorithms, for identifying parameters in mechanistic models of neural dynamics. Specifically, we use rejection ABC (REJ-ABC) and Markov chain Monte Carlo ABC (MCMC-ABC) to infer the conductance parameters in the Hodgkin-Huxley model for initiation and propagation of action potentials and the synaptic weight parameters in the Brunel network model for activity dynamics in local cortical networks. 
 
-%The Bayesian paradigm of statistical inference provides a robust approach to parameter identification with quantified uncertainty. Statistical inference uses the likelihood function to quantify the match between parameters and data by deriving estimators of the parameters from the data. Likelihoods can be derived for purely statistical models, but are generally intractable or computationally infeasible for simulation-based models. Hence are traditional methods in the toolkit of statistical inference inaccessible for many mechanistic models.
+It also has the
+advantage of returning an entire posterior distribution on the
+value of the parameters, rather than a simple point estimate
+
+implement the generic Python library pyLFI 
+
+We implemented REJ-ABC with quantile-based rejection
+
+We extensively varied hyperparameters, and found that
+
+As the curse of dimensionality forces ABC to require a compression of data into low-level summary statistics, we use expert-crafted statistics of spiking activity. 
 
 
 
+While rejection ABC (REJ-ABC) uses the prior as a proposal distribution, the efficiency can be improved by using sequentially refined proposal distributions (SMC) (can be said about MCMC also?). We implemented REJ-ABC with quantile-based rejection. 
+We extensively varied hyperparameters. We investigated linear regression adjustment (Blum and François, 2010) and the summary statistics approach
+by Prangle et al. (2014). [SBI Benchmark]
 
-%Mechanistic models in neuroscience aim to explain neural or behavioral phenomena in terms of causal mechanisms, and candidate models are validated by investigating whether proposed mechanisms can explain how experimental data manifests. The mechanistic modelling is generally through the use of differential equations, and these models often have non-measurable parameters. A central challenge in building a mechanistic model is to identify the parametrization of the system which achieves an agreement between the model and experimental data.
 
-%The Bayesian paradigm of statistical inference provides a robust approach to parameter identification with quantified uncertainty. Statistical inference uses the likelihood function to quantify the match between parameters and data by deriving estimators of the parameters from the data. In Bayesian inference, posterior beliefs about parameters are updated according to Bayes' theorem upon observing data.
 
-%Many mechanistic models are defined implicitly through simulators, i.e. a set of dynamical equations, which can be run forward to generate data. Likelihoods can be derived for purely statistical models, but are generally intractable or computationally infeasible for simulation-based models. Hence are traditional methods in the toolkit of statistical inference inaccessible for many mechanistic models.
+Because of the curse of dimensionality, ABC requires a compression of the data into low-dimensional summary statistics. We use various summary statistics of neural data obtained from domain knowledge.  expert-crafted summary statistics of spiking activity. If powerful low-dimensional summary statistics are established, traditional techniques can still offer a reasonable performance.
 
-%To overcome intractable likelihoods, a suite of methods that bypass the evaluation of the likelihood function, called likelihood-free inference methods, have been developed. These methods seek to directly estimate either the posterior or the likelihood, and require only the ability to generate data from the simulator to analyze the model in a fully Bayesian context.
+MCMC ABC, which improves the sample efficiency compared to Rej ABC by being guided by a proposal distribution ... MCMC ABC has improved sample efficiency 
+
+
+
+In this thesis, we have used ABC with rejection sampling (Rejection ABC) and
+
+In this thesis we implement the generic Python library pyLFI which uses ABC with both rejection and Markov chain Monte Carlo (MCMC) sampling for parameter inference/identification. In particular, we infer the conductance parameters in the Hodgkin-Huxley model for initiation and propagation of action potentials and the synaptic weight parameters in the Brunel network model for activity dynamics in local cortical networks. 
+
+In this thesis, we have used (rejection) ABC (rejection sampling) and (MCMC) ABC (importance sampling) for identifying the conductance parameters in the Hodgkin-Huxley model for initiation and propagation of action potentials and the synaptic weight parameters in the Brunel network model for activity dynamics in local cortical networks. 
+
+The Hodgkin-Huxley formalism is used as basis for many biophysically detailed cell models ...
+
+Many cell models are built on the Hodgkin-Huxley formalism ... so being able to accurately constrain model parameters
+
+using Markov chain Monte Carlo (MCMC) sampling
+
+We were able to accurately constrain the conductance parameters of the Hodgkin-Huxley model as we obtained narrow posteriors with the ground truth parameters in regions of high posterior density. A 
+For the Hodgkin-Huxley model we obtain narrow posteriors with the true parameters in regions of high posterior density, indicating that ABC is a viable method for parameter identification in the many cell models built on the Hodgkin formalism. 
+
+As we only investigated models with few parameters, the viability of ABC on high-dimensional problems is yet to explore. 
