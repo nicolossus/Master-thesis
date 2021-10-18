@@ -52,3 +52,8 @@ We were able to accurately constrain the conductance parameters of the Hodgkin-H
 For the Hodgkin-Huxley model we obtain narrow posteriors with the true parameters in regions of high posterior density, indicating that ABC is a viable method for parameter identification in the many cell models built on the Hodgkin formalism. 
 
 As we only investigated models with few parameters, the viability of ABC on high-dimensional problems is yet to explore. 
+
+
+REJ-ABC with local linear regression adjustment were able to constrain the potassium conductance $\bar{g}_\mathrm{K}$ to the credible interval ... (ground truth $\bar{g}_\mathrm{K} = 36$ and the sodium conductance $\bar{g}_\mathrm{Na}$ to the credible interval ... (ground truth $\bar{g}_\mathrm{Na} = 120$).
+
+ABC requires some tuning to achieve different levels of accuracy, which can be time consuming as neural models generally are computationally expensive. 

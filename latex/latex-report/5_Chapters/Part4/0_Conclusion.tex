@@ -3,6 +3,26 @@
 %\chapter{Conclusion \& Future Research}\label{chap:Conclusion}
 %================================================================
 
+Sum stat discussion (from SNPE paper)
+
+When fitting mechanistic models to data, it is common to target summary features to isolate specific behaviors, rather than the full data. For example, the spike shape is known to constrain sodium and potassium conductances (Druckmann et al., 2007; Pospischil et al., 2008; Hay et al., 2011). When modeling population dynamics, it is often desirable to achieve realistic firing rates, rate-correlations and response nonlinearities (Rubin et al., 2015; Bittner et al., 2019), or specified oscillations (Prinz et al., 2004). Choice of summary features might also be guided by known limitations of either the model or the measurement approach, or necessitated by the fact that published data are only available in summarized form.  In all cases, care is needed when interpreting models fit to summary features, as choice of features can influence the results (Blum et al., 2013; Jiang et al., 2017; Izbicki et al., 2019).
+
+
+
+
+
+ABC discussion 
+
+
+When in doubt, multiple prior distributions can be considered to assess the robustness of the results. 
+
+The resulting summary statistics (multiple statistics are allowed) from the simulated data set are compared to those from the empirical data, and if close enough, the parameter values used to simulate the data are retained and contribute to the posterior distribution. If, however, the simulated summary statistics are not close in value to those of the empirical data, the parameters are rejected. This process is repeated until enough replicates (at least a few thousand) are retained. 
+
+A major methodological advance in ABC is that rather than implementing the algorithm described above, parameter sets can be more heavily weighted if the resulting simulation more closely matches the summaries of real data (Beaumont et al. 2002). In this framework, one can accept parameter values that are not as close a match to the empirical data, increasing the efficiency of the ABC. This framework has been implemented in local linear regression models (Beaumont et al. 2002) as well as other nonlinear regression approaches (Blum \& Francois 2010). 
+
+ABC methods have several disadvantages. Firstly, the methods are highly computationally intensive, often involving billions of coalescent simulations, which may limit the parameter space explored and can lead to incorrect inference. However, the simplest ABC approaches are easily parallelizable and computational power is continuing to increase, potentially ameliorating this concern. Secondly, ABC approaches may not be efficient if the prior distributions are wide or if the type of model being considered is unlikely to generate the observed data. Under these conditions, a high proportion of parameter values will be rejected, although the local regression  approach discussed above will mitigate some of this concern. A more serious drawback is that the success of ABC inference may depend on the choice of summary statistics. If the summary statistics are not capturing enough information from the data or the relevant information for the parameters of interest, then the posterior distributions will appear similar to the prior distribution, suggesting that the data are noninformative. 
+
+
 %----------------------------------------------------------------
 \section{Summary}\label{sec:summary}
 %----------------------------------------------------------------

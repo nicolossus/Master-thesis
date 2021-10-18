@@ -1,11 +1,48 @@
 %================================================================
-\chapter{Density Estimation}\label{chap:dens_est}
+%\chapter{Inference Engines}\label{chap:infeng}
+\chapter{Bayesian Computation}\label{chap:infeng}
+%================================================================
+
+
+%================================================================
+\section{Inference Engines}
+%================================================================ 
+
+While conceptually simple, Bayesian methods can be mathematically and numerically challenging. The main reason is that the marginal likelihood, the denominator in Bayes' theorem (see equation 1.4), usually takes the form of an intractable or computationally-expensive integral to solve. For this reason, the posterior is usually estimated numerically using algorithms from the Markov Chain Monte Carlo (MCMC) family or, more recently, variational algorithms. These methods are sometimes called inference engines, because, at least in principle, they are capable of approximating the posterior distribution for any probabilistic model. 
+
+There are several methods to numerically compute the posterior. I have ordered them into two broad groups: Non-Markovian methods (Grid computing, Quadratic approximation, Variational methods) and Markovian methods (Metropolis-Hastings, Hamiltonian Monte Carlo, Sequential Monte Carlo). We will not discuss non-Markovian methods as the focus of this thesis is MCMC methods.
+
+%================================================================
+\subsection{Markov Chain Monte Carlo Methods}
+%================================================================ 
+
+
+
+There is a family of related methods, collectively known as MCMC methods. These stochastic methods allow us to get samples from the true posterior distribution as long as we are able to compute the likelihood and the prior point-wise. While this is the same condition that we need for the grid-approach, MCMC methods outperform the grid approximation. The is because MCMC methods are capable of taking more samples from higher-probability regions than lower ones. In fact, an MCMC method will visit each region of the parameter-space in accordance to their relative probabilities.
+
+To understand what MCMC methods are, we are going to split the method into the two MC parts; the Monte Carlo part and the Markov Chain part.
+
+%================================================================
+\subsection{Diagnosing Markov Chains}
+%\section{Diagnosing Posterior Samples}
+%================================================================ 
+
+
+%================================================================
+\subsection{Other methods}
+%\section{Diagnosing Posterior Samples}
+%================================================================
+
+NUTS
+
+%================================================================
+\section{Density Estimation}\label{sec:dens_est}
 %================================================================
 
 The probability density function (pdf) is a fundamental concept in statistics. In the following, we will discuss \textit{density estimation}, i.e., how to construct an estimate of the pdf from sample data. The likelihood-free inference methods are based on sampling parameters and estimating the posterior from the samples, and hence is density estimation a crucial topic to address. As we will see, density estimation can give representations that have qualitatively different features and lead to entirely different interpretation of the data. 
 
 %================================================================
-\section{Histograms}\label{sec:histograms}
+\subsection{Histograms}\label{sec:histograms}
 %================================================================ 
 
 The most basic density estimator is the histogram [1]. A histogram is an approximate representation of data that divides the data into discrete bins and counts the number of points that fall in each bin. In a more general mathematical sense, a histogram is defined as follows [1]. We denote the density estimator by $\hat{f}$ and assume we are given a sample of $n$ observations $X_1, ..., X_n$ whose underlying density is to be estimated. Given an origin $x_0$ and a bin width $h$, the bins of the histogram are defined as the intervals $[x_0 + mh, x_0 + (m+1)h)$ for $m$ positive and negative integers. The histogram is then defined by
@@ -46,7 +83,7 @@ Without knowing that these two histograms were built from the same data, we prob
 
 
 %================================================================
-\subsection{Number of Bins and Width}\label{sec:binning}
+\subsection*{Number of Bins and Width}\label{sec:binning}
 %================================================================ 
 
 
@@ -60,7 +97,7 @@ where $x$ is the sample data with $n$ observations. The braces indicate the ceil
 
 Smaller bin widths can make the histogram cluttered and larger bin widths may obscure nuances in the data. There are however some commonly-used rules-of-thumb, each of which has its own strengths and weaknesses. 
 
-\subsubsection{The Square-root Rule}
+\subsubsection*{The Square-root Rule}
 
 Generally, the larger the number of observations in the sample data, the more bins should be used [3, p. 16]. A reasonable rule of thumb is to take the square root of the number of observations in the sample and round to the next integer:
 
@@ -117,7 +154,7 @@ where $\Gamma$ is the gamma function, $n$ is the number of data points, $n_k$ is
 \end{figure}
 
 
-\subsection{References}
+\subsection*{References}
 
 [1] \url{https://ned.ipac.caltech.edu/level5/March02/Silverman/paper.pdf}
 
@@ -127,7 +164,7 @@ where $\Gamma$ is the gamma function, $n$ is the number of data points, $n_k$ is
 
 [4] \url{https://clauswilke.com/dataviz/histograms-density-plots.html}
 
-\subsubsection{Original papers:} 
+\subsubsection*{Original papers:} 
 
 Scott, D. (1979). On optimal and data-based histograms \url{http://biomet.oxfordjournals.org/content/66/3/605}
 
@@ -135,7 +172,7 @@ Freedman, D. and Diaconis, P. (1981). On the histogram as a density estimator: L
 
 \textbf{See also SNL thesis:} Primer on density estimation (parametric/non-parametric) and includes neural density estimators. 
 
-\subsubsection{Misc. sources:}
+\subsubsection*{Misc. sources:}
 
 \begin{itemize}
     \item Python Data Science Handbook by Jake VanderPlas
@@ -155,7 +192,7 @@ Freedman, D. and Diaconis, P. (1981). On the histogram as a density estimator: L
 
 
 
-\subsection{Notes}
+\subsection*{Notes}
 
 Histograms give a rough sense of the density of the underlying distribution of the data, and often for density estimation: estimating the probability density function of the underlying variable. The total area of a histogram used for probability density is always normalized to 1. If the length of the intervals on the x-axis are all 1, then a histogram is identical to a relative frequency plot.
 
@@ -175,7 +212,7 @@ A rug plot is a plot of data for a single quantitative variable, displayed as ma
 Rug plots are often used in combination with two-dimensional scatter plots by placing a rug plot of the x values of the data along the x-axis, and similarly for the y values. This is the origin of the term "rug plot", as these rug plots with perpendicular markers look like tassels along the edges of the rectangular "rug" of the scatter plot.
 
 %================================================================
-\section{Kernel Density Estimation}\label{sec:kde}
+\subsection{Kernel Density Estimation}\label{sec:kde}
 %================================================================
 
 Histograms have been a popular visualization option since at least the 18th century, in part because they are easily generated by hand. More recently, as extensive computing power has become available in everyday devices such as laptops and cell phones, we see them increasingly being replaced by density plots. In a density plot, we attempt to visualize the underlying probability distribution of the data by drawing an appropriate continuous curve (Figure 7.3). This curve needs to be estimated from the data, and the most commonly used method for this estimation procedure is called kernel density estimation. In kernel density estimation, we draw a continuous curve (the kernel) with a small width (controlled by a parameter called bandwidth) at the location of each data point, and then we add up all these curves to obtain the final density estimate
