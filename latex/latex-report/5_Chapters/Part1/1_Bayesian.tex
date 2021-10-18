@@ -18,7 +18,9 @@ This chapter introduces the fundamentals of Bayesian inference, with a particula
 \section{Bayesian Inference}\label{sec:bayes_paradigm}
 %================================================================
 
-In terms of parameter inference, the Bayesian approach differs from the frequentist in that unknown parameters $\theta$ are treated as random variables rather than fixed quantities. In the Bayesian paradigm, all available information about an unknown parameter is incorporated in a \textit{prior probability distribution}, expressing our beliefs before some evidence is taken into account. We usually have a prior pdf $\prior$, since there will typically be a continuum of possible values of a parameter rather than just a discrete set. In the case of substantial prior knowledge about a parameter $\theta$, the prior pdf is narrow and concentrated about some central value, whereas a lack of information yield a wider and relatively flat prior pdf as shown in \autoref{fig:prior_illustration}. The prior is often specified by a particular distribution among a set of well-known and tractable distributions (see \autoref{sec:Appendix A}), with the purpose of making evaluation of prior probabilities and random generation of $\theta$ values straightforward.
+In terms of parameter inference, the Bayesian approach differs from the frequentist in that unknown parameters $\theta$ are treated as random variables rather than fixed quantities. In the Bayesian paradigm, all available information about an unknown parameter is incorporated in a \textit{prior probability distribution}, expressing our beliefs before some evidence is taken into account. We usually have a prior pdf $\prior$, since there will typically be a continuum of possible values of a parameter rather than just a discrete set. In the case of substantial prior knowledge about a parameter $\theta$, the prior pdf is narrow and concentrated about some central value, whereas a lack of information yield a wider and relatively flat prior pdf as shown in \autoref{fig:prior_illustration}. The prior is often specified by a particular distribution among a set of well-known and tractable distributions, with the purpose of making evaluation of prior probabilities and random generation of $\theta$ values straightforward.
+
+%In terms of parameter inference, the Bayesian approach differs from the frequentist in that unknown parameters $\theta$ are treated as random variables rather than fixed quantities. In the Bayesian paradigm, all available information about an unknown parameter is incorporated in a \textit{prior probability distribution}, expressing our beliefs before some evidence is taken into account. We usually have a prior pdf $\prior$, since there will typically be a continuum of possible values of a parameter rather than just a discrete set. In the case of substantial prior knowledge about a parameter $\theta$, the prior pdf is narrow and concentrated about some central value, whereas a lack of information yield a wider and relatively flat prior pdf as shown in \autoref{fig:prior_illustration}. The prior is often specified by a particular distribution among a set of well-known and tractable distributions (see \autoref{sec:Appendix A}), with the purpose of making evaluation of prior probabilities and random generation of $\theta$ values straightforward.
 
 %\begin{figure}[H]
 %    \centering
@@ -72,12 +74,12 @@ The way in which Bayes' theorem operates is best seen through examples. In the f
 %The way in which Bayes’s theorem operates is best seen through examples. In the following we develop some problem formulations to apply Bayesian analysis on for parameter inference. We will focus on situations where closed forms are available, that is, situations where we can use probability models based on the standard distributions. In particular, we will look at probability models based on the binomial and normal distributions. The binomial distribution is motivated from counting exchangeable outcomes, and the normal distribution applies to a random variable that is the sum of many exchangeable or independent terms. Such models are sometimes unrealistic, but their analysis often provides a useful starting point when it comes to constructing more realistic models. The toy problems developed in this section will later serve as benchmark problems. 
 
 %================================================================
-\subsection{Single-Parameter Inference}\label{sec:coin_flipping}
+\subsection{The Beta-Binomial Model}\label{sec:coin_flipping}
 %===============================================================
 
 The beta-binomial model is one of the simplest Bayesian models, and useful for introducing important concepts and computational methods in Bayesian analysis. The model is often illustrated in the context of the classical coin-flipping problem, where only a single scalar parameter, the success probability $\theta$, is to be estimated. 
 
-In the coin-flipping problem, we toss a coin $n$ times and record the observations: either \textit{heads} or \textit{tails}. Based on this data, we try to answer questions such as “is the coin fair?”. In order to estimate the fairness of a coin in a Bayesian setting, we need observed data, a probabilistic model of the data generating process, i.e., the likelihood, and priors placed on the unknown model parameters. For this example, we assume that the data-gathering part is already done and we have recorded $y_0$ heads. The fairness of the coin is represented by the $\theta$ parameter, and we say that a coin with $\theta=1$ will always land heads, one with $\theta=0$ always tails and one with $\theta=0.5$ have an equal chance of landing either heads or tails. Assuming that only two outcomes are possible, heads or tails, and the random variable \textit{coin toss} is independent and identically distributed (iid), a candidate for the likelihood is the binomial distribution: 
+In the coin-flipping problem, we toss a coin $n$ times and record the observations: either \textit{heads} or \textit{tails}. Based on this data, we try to answer questions such as \textit{is the coin fair?} Or, more generally, \textit{how biased is the coin?}. In order to estimate the bias of a coin in a Bayesian setting, we need observed data, a probabilistic model of the data generating process, i.e., the likelihood, and priors placed on the unknown model parameters. For this example, we assume that the data-gathering part is already done and we have recorded $y_0$ heads. The bias of the coin is represented by the $\theta$ parameter, and we say that a coin with $\theta=1$ will always land heads, one with $\theta=0$ always tails and one with $\theta=0.5$ have an equal chance of landing either heads or tails. Assuming that only two outcomes are possible, heads or tails, and the random variable \textit{coin toss} is independent and identically distributed (iid), a candidate for the likelihood is the binomial distribution: 
 
 % p \qty(y \mid \theta)
 \begin{equation}\label{eq:coin_flip_likelihood}
@@ -91,9 +93,8 @@ This is a discrete distribution returning the probability of getting $y$ heads (
 \begin{figure}[H]
     \centering
     \includegraphics[scale=1]{binomial_distribution}
-    \caption{Binomial distributions with $n=40$ coin flips and different success probabilities $\theta$. The coin is biased towards tails when $\theta < 0.5$ and heads when $\theta > 0.5$. For $\theta=0.5$ the coin is unbiased (or fair). The legend indicates the values of the $\theta$.}
+    \caption{Binomial distributions with $n=40$ coin flips and different success probabilities $\theta$. The coin is biased towards tails when $\theta < 0.5$ (blue) and heads when $\theta > 0.5$ (green). For $\theta=0.5$ (orange) the coin is unbiased (or fair). The legend indicates the values of the $\theta$.}
     \label{fig:binom_distribution}
-    %\source{Figure 14.3 in \cite{STK}.}
 \end{figure} 
 
 If the value of $\theta$ is known, the binomial distribution tells us the expected distribution of heads. However, $\theta$ is an unknown model parameter, and thus we need to place a prior on it. For mathematical convenience, we choose a family of prior densities that lead to simple posterior densities. Considered as a function of $\theta$, \autoref{eq:coin_flip_likelihood} is of the form: 
@@ -124,12 +125,10 @@ The beta distribution is defined on the interval $[0, 1]$. \autoref{fig:beta_dis
 \begin{figure}[ht]
     \centering
     \includegraphics[scale=1]{beta_distribution}
-    \caption{The beta prior probability distribution with different parameterizations by the two positive shape parameters. The legend indicates the values of the corresponding shape parameters $\alpha$ and $\beta$. The beta distribution adopts several shapes controlled by the shape parameters; $\alpha=\beta=1$ gives a uniform distribution, $\alpha=\beta=20$ gives a bell curve centered at $\theta=0.5$ and finally $\alpha=1$ and $\beta=2$ gives a reverse J-shaped distribution with a right tail.
+    \caption{The beta prior probability distribution with different parameterizations by the two positive shape parameters. The legend indicates the values of the corresponding shape parameters $\alpha$ and $\beta$. The beta distribution adopts several shapes controlled by the shape parameters; $\alpha=\beta=1$ gives a uniform distribution (blue), $\alpha=\beta=20$ gives a bell curve centered at $\theta=0.5$ (orange) and finally $\alpha=1$ and $\beta=2$ gives a reverse J-shaped distribution with a right tail (green).
     }
     \label{fig:beta_distribution}
-    %\source{Figure 14.3 in \cite{STK}.}
 \end{figure} 
-
 
 
 Bayes' theorem, \autoref{eq:bayes_unnorm}, states that the posterior is proportional to the product of the likelihood and the prior. Thus, for our problem the posterior density for $\theta$ is given as: 
@@ -153,15 +152,18 @@ or, more concisely:
 
 with $\alpha'=\alpha+y$ and $\beta' = \beta + n - y$. We recognize that the expression above has the same functional form as the unnormalized beta distribution. The property that the posterior distribution follows the same parametric form as the prior distribution is called \textit{conjugacy}, and we say that the beta prior distribution is a \textit{conjugate prior} for the binomial likelihood.  
 
-fig illustrates how our posterior beliefs are updated in the light of observed data.
+\autoref{fig:coin_flip_posterior} shows how the posteriors for the priors in \autoref{fig:beta_distribution} evolve as more and more data become available. 
+
+The uniform (blue) prior. This represent all the possible values for the bias being equally probable a priori.
+The Gaussian-like (orange) prior is centered and concentrated around 0.5, so this prior is compatible with information indicating that the coin has more or less about the same chance of landing heads or tails. We could also say this prior is compatible with the belief that most coins are fair. While belief is commonly used in Bayesian discussions, we think is better to talk about models and parameters that are informed by data.
+The skewed (green) prior puts the most weight on a tail-biased outcome.
 
 \begin{figure}[ht]
     \centering
     \includegraphics[scale=1]{coin_flip_posterior}
-    \caption{The beta prior probability distribution with different parameterizations by the two positive shape parameters. The legend indicates the values of the corresponding shape parameters $\alpha$ and $\beta$. The beta distribution adopts several shapes controlled by the shape parameters; $\alpha=\beta=1$ gives a uniform distribution, $\alpha=\beta=20$ gives a bell curve centered at $\theta=0.5$ and finally $\alpha=1$ and $\beta=2$ gives a reverse J-shaped distribution with a right tail.
+    \caption{The effect of different priors on the posterior as the number of data available increases. The uniform prior (blue) . The ground truth, $\theta=0.5$ (the coin is indeed fair), is indicated by the black vertical line. 
     }
-    \label{fig:beta_distribution}
-    %\source{Figure 14.3 in \cite{STK}.}
+    \label{fig:coin_flip_posterior}
 \end{figure} 
 
 shows how the posterior pdfs for the different priors evolve, as more and more data become available;
