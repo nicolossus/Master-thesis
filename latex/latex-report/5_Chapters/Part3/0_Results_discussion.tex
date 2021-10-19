@@ -7,6 +7,59 @@
 \section{The Hodgkin-Huxley Model}
 %================================================================
 
+\subsection{Observed data}
+
+Observed data 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1]{hh_obs_data}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure} 
+
+Found locations in voltage trace for extraction of summary statistics 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1]{hh_stat_extraction}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure} 
+
+table of observed summary statistics 
+
+% n_spikes=7
+% average_AP_overshoot=30.7316 mV
+% spike_rate=0.0700 mHz
+% average_AP_width=2.0501 mV
+% average_AHP_depth=-63.6200 mV
+% latency_to_first_spike=2.3000 ms
+% accommodation_index=0.00000000000000002
+
+\subsection{A deeper look into the statistics}
+
+\subsection{Priors for HH}
+
+
+\subsection{Sensitivity Weights}
+
+
+----
+
+observed data w/o noise 
+
+feature extraction 
+
+plot features 
+
+compute weights (plot correlation matrix) 
+
+plot priors (informative, noninformative)
+
+
+---
+
 create the observed data
 
 summary statistics of observation 
@@ -35,25 +88,125 @@ weights
 %================================================================
 
 %================================================================
-\section{ABC Settings for Identification of Hodgkin-Huxley Parameters}
+\section{Rejection ABC Posteriors on Conductance Parameters}
 %================================================================
-
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=1]{RMSPE_vs_quantile}
-    \caption{caption}
-    \label{fig:fig1}
-\end{figure} 
-
 
 show how Hodgkin–Huxley model is more tightly constrained by increasing numbers of data features
 
 We also inferred HH parameters for 8 in vitro recordings from the Allen Cell Types database using the same current-clamp stimulation protocol as in our model [60, 70] (Fig. 4F, Supplementary Fig. 8). In each case, simulations based on the SNPE-inferred posterior closely resembled the original data (Fig. 4F). We note that while inferred parameters differed across recordings, some parameters (the spike threshold, the density of sodium channels, the membrane reversal potential and the density of potassium channels) were consistently more strongly constrained than others (the intrinsic neural noise, the adaptation time constant, the density of slow voltage-dependent channels and the leak conductance) (Supplementary Fig. 8). Overall, these results suggest that the electrophysiological responses measured by this current-clamp protocol can be approximated by a single-compartment HH model, and that SNPE can identify the admissible parameters.
 
 %================================================================
-\section{Rejection ABC Posteriors on Conductance Parameters}
+\subsection{ABC Settings for Identification of Hodgkin-Huxley Parameters}
 %================================================================
+
+RMSE averaged over 10 posteriors for each quantile value. 1000 posterior samples in each posterior. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.8]{RMSPE_vs_quantile}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure} 
+
+Run time
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.8]{comp_time_quantile}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure}
+
+
+Number of summary statistics
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.8]{RMSPE_vs_n_sumstats}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure} 
+
+
+\subsection{Summarizing Posteriors, informative priors}
+
+Posteriors with original samples, informative prior
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1]{hh_posterior_org_normal}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure}
+
+Correlation
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.8]{hh_corr_org_normal}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure}
+
+Joint posterior 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1.0]{hh_joint_posterior_org_normal}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure}
+
+Posteriors, reg adjusted samples, informative prior
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1.0]{hh_posterior_reg_normal}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure}
+
+PPC reg adjusted posterior predictive 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1.0]{hh_postpred_reg_normal}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure}
+
+
+\subsection{Summarizing Posteriors, noninformative priors}
+
+posterior, original, noninfo prior
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1.0]{hh_posterior_org_uniform}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure}
+
+Adjusted posterior, noninformative prior
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1.0]{hh_posterior_reg_uniform}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure} 
+
+PPC adjusted posterior 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1.0]{hh_postpred_reg_uniform}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure}
+
+\subsection{Noisy observation} 
+
 
 %================================================================
 \section{ABC Settings for Identification of Brunel Network Parameters}
