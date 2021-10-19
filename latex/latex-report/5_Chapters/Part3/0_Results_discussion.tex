@@ -39,10 +39,49 @@ table of observed summary statistics
 
 \subsection{A deeper look into the statistics}
 
-\subsection{Priors for HH}
+Priors for HH
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1]{hh_priors}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure} 
 
 
-\subsection{Sensitivity Weights}
+Summary statistics under the (informative) prior predictive distribution (draw 2000 samples, dropna -> left with 1881 samples, but here we only plot a subset of 470 samples)
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1]{hh_priorpred_sstats_normal}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure} 
+
+
+Correlation (pearson) 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1]{hh_priorpred_corr_normal}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure} 
+
+weights from corr coef
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1]{hh_priorpred_weights_normal}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure} 
+
+Perhaps unsurprisingly, since the prior distribution does not alter the inherent relationship between the quantities, we obtain the same weights from the summary statistics generated under the noninformative prior predictive distribution. The same results as above for the noninformative prior can be found in ... ref appendix A section ...
+
+%
+
+
 
 
 ----
