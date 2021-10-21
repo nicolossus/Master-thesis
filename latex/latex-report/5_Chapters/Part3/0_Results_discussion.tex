@@ -13,7 +13,7 @@ Observed data
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=1]{hh_obs_data}
+    \includegraphics[scale=0.9]{hh_obs_data}
     \caption{caption}
     \label{fig:fig1}
 \end{figure} 
@@ -29,13 +29,29 @@ Found locations in voltage trace for extraction of summary statistics
 
 table of observed summary statistics 
 
-% n_spikes=7
-% average_AP_overshoot=30.7316 mV
-% spike_rate=0.0700 mHz
-% average_AP_width=2.0501 mV
-% average_AHP_depth=-63.6200 mV
-% latency_to_first_spike=2.3000 ms
-% accommodation_index=0.00000000000000002
+% Alternating row colors
+\begin{table}[H]
+  \caption{Generic table with alternating rows and different sized rulers. The number of spikes is not used as a summary statistic in and of itself, but is included to show that the statistic extraction indeed finds all spikes.}
+  %\footnotesize%
+  \begin{center}
+    \rowcolors{2}{gray!15}{white}
+    \begin{tabular}{cccc}
+      \toprule
+      \textbf{Summary statistic} & \textbf{Observed value} \\
+      \midrule
+      Number of spikes &  7 \\
+      Spike rate &  0.0700 mHz \\
+      Average AP overshoot & 30.7316 mV  \\
+      Average AP width &  2.0501 mV \\
+      Average AHP depth & -74.2234 mV \\
+      Latency to first spike & 2.3000 ms \\
+      Accommodation index &  $2 \cdot 10^{-17}$ \\
+      \bottomrule
+    \end{tabular}
+  \end{center}
+  \label{tab:hh_obs_sumstats}
+\end{table}
+
 
 \subsection{A deeper look into the statistics}
 
@@ -43,7 +59,7 @@ Priors for HH
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=1]{hh_priors}
+    \includegraphics[scale=0.8]{hh_priors}
     \caption{caption}
     \label{fig:fig1}
 \end{figure} 
@@ -53,7 +69,7 @@ Summary statistics under the (informative) prior predictive distribution (draw 2
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=1]{hh_priorpred_sstats_normal}
+    \includegraphics[scale=0.8]{hh_priorpred_sstats_normal}
     \caption{caption}
     \label{fig:fig1}
 \end{figure} 
@@ -63,7 +79,7 @@ Correlation (pearson)
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=1]{hh_priorpred_corr_normal}
+    \includegraphics[scale=0.8]{hh_priorpred_corr_normal}
     \caption{caption}
     \label{fig:fig1}
 \end{figure} 
@@ -72,7 +88,7 @@ weights from corr coef
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=1]{hh_priorpred_weights_normal}
+    \includegraphics[scale=0.8]{hh_priorpred_weights_normal}
     \caption{caption}
     \label{fig:fig1}
 \end{figure} 
@@ -81,6 +97,39 @@ Perhaps unsurprisingly, since the prior distribution does not alter the inherent
 
 %
 
+
+\subsection{Noisy HH Data}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.9]{hh_noisy_data}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure} 
+
+
+% Alternating row colors
+\begin{table}[H]
+  \caption{Generic table with alternating rows and different sized rulers. The number of spikes is not used as a summary statistic in and of itself, but is included to show that the statistic extraction indeed finds all spikes.}
+  %\footnotesize%
+  \begin{center}
+    \rowcolors{2}{gray!15}{white}
+    \begin{tabular}{cccc}
+      \toprule
+      \textbf{Summary statistic} & \textbf{Observed value} \\
+      \midrule
+      Number of spikes &  7 \\
+      Spike rate &  0.0700 mHz \\
+      Average AP overshoot & 30.7223 mV  \\
+      Average AP width & 2.0679 mV \\
+      Average AHP depth & -74.3394 mV \\
+      Latency to first spike & 2.2750 ms \\
+      Accommodation index &  -0.0067 \\
+      \bottomrule
+    \end{tabular}
+  \end{center}
+  \label{tab:hh_noisy_sumstats}
+\end{table}
 
 
 
@@ -246,6 +295,33 @@ PPC adjusted posterior
 
 \subsection{Noisy observation} 
 
+original posterior on noisy observed data
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1.0]{hh_posterior_org_noisy}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure} 
+
+adjusted posterior on noisy observed data
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1.0]{hh_posterior_reg_noisy}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure} 
+
+ppc with reg adjusted posterior samples (100 posterior samples)
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1.0]{hh_postpred_reg_noisy}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure}
 
 %================================================================
 \section{ABC Settings for Identification of Brunel Network Parameters}

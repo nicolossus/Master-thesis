@@ -52,6 +52,14 @@ Reference to equations in original paper:
 Describes how the membrane potential $V_m$, that is, the voltage across a membrane with capacitance $C$, responds to an input current $I$.
 
 
+\url{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3219615/}
+There are several sources to noise in cellular dynamics. [article] provides an excellent review of stochastic versions of the HH equations. [To model channel noise within a differential equation framework of the general form above, we seek ways of introducing fluctuations into this deterministic system.] Current noise, subunit noise, conductance noise. We only look at current noise in this thesis
+
+Gaussian white noise (GWN) is a stationary and ergodic random process with zero mean that is defined by the following fundamental property: any two values of GWN are statistically independent now matter how close they are in time. 
+
+Although the mathematical properties of GWN have been studied extensively and utilized in many fields, the ideal GWN signal is not physically realizable because it has infinite variance by definition (recall that the variance of a stationary zero-mean random signal is equal to the value of its autocorrelation function at zero lag).
+
+
 %================================================================ 
 \subsubsection{Channel Kinetics}
 %================================================================ 
@@ -293,6 +301,9 @@ sec 5.4.2 Thermodynamic models
 
 In Box 5.2 there are effectively five different forms of function to fit the dependence on voltage of the rate coefficients $\alpha_m (V)$, $\beta_m (V)$ and so on: three for the HH sodium and potassium channels and two for the A-type potassium channel. All these forms satisfy the critical requirement of fitting the data well. However, it is desirable to base the form of these functions as much as possible on the biophysical theory of channels, \textbf{since fitting to the most principled function is likely to minimise errors due to fitting}.
 
+\section{The Integrate- and Fire Neuron Model}
+
+Providing an answer to the question whether IF models provide an adequate simplification of biophysically based models is therefore important in the quest for a better un- derstanding of the nature of the neural code.
 
 %================================================================ 
 \section{Network Models}

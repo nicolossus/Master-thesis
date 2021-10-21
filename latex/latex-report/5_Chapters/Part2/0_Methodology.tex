@@ -124,6 +124,21 @@ Most well-tested implementations will do a bit more than this under the hood, bu
 
 An ABC software should be flexible enough to accommodate the new developments of the field. Here, we introduce a generalist Python package \cw{pyLFI}. The price to pay for the generality and flexibility is that the simulation of data and the calculation of summary statistics are left to the users. 
 
+There are already a few stable ABC Python packages with several samplers implemented, the perhaps most notable packages being ELFI and ABCpy. However, we opted to make our own for several reasons:
+- gain a thourogh understanding of the inner workings (under-the-hood)
+- gain control over the bayesian workflow 
+- abcpy requires a highly specific input and is not versatile when it comes to certain customizations, like sum stats
+- ELFI, the better option of the two in the authors opinion, is being actively developed (also a nuisance with sbi) and drastic changes may thus occur on a frequent basis
+- lacks integration with proper analysis tools (mostly basic visual and numerical diagnosis tools)
+
+What pylfi is and isn’t:
+- not a collection of the most advanced samplers
+- is parallelized, like both ELFI and ABCpy
+- reproducable, by using prng. Note: a caveat of multiprocessing and prng is that exact reproducibility is only possible when the number of procceses is the same (e.g. 3 processes will not generate the exact same result as 4 for a given seed, but a new run with 3 will generate the same with the same seed)
+- arviz integration
+- seaborn integration
+- flexible kde
+- flexible post-processing
 
 
 \textbf{Simulation-based inference} 

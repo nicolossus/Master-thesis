@@ -3,6 +3,10 @@
 %\chapter{Conclusion \& Future Research}\label{chap:Conclusion}
 %================================================================
 
+SNL thesis
+
+In practice, in order to maintain the acceptance probability at manageable levels, we typically transform the data into a small number of features, also known as summary statistics, in order to reduce the dimensionality D. If the summary statistics are sufficient for inferring $\theta$, then turning data into summary statistics incurs no loss of information about $\theta$ (for a formal definition of sufficiency, see e.g. Wasserman, 2010, definition 9.32). However, it can be hard to find sufficient summary statistics, and so in practice summary statistics are often chosen based on domain knowledge about the inference task. A large section of the ABC literature is devoted to constructing good summary statistics (see e.g. Blum et al., 2013; Charnock et al., 2018; Fearnhead and Prangle, 2012; Prangle et al., 2014, and references therein).
+
 Sum stat discussion (from SNPE paper)
 
 When fitting mechanistic models to data, it is common to target summary features to isolate specific behaviors, rather than the full data. For example, the spike shape is known to constrain sodium and potassium conductances (Druckmann et al., 2007; Pospischil et al., 2008; Hay et al., 2011). When modeling population dynamics, it is often desirable to achieve realistic firing rates, rate-correlations and response nonlinearities (Rubin et al., 2015; Bittner et al., 2019), or specified oscillations (Prinz et al., 2004). Choice of summary features might also be guided by known limitations of either the model or the measurement approach, or necessitated by the fact that published data are only available in summarized form.  In all cases, care is needed when interpreting models fit to summary features, as choice of features can influence the results (Blum et al., 2013; Jiang et al., 2017; Izbicki et al., 2019).
