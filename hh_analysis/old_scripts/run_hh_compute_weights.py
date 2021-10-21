@@ -1,15 +1,15 @@
 import numpy as np
 import pandas as pd
 
-s_stats = ["average_AP_overshoot",
-           "spike_rate",
-           "average_AP_width",
-           "average_AHP_depth",
+s_stats = ["spike_rate",
            "latency_to_first_spike",
+           "average_AP_overshoot",
+           "average_AHP_depth",
+           "average_AP_width",
            "accommodation_index"]
 
 # Normal prior
-df = pd.read_csv('data/sum_stats_prior_pred_normal.csv')
+df = pd.read_csv('data/sum_stats_priorpred_normal.csv')
 
 weights = []
 
@@ -33,7 +33,7 @@ df_norm = pd.DataFrame(data=weights,
 df_norm.to_csv('data/sumstat_weights_normal.csv', index=True)
 
 # Uniform prior
-df = pd.read_csv('data/sum_stats_priorpred_uniform.csv')
+df = pd.read_csv('data/sum_stats_priorpred_normal.csv')
 
 weights = []
 
