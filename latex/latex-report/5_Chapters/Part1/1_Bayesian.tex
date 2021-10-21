@@ -196,6 +196,23 @@ An uninformative prior or diffuse prior expresses vague or general information a
 
 %If you have a lot of data, the data will dominate the posterior distribution (they will overwhelm the prior) 
 
+
+\section{Bayesian Computation}
+
+Move section to here?
+
+As we saw in the previous section, conjugacy ensures analytic tractability. However, often the prior will not be the conjugate prior for the likelihood
+
+In practice, ... not analytical
+
+continuous data, normal model 
+
+the derivation is quite tedious on the algebraic side, so we will here just provide the results and refer to ... for a full derivation.
+
+...
+
+where .. is the mean and .. the var. These are so-called summary statistics ... often used to derive
+
 %================================================================
 %\section{Gaussian Models and Posterior Checks}\label{sec:gaussian_models}
 \section{Summarizing the Posterior}
@@ -205,25 +222,28 @@ An uninformative prior or diffuse prior expresses vague or general information a
 The result of a Bayesian analysis is a posterior distribution which contains all the current information about the parameters $\theta$. 
 
 
-Commonly used summaries of location are the mean, median and mode(s) of the distribution; variation is commonly summarized by the standard deviation, the interquartile range and other quantiles. Each summary has its own interpretation: for example, the mean is the posterior expectation of the parameter, and the mode may be interpreted as the single 'most likely' value, given the data (and the model).
+In this section, we will look at both numerical and graphical ways to summarize the posterior:
 
+
+
+
+\subsection{Posterior Plot}
+
+In principle, the posterior distribution contains all the information about the possible parameter values. In practice, we must also present the posterior distribution somehow. If the examined parameter $\theta$
+  is one- or two dimensional, we can simply plot the posterior distribution. Or when we use simulation to obtain values from the posterior, we can draw a histogram or scatterplot of the simulated values from the posterior distribution. If the parameter vector has more than two dimensions, we can plot the marginal posterior distributions of the parameters of interest.
+  
+ However, we often also want to summarize the posterior distribution numerically. The usual summary statistics, such as the mean, median, mode, variance, standard devation and different quantiles, that are used to summarize probability distributions, can be used. These summary statistics are often also easier to present and interpret than the full posterior distribution.
 
 \subsection{Point estimates}
 
 People often choose the median, just because it is more robust to outliers than the mean, or use the mean just because is a simple and familiar concept, or because they think their observable is truly the average of some process at some level, like molecules bouncing to each other or genes interacting with themselves and the environment.
 
+Commonly used summaries of location are the mean, median and mode(s) of the distribution; variation is commonly summarized by the standard deviation, the interquartile range and other quantiles. Each summary has its own interpretation: for example, the mean is the posterior expectation of the parameter, and the mode may be interpreted as the single 'most likely' value, given the data (and the model).
+
 \subsection{Posterior quantiles and intervals}
 
 
 
-
-
-
-
-In principle, the posterior distribution contains all the information about the possible parameter values. In practice, we must also present the posterior distribution somehow. If the examined parameter $\theta$
-  is one- or two dimensional, we can simply plot the posterior distribution. Or when we use simulation to obtain values from the posterior, we can draw a histogram or scatterplot of the simulated values from the posterior distribution. If the parameter vector has more than two dimensions, we can plot the marginal posterior distributions of the parameters of interest.
-
-However, we often also want to summarize the posterior distribution numerically. The usual summary statistics, such as the mean, median, mode, variance, standard devation and different quantiles, that are used to summarize probability distributions, can be used. These summary statistics are often also easier to present and interpret than the full posterior distribution.
 
 THIS IS NEW
 
