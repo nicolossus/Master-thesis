@@ -7,6 +7,32 @@
 \section{The Hodgkin-Huxley Model}
 %================================================================
 
+Chapter Inference on the HH model 
+
+- observed data (clean)
+- priors
+- prior predictive sum stats 
+- rej-abc analysis 
+- rej-abc (original) posteriors 
+- reg adj posteriors
+- ppc 
+
+- observed data noisy 
+- rej-abc (original) posteriors 
+- reg adj posteriors
+- ppc 
+
+- sbi
+
+Chapter Inference on the Brunel model
+- observed data 
+- priors
+- prior predictive sum stats 
+- rej-abc (original) posteriors 
+- reg adj posteriors
+- ppc 
+- sbi
+
 \subsection{Observed data}
 
 Observed data 
@@ -334,3 +360,109 @@ ppc with reg adjusted posterior samples (100 posterior samples)
 %================================================================
 \chapter{Markov Chain Monte Carlo ABC on the Models}
 %================================================================
+
+Brunel 
+
+\section{Observation}
+
+observed spiketrain 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1.0]{brunel_obs_ai}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure}
+
+sum stats
+
+%mean_firing_rate: 0.03661111111111111
+%mean_cv: 0.42506007658105566
+%fanofactor: 0.23413793103448277
+
+correlation (pearson) coefficient matrix
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1.0]{brunel_obs_corr}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure}
+
+\section{prior pred}
+
+priors
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1.0]{brunel_priors}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure}
+
+sum stats scatter (500 samples)
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1.0]{brunel_sum_stats}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure}
+
+sum stats correlation
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1.0]{brunel_sum_stats_corr}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure}
+
+sum stats weights
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1.0]{brunel_sum_stats_weights}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure}
+
+\section{Posteriors} 
+
+original posterior
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1.0]{brunel_posterior_org}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure}
+
+
+joint posterior (original)
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1.0]{brunel_joint_posterior_org}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure} 
+
+reg adjusted posterior
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1.0]{brunel_posterior_reg}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure}
+
+
+joint posterior (reg adjusted)
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1.0]{brunel_joint_posterior_reg}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure}
