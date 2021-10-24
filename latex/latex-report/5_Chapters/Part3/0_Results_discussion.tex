@@ -145,7 +145,7 @@ Perhaps unsurprisingly, since the prior distribution does not alter the inherent
   %\footnotesize%
   \begin{center}
     \rowcolors{2}{gray!15}{white}
-    \begin{tabular}{cccc}
+    \begin{tabular}{cc}
       \toprule
       \textbf{Summary statistic} & \textbf{Observed value} \\
       \midrule
@@ -383,9 +383,24 @@ observed spiketrain
 
 sum stats
 
-%mean_firing_rate: 0.03661111111111111
-%mean_cv: 0.42506007658105566
-%fanofactor: 0.23413793103448277
+% Alternating row colors
+\begin{table}[H]
+  \caption{Generic table with alternating rows and different sized rulers. The number of spikes is not used as a summary statistic in and of itself, but is included to show that the statistic extraction indeed finds all spikes.}
+  %\footnotesize%
+  \begin{center}
+    \rowcolors{2}{gray!15}{white}
+    \begin{tabular}{cc}
+      \toprule
+      \textbf{Summary statistic} & \textbf{Observed value} \\
+      \midrule
+      Mean firing rate &  0.0366 kHz \\
+      Mean CV &  0.4250  \\
+      Fano factor & 0.2341  \\
+      \bottomrule
+    \end{tabular}
+  \end{center}
+  \label{tab:hh_noisy_sumstats}
+\end{table}
 
 correlation (pearson) coefficient matrix
 
@@ -440,7 +455,7 @@ Ran 2000 simulations of the model with different parameters drawn from the prior
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=1.0]{brunel_quantile_rmspe}
+    \includegraphics[scale=0.8]{brunel_quantile_rmspe}
     \caption{caption}
     \label{fig:fig1}
 \end{figure}
@@ -475,6 +490,30 @@ joint posterior (reg adjusted)
     \label{fig:fig1}
 \end{figure}
 
-posterior predictive checks with reg adjusted samples
+posterior predictive checks with reg adjusted samples, 50 samples from posterior pred
 
-TODO
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1.0]{brunel_post_pred}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure}
+
+mean correlation coefficient matrix 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1.0]{brunel_pred_corr}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure}
+
+standard deviation, correlation coefficient matrix
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1.0]{brunel_pred_corr_std}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure}
+
