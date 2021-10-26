@@ -26,6 +26,43 @@ A major methodological advance in ABC is that rather than implementing the algor
 
 ABC methods have several disadvantages. Firstly, the methods are highly computationally intensive, often involving billions of coalescent simulations, which may limit the parameter space explored and can lead to incorrect inference. However, the simplest ABC approaches are easily parallelizable and computational power is continuing to increase, potentially ameliorating this concern. Secondly, ABC approaches may not be efficient if the prior distributions are wide or if the type of model being considered is unlikely to generate the observed data. Under these conditions, a high proportion of parameter values will be rejected, although the local regression  approach discussed above will mitigate some of this concern. A more serious drawback is that the success of ABC inference may depend on the choice of summary statistics. If the summary statistics are not capturing enough information from the data or the relevant information for the parameters of interest, then the posterior distributions will appear similar to the prior distribution, suggesting that the data are noninformative. 
 
+\section{Sum stats}
+
+the success of ABC inference depends on the choice of summary statistics. If the summary statistics are not capturing enough information from the data or the relevant information for the parameters of interest, then the posterior distributions will appear similar to the prior distribution, suggesting that the data are noninformative. 
+
+\section{ABC methods}
+
+rejection abc not efficient if the prior .. posterior. MCMC, as discussed in theory section, improves on this by ... 
+
+There are more advanced importance sampling ABC methods that builds on the MCMC approach: SMC, PMC, HMC - ABC (link to papers)
+
+
+\section{Uncertainpy}
+
+Hodgkin-Huxley, reason for why $\bar{g}_\mathrm{K}$ is better constrained than $\bar{g}_\mathrm{Na}$:
+
+The sensitivity analysis reveals that the variance in the membrane potential mainly is due to the uncertainty in two parameters: the maximum conductance of the $\mathrm{K}^+$ channel, $\bar{g}_\mathrm{K}$, and the $\mathrm{Na}^+$ reversal potential, $E_\mathrm{Na}$.
+
+Brunel 
+
+Able to accurately predict summary statistics ...
+
+Indicates that $\eta$ is not dominant in determining the dynamics of the SR state. 
+
+Supported by the findings of (uncertainpy paper), where a sensitivity analysis of the Brunel model parameters was carried out. In the SR state, (uncertainpy paper) found that the Brunel network is most sensitive to the synaptic delay $D$ (which is kept constant in our results). However, the network was also found to be more sensitive to $g$ than $\eta$ in the SR state. 
+
+In the AI state, the network was found to be most sensitive to the relative strength of inhibitory synapses $g$. The $\eta$ parameter also plays a role in the AI state, but not as much as $g$. The synaptic delay $D$ plays no role. 
+
+\section{Scalability}
+
+We have only demonstrated the success of simulation-based inference on low dimensional problems, i.e., few parameters to identify. 
+
+state-of-the-art V1 allen model, 1500 free parameters. Although it might be excessive to infer all of these parameters at once, the problem will nonetheless be high-dimensional. 
+
+ABC have been shown to scale poorly to higher dimensions
+
+SNPE have been demonstrated to obtain good results for systems with about X free parameters (ref paper), but has yet to demonstrate scalability to problems like the V1 model. In its current state, one of the principal investigators behind SNPE, J. Macke, stated that SNPE is only able to infer up to a couple of dozen parameters, depending on the problem (ref: in conference).
+
 
 %----------------------------------------------------------------
 \section{Summary}\label{sec:summary}
