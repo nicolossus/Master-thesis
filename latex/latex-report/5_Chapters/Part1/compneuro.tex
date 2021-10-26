@@ -14,6 +14,25 @@
 \section{The Hodgkin-Huxley Model}
 %================================================================
 
+\autoref{fig:hh_states} plot states
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1.0]{hh_states}
+    \caption{gbarK=36, gbarNa=120
+    }
+    \label{fig:hh_states}
+\end{figure}
+
+\autoref{fig:hh_different_gs} different gs
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1.0]{hh_different_gs}
+    \caption{caption
+    }
+    \label{fig:hh_different_gs}
+\end{figure}
 
 %================================================================
 \section{The Brunel Network Model}
@@ -31,6 +50,19 @@ Spikes are events characterized by their firing time $t^{(f)}$, where $f=1, 2, .
 
 where $\delta(x)$ is the Dirac $\delta$ function with $\delta(x)=0$ for $x \neq 0$ and $\int_{-\infty}^\infty \delta (x) \dd{x} = 1$. Thus, spikes are reduced to points in time. 
 
+In a population of $N$ neurons, we calculate the proportion of active neurons by counting the number of spikes in a small time interval $\Delta t$ and dividing by $N$. Further division by $\Delta t$ yields the population activity:
+
+\begin{equation}
+    \nu (t) = \lim_{\Delta t \to 0} \frac{1}{\Delta t} \frac{\int_{t}^{t + \Delta t} \sum_i \sum_f \delta \left(t - t_i^{(f)} \right) \dd{t}}{N}
+\end{equation} 
+
+In practice, we usually have to bin the spike trains in bins of $\Delta t$ to obtain the time resolved firing rate. 
+
+The mean firing rate of the population  
+
+
+Note that the size of the neuron population in the equations above is the number of recorded neurons, i.e., $N = N_\mathrm{rec}$.
+
 \textbf{Mean firing rate in thesis}
 
 We use a time and population averaged firing rate. 
@@ -42,16 +74,20 @@ The population average is subsequently calculated by averaging over all the $N_\
 Formally, the above procedure can be denoted by: 
 
 \begin{equation}
-    \bar{\eta} = \frac{1}{N_\mathrm{rec} \left(T_\mathrm{sim} - T_\mathrm{transient}\right)} \int_{T_\mathrm{transient}}^{T_\mathrm{sim}} \sum_i \sum_f \delta \left(t - t_i^{(f)} \right) \dd{t}
+    \bar{\nu} = \frac{1}{N_\mathrm{rec} \left(T_\mathrm{sim} - T_\mathrm{transient}\right)} \int_{T_\mathrm{transient}}^{T_\mathrm{sim}} \sum_i \sum_f \delta \left(t - t_i^{(f)} \right) \dd{t}
 \end{equation}
 
 Time resolved firing rate: 
 
-Histogram: Binned the spike trains in bins of $\Delta t = 10$ ms.
+In a population of $N$ neurons, we calculate the proportion of active neurons by counting the number of spikes in a small time interval $\Delta t$ and dividing by $N$. Further division by $\Delta t$ yields the population activity:
 
 \begin{equation}
-    \eta (t) = \frac{1}{N_\mathrm{rec} \Delta t} \int_{t}^{t + \Delta t} \sum_i \sum_f \delta \left(t - t_i^{(f)} \right) \dd{t}
-\end{equation}
+    \nu (t) = \lim_{\Delta t \to 0} \frac{1}{N_\mathrm{rec} \Delta t} \int_{t}^{t + \Delta t} \sum_i \sum_f \delta \left(t - t_i^{(f)} \right) \dd{t}
+\end{equation} 
+
+In practice, we usually have to bin the spike trains in bins of $\Delta t$ to obtain the time resolved firing rate. 
+
+In practice, have to use histogram: Bin the spike trains in bins of $\Delta t$
 
 \subsection{Recurrent network of LIF}
 
