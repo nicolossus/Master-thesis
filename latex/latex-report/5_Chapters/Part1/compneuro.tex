@@ -1,7 +1,87 @@
 
+
+%================================================================
+%\chapter{Computational Neuroscience}\label{chap:compneuro}
+%================================================================
+
+
 %================================================================
 \chapter{Neuroscientific Models}\label{chap:compneuro}
 %================================================================
+
+
+%================================================================
+\section{The Hodgkin-Huxley Model}
+%================================================================
+
+
+%================================================================
+\section{The Brunel Network Model}
+%================================================================
+
+\subsection{Leaky integrate and fire neurons}
+
+\subsection{Spike Train Statistics}
+
+Spikes are events characterized by their firing time $t^{(f)}$, where $f=1, 2, ...$ labels a spike by the spike count. We define the spike train of a neuron $i$ as the sequence of firing times: 
+
+\begin{equation}
+    S_i(t) = \sum_f \delta \left(t - t_i^{(f)} \right),
+\end{equation}
+
+where $\delta(x)$ is the Dirac $\delta$ function with $\delta(x)=0$ for $x \neq 0$ and $\int_{-\infty}^\infty \delta (x) \dd{x} = 1$. Thus, spikes are reduced to points in time. 
+
+\textbf{Mean firing rate in thesis}
+
+We use a time and population averaged firing rate. 
+
+The time averaged firing rate of a single spike train is calculated as the number of spikes in the spike train in the time interval $T = [t_\mathrm{start}, t_\mathrm{stop}]$ divided by the time interval $T$. 
+
+The population average is subsequently calculated by averaging over all the $N_\mathrm{rec}$ recorded neurons, resulting in the mean firing rate.  
+
+Formally, the above procedure can be denoted by: 
+
+\begin{equation}
+    \bar{\eta} = \frac{1}{N_\mathrm{rec} \left(T_\mathrm{sim} - T_\mathrm{transient}\right)} \int_{T_\mathrm{transient}}^{T_\mathrm{sim}} \sum_i \sum_f \delta \left(t - t_i^{(f)} \right) \dd{t}
+\end{equation}
+
+Time resolved firing rate: 
+
+Histogram: Binned the spike trains in bins of $\Delta t = 10$ ms.
+
+\begin{equation}
+    \eta (t) = \frac{1}{N_\mathrm{rec} \Delta t} \int_{t}^{t + \Delta t} \sum_i \sum_f \delta \left(t - t_i^{(f)} \right) \dd{t}
+\end{equation}
+
+\subsection{Recurrent network of LIF}
+
+
+\autoref{fig:brunel_states} illustrates an example of each of the states of the Brunel network. For each state, the figure shows the firing times (rasters) of 20 randomly chosen neurons, the temporal evolution of the activity of the system (time resolved firing rate computed in bins of 10 ms) together with the mean firing rate (horizontal axis line), and the correlation coefficient matrix of the recorded neurons.
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1.0]{brunel_states}
+    \caption{Simulation of a network of $N_\mathrm{E}=10,000$ excitatory and $N_\mathrm{I} = 2,500$ inhibitory neurons with connection probability $\epsilon = 0.1$, which corresponds to a network where each neuron has $C_\mathrm{E}=1,000$ and $C_\mathrm{I}=250$ randomly selected connections to excitatory and inhibitory neurons, respectively. Each spike causes, after a delay of $D=1.5$ ms (synaptic delay), a voltage jump of $J_E = 0.1$ mV (amplitude of excitatory synaptic currents). The distance from equilibrium potential to firing threshold is $V_\mathrm{th} = 20$ mV; absolute refractory period $\tau_\mathrm{rp} = 2$ ms; membrane time constant $\tau_\mathrm{m}=20$ ms; membrane capacitance $C_m = 1$ pF. The network is simulated for $T_\mathrm{sim} = 1,000$ ms, and we record the output from $N_\mathrm{rec} = 20$ excitatory neurons. To avoid transient effects, we start recording after $T_\mathrm{transient} = 100$ ms. 
+    }
+    \label{fig:brunel_states}
+\end{figure}
+
+
+SR: Almost fully synchronized network, neurons firing regularly at high rates.
+
+AI: Stationary global activity (see text), irregularly firing neurons
+
+SI fast: Fast oscillation of the global activity, neurons firing irregularly at a rate that is lower than the global frequency
+
+SI slow: Slow oscillation of the global activity, neurons firing irregularly at very low rates
+
+
+
+%================================================================
+\section{Notes}
+%================================================================
+
 %================================================================
 %\chapter{Computational Neuroscience}\label{chap:compneuro}
 %================================================================
@@ -440,3 +520,5 @@ Brunel paper:
 
 Neurodynamics: 
 \url{https://neuronaldynamics.epfl.ch/online/Ch13.S4.html}
+\url{https://neuronaldynamics.epfl.ch/online/Ch7.S2.html}
+\url{https://neuronaldynamics.epfl.ch/online/Ch1.S3.html}

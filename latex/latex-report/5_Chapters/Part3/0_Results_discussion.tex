@@ -3,6 +3,9 @@
 \chapter{Analysis of the Neuroscientific Models}
 %================================================================
 
+% chapter: Inference on the Hodgkin-Huxley Model 
+% chapter: Inference on the Brunel Model
+
 %================================================================
 \section{The Hodgkin-Huxley Model}
 %================================================================
@@ -106,23 +109,19 @@ Summary statistics under the (informative) prior predictive distribution (draw 2
 \end{figure} 
 
 
-Correlation (pearson) 
+sum stats correlation (pearson) and weights
 
+% subfigure
 \begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.8]{hh_priorpred_corr_normal}
-    \caption{caption}
-    \label{fig:fig1}
-\end{figure} 
+\centering
+\subfloat[]{{\includegraphics[scale=0.7]{hh_priorpred_corr_normal}}}
+\qquad
+\subfloat[]{{\includegraphics[scale=0.7]{hh_priorpred_weights_normal}}}
+\caption{\textbf{(a)} sum stats correlation. \textbf{(b)} sum stats weights from corr coef
+}
+\label{fig:fig1}
+\end{figure}
 
-weights from corr coef
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.8]{hh_priorpred_weights_normal}
-    \caption{caption}
-    \label{fig:fig1}
-\end{figure} 
 
 Perhaps unsurprisingly, since the prior distribution does not alter the inherent relationship between the quantities, we obtain the same weights from the summary statistics generated under the noninformative prior predictive distribution. The same results as above for the noninformative prior can be found in ... ref appendix A section ...
 
@@ -227,15 +226,7 @@ RMSE averaged over 10 posteriors for each quantile value. 1000 posterior samples
     \label{fig:fig1}
 \end{figure} 
 
-Run time
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.8]{comp_time_quantile}
-    \caption{caption}
-    \label{fig:fig1}
-\end{figure}
-
+0.4 quantile, compromise between accuracy and computational demands (see fig runtime in appendix)
 
 Number of summary statistics
 
@@ -258,7 +249,9 @@ Posteriors with original samples, informative prior
     \label{fig:fig1}
 \end{figure}
 
-Correlation
+Make subfig with corr and joint
+
+Correlation 
 
 \begin{figure}[H]
     \centering
@@ -357,15 +350,15 @@ ppc with reg adjusted posterior samples (100 posterior samples)
 \end{figure}
 
 %================================================================
-\section{ABC Settings for Identification of Brunel Network Parameters}
+%\section{ABC Settings for Identification of Brunel Network Parameters}
 %================================================================
 
 %================================================================
-\section{Rejection ABC Posteriors on Synaptic Weight Parameters}
+%\section{Rejection ABC Posteriors on Synaptic Weight Parameters}
 %================================================================
 
 %================================================================
-\chapter{Markov Chain Monte Carlo ABC on the Models}
+\chapter{Brunel ABC Results}
 %================================================================
 
 Brunel 
@@ -376,7 +369,7 @@ observed spiketrain
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=1.0]{brunel_obs_ai}
+    \includegraphics[scale=1.0]{brunel_ai_observation}
     \caption{caption}
     \label{fig:fig1}
 \end{figure}
@@ -385,7 +378,7 @@ sum stats
 
 % Alternating row colors
 \begin{table}[H]
-  \caption{Generic table with alternating rows and different sized rulers. The number of spikes is not used as a summary statistic in and of itself, but is included to show that the statistic extraction indeed finds all spikes.}
+  \caption{AI state observed sum stats}
   %\footnotesize%
   \begin{center}
     \rowcolors{2}{gray!15}{white}
@@ -431,23 +424,22 @@ sum stats scatter (500 samples)
     \label{fig:fig1}
 \end{figure}
 
-sum stats correlation
 
+sum stats correlation and weights
+
+% subfigure
 \begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.8]{brunel_sum_stats_corr}
-    \caption{caption}
-    \label{fig:fig1}
+\centering
+\subfloat[]{{\includegraphics[scale=0.7]{brunel_sum_stats_corr}}}
+\qquad
+\subfloat[]{{\includegraphics[scale=0.7]{brunel_sum_stats_weights}}}
+\caption{\textbf{(a)} sum stats correlation. \textbf{(b)} sum stats weights
+}
+\label{fig:fig1}
 \end{figure}
 
-sum stats weights
+corr coefs of these particular summary statistics indicate that the AI state is most sensitive to the relative strength of inhibitory synapses $g$. Thus, we expect the summary statistics to constrain the $g$ parameter better.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.8]{brunel_sum_stats_weights}
-    \caption{caption}
-    \label{fig:fig1}
-\end{figure}
 
 \section{Posteriors} 
 
@@ -494,26 +486,165 @@ posterior predictive checks with reg adjusted samples, 50 samples from posterior
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=1.0]{brunel_post_pred}
+    \includegraphics[scale=0.8]{brunel_post_pred}
     \caption{caption}
     \label{fig:fig1}
 \end{figure}
 
-mean correlation coefficient matrix 
+The pairwise Pearson's correlation coefficient is a measure of how synchronous the spiking of a network is. This correlation coefficient measures the correlation between the spike trains of two neurons in the network. In Figure X we examine how this correlation depends on parameter uncertainties by plotting the mean and standard deviation for the pairwise Pearson's correlation coefficient in the AI state.
+
+% subfigure
+\begin{figure}[H]
+\centering
+\subfloat[]{{\includegraphics[scale=0.6]{brunel_pred_corr}}}
+\qquad
+\subfloat[]{{\includegraphics[scale=0.6]{brunel_pred_corr_std}}}
+\caption{\textbf{(a)} mean correlation coefficient matrix. \textbf{(b)} standard deviation
+}
+\label{fig:fig1}
+\end{figure}
+
+
+%================================================================
+\section{HH SBI Results}
+%================================================================
+
+same observed data as for clean hh
+
+Posterior:
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=1.0]{brunel_pred_corr}
+    \includegraphics[scale=0.8]{hh_post_sbi}
     \caption{caption}
     \label{fig:fig1}
 \end{figure}
 
-standard deviation, correlation coefficient matrix
+PPC
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=1.0]{brunel_pred_corr_std}
+    \includegraphics[scale=0.8]{hh_post_pred_sbi}
     \caption{caption}
     \label{fig:fig1}
 \end{figure}
 
+see that the wider posterior has an effect on recreating the observed data, this is not present in rej-abc reg adjust posterior due to it being more narrow
+
+
+%================================================================
+\section{Brunel SBI Results}
+%================================================================
+
+%================================================================
+\subsection{AI state} 
+%================================================================
+
+
+
+0.037222	0.401465	0.145315
+
+Posterior:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.8]{brunel_post_ai_sbi}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure}
+
+ppc 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.8]{brunel_post_pred_ai_sbi}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure}
+
+corr 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.8]{brunel_pred_corr_sbi_ai}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure}
+
+corr std
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.8]{brunel_pred_corr_std_ai_sbi}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure}
+
+%================================================================
+\subsection{SR state}
+%================================================================
+
+SR observation
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1.0]{brunel_sr_observation}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure}
+
+Recorded spike trains from the Brunel network and observed the following summary statistics:
+
+\begin{table}[H]
+  \caption{SR state observation.}
+  %\footnotesize%
+  \begin{center}
+    \rowcolors{2}{gray!15}{white}
+    \begin{tabular}{cc}
+      \toprule
+      \textbf{Summary statistic} & \textbf{Observed value} \\
+      \midrule
+      Mean firing rate &  0.3333 kHz \\
+      Mean CV &  0.0121  \\
+      Fano factor & 0.007  \\
+      \bottomrule
+    \end{tabular}
+  \end{center}
+  \label{tab:hh_noisy_sumstats}
+\end{table}
+
+Posterior:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.8]{brunel_post_sr_sbi}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure}
+
+ppc 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.8]{brunel_post_pred_sr_sbi}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure}
+
+corr 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.8]{brunel_pred_corr_sbi_sr}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure}
+
+corr std
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.8]{brunel_pred_corr_std_sr_sbi}
+    \caption{caption}
+    \label{fig:fig1}
+\end{figure}
