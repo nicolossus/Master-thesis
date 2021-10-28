@@ -2,6 +2,95 @@
 \chapter{Methodology}\label{chap:methodology}
 %================================================================
 
+%================================================================
+\section{Computation}
+%================================================================
+
+\subsection{Log densities}
+
+To avoid computational overflows and underflows, one should compute with the logarithm of posterior densities whenever possible. Exponentiation should be performed only when necessary and as late as possible; for example, in the Metropolis algorithm, the required ratio of two densities (11.1) should be computed as the exponential of the difference of the log-densities \cite[p. 261]{BDA}
+
+\subsection{Numerical integration} 
+
+
+\subsection{MCMC-ABC}
+
+Flip-ordering, accept prob first then simulation
+
+MCMC-ABC was also implemented in pyLFI, however, in order to focus the study on the objective, it is not included in the following analyses as it would not give any significant insights into the questions we seek than the more naive rejection sampler would. 
+
+
+\subsection{Distance function}
+
+\textbf{Relevant papers:}
+
+* H. Jung and P. Marjoram (2011). "Choice of Summary Statistic Weights in Approximate Bayesian Computation". \url{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3192002/}
+    * Develops a Genetic Algorithm that computes how one should weight the summary statistics 
+    * Fairly advanced, so we won't implement their approach, but should be mentioned in thesis
+* D. Prangle (2015). "Adapting the ABC distance function". \url{https://arxiv.org/pdf/1507.00874.pdf}
+    * Methods for adaptive distances
+    * Won't implement this either, but will use the weighted distance defined in the paper
+* S. Druckmann et al. (2007) "A novel multiple objective optimization framework for constraining conductance-based neuron models by experimental data". 
+    * MOO
+    
+    
+In the ABC algorithms, each simulation is converted to a vector of summary statistics $\mathbf{s} = (s_1, s_2, ..., s_m)$ and a distance between this and the summary statistics of the observed data, $\mathbf{s}_{obs}$, is calculated. Parameters producing distances below some threshold are accepted and form a sample from an approximation to the posterior. 
+
+However, without normalization of the summary statistics, we are comparing oranges with apples. The most variable summaries will dominate the distances because of their larger scales. Handling the scales of the summaries ... blabla ... important.  
+
+Normalizing the summaries so that they vary over roughly the same scale can be achieved by using a weighted Euclidean distance: 
+
+$$ d \left(\mathbf{s}, \mathbf{s}_{obs} \right) = \left[ \sum_{i=1}^m \left( \frac{s_i - s_{obs, i}}{\sigma_i} \right)^2 \right]^{1/2},$$
+
+where $\sigma_i$ is an estimate of the prior predictive standard deviation of the $i$th summary statistic. A convenient estimate is the empirical standard deviation of simulated $s_i$ values. The normalization we acquire from scaling by $\sigma_i$ prevents the distances from being dominated by the most variable summaries.  
+
+Furthermore, we should also weight the importance of the summary statistics ...
+
+\subsection{Sensitivity analysis} 
+
+pearson correlation coefficient
+
+Use Pearson's Coefficient of Correlation to weight importance of summary statistics.
+
+* This is a simple approach for producing weighted statistics 
+    * Method developed by H. Jung and P. Marjoram (2011) is more advanced and likely better
+* The correlation coefficient, $r$, relates $Y$ to $X$ 
+* The squared correlation coefficient, $r^2$, indicates the proportion of variance in $Y$ that is shared with (or accounted for) by $X$.
+
+**Cons of using Pearson's Coefficient of Correlation:**
+
+* Assumes:
+    1. Normality of data (meaning that the data should approximate the normal distribution; most data points should tend to hover close to the mean)
+    2. Homoscedasticity (means ‘equal variances’), i.e. a situation in which the variance of the dependent variable is the same for all the data.
+    3. Linearity; simply means that the data follows a linear relationship. 
+* (2. and 3. can be checked visually by scatter plot)
+* Is sensitive to outliers; outliers can can significantly skew the correlation coefficient and make it inaccurate. Outliers are also easy to spot visually from the scatter plot
+
+* vekte utifra sensitivitet
+
+\textbf{Relevant papers:}
+
+H. Jung and P. Marjoram (2011). "Choice of Summary Statistic Weights in Approximate Bayesian Computation". \url{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3192002/}
+
+* Develops a Genetic Algorithm that computes how one should weight the summary statistics 
+
+* Fairly advanced, so we won't implement their approach, but should be mentioned in thesis
+
+\subsection{Summary statistics weights}
+
+\textbf{Relevant papers:}
+
+H. Jung and P. Marjoram (2011). "Choice of Summary Statistic Weights in Approximate Bayesian Computation". \url{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3192002/}
+
+* Develops a Genetic Algorithm that computes how one should weight the summary statistics 
+
+* Fairly advanced, so we won't implement their approach, but should be mentioned in thesis
+
+* S. Druckmann et al. (2007) "A novel multiple objective optimization framework for constraining conductance-based neuron models by experimental data". 
+
+%================================================================
+\section{Notes}
+%================================================================
 
 Tabs to open again:
 
@@ -62,18 +151,7 @@ toward such synchronized states as soon as the excitation starts to dominate ove
 
 Post-sampling Adjustment
 
-\alglanguage{pseudocode}
-\begin{algorithm}[H]
-\caption{Feed forward algorithm}
-\label{alg:FeedForward}
-\begin{algorithmic}[1] 
 
-\For{sample $\mathbf{x}_j$ in data set}
-        \State $\mathbf{a}^0 = \mathbf{x}_j$\;
-\EndFor
-
-\end{algorithmic}
-\end{algorithm}
 
 %================================================================
 \subsection{Regression Adjustment}\label{sec:reg_adjust}

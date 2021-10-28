@@ -7,53 +7,8 @@
 
 %Limit the abstract to as few words as possible. The abstract should always be less than one page long, and less than 400 words. Be aware that many online referencing systems only allow the first 200 words to be included. No figures or references should be presented.Avoid extensive technical and method details where possible. Should be readable to a literate science reader familiar with your general area, but not necessarily experts-only material. 
 
-
-A central challenge in building a mechanistic model of neural dynamics is to identify the model parameters consistent with experimental data. Due to intractable likelihoods, traditional methods in the toolkit of statistical inference are inaccessible for many mechanistic models. To overcome intractable likelihoods, simulation-based inference provides a framework for performing rigorous Bayesian inference without requiring numerical evaluation of likelihoods by using only forward simulations. The objective of this thesis is to investigate the viability of simulation-based inference, in particular approximate Bayesian computation (ABC) algorithms, for identifying parameters in mechanistic models of neural dynamics. Specifically, we use rejection ABC (REJ-ABC) and Markov chain Monte Carlo ABC (MCMC-ABC) to infer the conductance parameters in the Hodgkin-Huxley model for initiation and propagation of action potentials and the synaptic weight parameters in the Brunel network model for activity dynamics in local cortical networks. 
-
-It also has the
-advantage of returning an entire posterior distribution on the
-value of the parameters, rather than a simple point estimate
-
-implement the generic Python library pyLFI 
-
-We implemented REJ-ABC with quantile-based rejection
-
-We extensively varied hyperparameters, and found that
-
-As the curse of dimensionality forces ABC to require a compression of data into low-level summary statistics, we use expert-crafted statistics of spiking activity. 
-
-
-
-While rejection ABC (REJ-ABC) uses the prior as a proposal distribution, the efficiency can be improved by using sequentially refined proposal distributions (SMC) (can be said about MCMC also?). We implemented REJ-ABC with quantile-based rejection. 
-We extensively varied hyperparameters. We investigated linear regression adjustment (Blum and François, 2010) and the summary statistics approach
-by Prangle et al. (2014). [SBI Benchmark]
-
-
-
-Because of the curse of dimensionality, ABC requires a compression of the data into low-dimensional summary statistics. We use various summary statistics of neural data obtained from domain knowledge.  expert-crafted summary statistics of spiking activity. If powerful low-dimensional summary statistics are established, traditional techniques can still offer a reasonable performance.
-
-MCMC ABC, which improves the sample efficiency compared to Rej ABC by being guided by a proposal distribution ... MCMC ABC has improved sample efficiency 
-
-
-
-In this thesis, we have used ABC with rejection sampling (Rejection ABC) and
-
-In this thesis we implement the generic Python library pyLFI which uses ABC with both rejection and Markov chain Monte Carlo (MCMC) sampling for parameter inference/identification. In particular, we infer the conductance parameters in the Hodgkin-Huxley model for initiation and propagation of action potentials and the synaptic weight parameters in the Brunel network model for activity dynamics in local cortical networks. 
-
-In this thesis, we have used (rejection) ABC (rejection sampling) and (MCMC) ABC (importance sampling) for identifying the conductance parameters in the Hodgkin-Huxley model for initiation and propagation of action potentials and the synaptic weight parameters in the Brunel network model for activity dynamics in local cortical networks. 
-
-The Hodgkin-Huxley formalism is used as basis for many biophysically detailed cell models ...
-
-Many cell models are built on the Hodgkin-Huxley formalism ... so being able to accurately constrain model parameters
-
-using Markov chain Monte Carlo (MCMC) sampling
-
-We were able to accurately constrain the conductance parameters of the Hodgkin-Huxley model as we obtained narrow posteriors with the ground truth parameters in regions of high posterior density. A 
-For the Hodgkin-Huxley model we obtain narrow posteriors with the true parameters in regions of high posterior density, indicating that ABC is a viable method for parameter identification in the many cell models built on the Hodgkin formalism. 
-
-As we only investigated models with few parameters, the viability of ABC on high-dimensional problems is yet to explore. 
-
-
-REJ-ABC with local linear regression adjustment were able to constrain the potassium conductance $\bar{g}_\mathrm{K}$ to the credible interval ... (ground truth $\bar{g}_\mathrm{K} = 36$ and the sodium conductance $\bar{g}_\mathrm{Na}$ to the credible interval ... (ground truth $\bar{g}_\mathrm{Na} = 120$).
-
-ABC requires some tuning to achieve different levels of accuracy, which can be time consuming as neural models generally are computationally expensive. 
+A central challenge in building a mechanistic model of neural dynamics is to identify the model parameters consistent with experimental data. Due to intractable likelihoods, traditional methods in the toolkit of statistical inference are inaccessible for many mechanistic models. To overcome intractable likelihoods, simulation-based inference provides a framework for performing rigorous Bayesian inference by just requiring forward simulations of the model. The objective of this thesis is to investigate the viability of simulation-based inference, in particular approximate Bayesian computation (ABC) and neural density estimation, for identifying parameters in mechanistic models of neural dynamics. Specifically, we infer the conductance parameters in the Hodgkin-Huxley model for initiation and propagation of action potentials and the synaptic weight parameters in the Brunel network model for activity dynamics in local cortical networks. 
+\\
+\indent We develop the generic Python library pyLFI which uses ABC with quantile-based rejection sampling and local linear regression adjustment for estimating the posterior distributions of model parameters. As the curse of dimensionality forces ABC to require a compression of data into low-level summary statistics, we use expert-crafted statistics of spiking activity. The choice of summary statistics is crucial, and we carry out a sensitivity analysis to select and weight summary statistics. On synthetic data, pyLFI efficiently estimates posterior distributions and recovers ground truth parameters. We extensively vary hyperparameters, and find that, with local linear regression adjustment, accepting between 30-50\% of simulations, depending on the complexity of the model, yields accurate posteriors at a reasonable computational cost. The approach of pyLFI is compared to the newly developed machine learning tool Sequential Neural Posterior Estimation (SNPE), which trains an artificial neural network to map features of observed data to posteriors over parameters by using adaptively proposed model simulations. Inference on the Brunel network model demonstrates the power and flexibility of SNPE; by training on simulations that includes two of the network states, SNPE is able to accurately predict posteriors that correspond to the state of observed data.
+\\
+\indent In conclusion, we find that simulation-based inference is a powerful tool that can be applied to a wide range of computational investigations in neuroscience, which may help to both bridge the gap between mechanistic hypotheses and experimental neural data, and design better models of neural dynamics. However, there are challenges (and opportunities) ahead in scaling and automating simulation-based inference approaches, and the methods are simulation intensive. 

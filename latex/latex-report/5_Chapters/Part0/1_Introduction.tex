@@ -170,6 +170,19 @@ using Markov chain Monte Carlo (MCMC) sampling
 %To overcome intractable likelihoods, a suite of methods that bypass the evaluation of the likelihood function, called likelihood-free inference methods, have been developed. These methods seek to directly estimate either the posterior or the likelihood, and require only the ability to generate data from the simulator to analyze the model in a fully Bayesian context.
 
 
+
+
+\section{intro}
+
+Computational neuroscientists use mathematical models built on observational data to investigate what’s happening in the brain. Models can simulate brain activity from the behavior of a single neuron right through to the patterns of collective activity in whole neural networks. Collecting the experimental data is the first step, then the challenge becomes deciding which computer models best represent the data and can explain the underlying causes of how the brain behaves.
+
+Researchers usually find the right model for their data through trial and error. This involves tweaking a model’s parameters until the model can reproduce the data of interest. But this process is laborious and not systematic. Moreover, with the ever-increasing complexity of both data and computer models in neuroscience, the old-school approach of building models is starting to show its limitations.
+
+Now, Gonçalves, Lueckmann, Deistler et al. have designed an algorithm that makes it easier for researchers to fit mathematical models to experimental data. First, the algorithm trains an artificial neural network to predict which models are compatible with simulated data. After initial training, the method can rapidly be applied to either raw experimental data or selected data features. The algorithm then returns the models that generate the best match.
+
+This newly developed machine learning tool was able to automatically identify models which can replicate the observed data from a diverse set of neuroscience problems. Importantly, further experiments showed that this new approach can be scaled up to complex mechanisms, such as how a neural network in crabs maintains its rhythm of activity. This tool could be applied to a wide range of computational investigations in neuroscience and other fields of biology, which may help bridge the gap between ‘data-driven’ and ‘theory-driven’ approaches.
+
+
 %================================================================
 \section{Motivation}\label{sec:Motivation}
 %================================================================
@@ -210,3 +223,118 @@ setting [6] are based on Monte-Carlo rejection [7, 8], an approach known as Appr
 These algorithms are not based on rejecting simulations, but rather train deep neural conditional density estimators or classifiers on simulated data. 
 
 
+\section{Notes from abstract}
+
+A central challenge in building a mechanistic model of neural dynamics is to identify the model parameters consistent with experimental data. Due to intractable likelihoods, traditional methods in the toolkit of statistical inference are inaccessible for many mechanistic models. To overcome intractable likelihoods, simulation-based inference provides a framework for performing rigorous Bayesian inference without requiring numerical evaluation of likelihoods by using only forward simulations. The objective of this thesis is to investigate the viability of simulation-based inference, in particular approximate Bayesian computation (ABC) algorithms, for identifying parameters in mechanistic models of neural dynamics. Specifically, we use rejection ABC (REJ-ABC) and Markov chain Monte Carlo ABC (MCMC-ABC) to infer the conductance parameters in the Hodgkin-Huxley model for initiation and propagation of action potentials and the synaptic weight parameters in the Brunel network model for activity dynamics in local cortical networks. 
+
+and for designing better models of neural dynamics.
+
+In conclusion, we find that simulation-based inference provides a principled approach for determining parameters consistent with empirical observations, and can be applied to a wide range of computational investigations in neuroscience and other fields. 
+
+Simulation-based inference, although simulation intensive
+
+However, scalability
+
+This tool could be applied to a wide range of computational investigations in neuroscience and other fields of biology, which may help bridge the gap between ‘data-driven’ and ‘theory-driven’ approaches.
+
+There are challenges and opportunities ahead in further scaling and automating simulation-based inference approaches. However, in its current form, SNPE will be a powerful tool for quantitatively evaluating mechanistic hypotheses on neural data, and for designing better models of neural dynamics.
+
+Method remains simulation intensive, in particular ABC where many simulations are rejected, 
+
+
+---
+
+The posteriors obtained via pyLFI are compared to posteriors obtained via the newly developed machine learning tool Sequential Neural Posterior Estimation (SNPE), which trains an artificial neural network to map features of observed data to posteriors over parameters by using adaptively proposed model simulations. 
+
+
+which uses adaptively proposed model simulations to train an artificial neural network to map features of the observed data to posteriors over parameters. Inference on the Brunel network model demonstrates the power and flexibility of SNPE; by training on simulations that includes 
+
+to predict parameter posteriors given 
+
+Our approach builds on recent advances in ABC by learning a neural network which maps features of the observed data to the poste- rior distribution over parameters. We learn a Bayesian mixture-density network approximating the posterior over multiple rounds of adaptively chosen simulations.
+
+
+
+
+learn a Bayesian mixture-density network approximating the posterior over multiple rounds of adaptively chosen simulations.
+
+
+SNPE uses simulations of the model to train an artificial neural network to predict which models are 
+
+
+trains an artificial neural network to predict which models are compatible with simulated data. After initial training, the method can rapidly be applied to either raw experimental data or selected data features. The algorithm then returns the models that generate the best match. 
+
+On synthetic data, the aforementioned simulation-
+
+On synthetic data, our approach efficiently estimates posterior distributions and recovers ground-truth parameters.
+
+In conclusion, we find that simulation-based inference provides a principled approach for determining parameters consistent with empirical observations, and can be applied to a wide range of computational investigations in neuroscience and other fields. 
+
+However, scalability
+
+This tool could be applied to a wide range of computational investigations in neuroscience and other fields of biology, which may help bridge the gap between ‘data-driven’ and ‘theory-driven’ approaches.
+
+There are challenges and opportunities ahead in further scaling and automating simulation-based inference approaches. However, in its current form, SNPE will be a powerful tool for quantitatively evaluating mechanistic hypotheses on neural data, and for designing better models of neural dynamics.
+
+Method remains simulation intensive, in particular ABC where many simulations are rejected, 
+
+----
+
+ methods for estimating the posterior distributions of model parameters.
+
+In this thesis we implement the generic Python library pyLFI which uses ABC with both rejection
+
+Specifically, we use rejection ABC (REJ-ABC) and Markov chain Monte Carlo ABC (MCMC-ABC) to infer the conductance parameters in the Hodgkin-Huxley model for initiation and propagation of action potentials and the synaptic weight parameters in the Brunel network model for activity dynamics in local cortical networks. 
+
+
+
+Bayesian inference is a principled approach for determining parameters consistent with empirical observations
+
+
+It also has the
+advantage of returning an entire posterior distribution on the
+value of the parameters, rather than a simple point estimate
+
+implement the generic Python library pyLFI 
+
+We implemented REJ-ABC with quantile-based rejection
+
+
+
+As the curse of dimensionality forces ABC to require a compression of data into low-level summary statistics, we use expert-crafted statistics of spiking activity. The choice of summary statistics is crucial, and we carried out a sensitivity analysis to select and weight summary statistics. We extensively varied hyperparameters, and found that, with local linear regression adjustment, accepting between 30-50\% of simulations, depending on the model, yields accurate posteriors at a reasonable computational cost.  
+
+
+
+While rejection ABC (REJ-ABC) uses the prior as a proposal distribution, the efficiency can be improved by using sequentially refined proposal distributions (SMC) (can be said about MCMC also?). We implemented REJ-ABC with quantile-based rejection. 
+We extensively varied hyperparameters. We investigated linear regression adjustment (Blum and François, 2010) and the summary statistics approach
+by Prangle et al. (2014). [SBI Benchmark]
+
+
+
+Because of the curse of dimensionality, ABC requires a compression of the data into low-dimensional summary statistics. We use various summary statistics of neural data obtained from domain knowledge.  expert-crafted summary statistics of spiking activity. If powerful low-dimensional summary statistics are established, traditional techniques can still offer a reasonable performance.
+
+MCMC ABC, which improves the sample efficiency compared to Rej ABC by being guided by a proposal distribution ... MCMC ABC has improved sample efficiency 
+
+
+
+In this thesis, we have used ABC with rejection sampling (Rejection ABC) and
+
+In this thesis we implement the generic Python library pyLFI which uses ABC with both rejection and Markov chain Monte Carlo (MCMC) sampling for parameter inference/identification. In particular, we infer the conductance parameters in the Hodgkin-Huxley model for initiation and propagation of action potentials and the synaptic weight parameters in the Brunel network model for activity dynamics in local cortical networks. 
+
+In this thesis, we have used (rejection) ABC (rejection sampling) and (MCMC) ABC (importance sampling) for identifying the conductance parameters in the Hodgkin-Huxley model for initiation and propagation of action potentials and the synaptic weight parameters in the Brunel network model for activity dynamics in local cortical networks. 
+
+The Hodgkin-Huxley formalism is used as basis for many biophysically detailed cell models ...
+
+Many cell models are built on the Hodgkin-Huxley formalism ... so being able to accurately constrain model parameters
+
+using Markov chain Monte Carlo (MCMC) sampling
+
+We were able to accurately constrain the conductance parameters of the Hodgkin-Huxley model as we obtained narrow posteriors with the ground truth parameters in regions of high posterior density. 
+For the Hodgkin-Huxley model we obtain narrow posteriors with the true parameters in regions of high posterior density, indicating that ABC is a viable method for parameter identification in the many cell models built on the Hodgkin formalism. 
+
+As we only investigated models with few parameters, the viability of ABC on high-dimensional problems is yet to explore. 
+
+
+REJ-ABC with local linear regression adjustment were able to constrain the potassium conductance $\bar{g}_\mathrm{K}$ to the credible interval ... (ground truth $\bar{g}_\mathrm{K} = 36$ and the sodium conductance $\bar{g}_\mathrm{Na}$ to the credible interval ... (ground truth $\bar{g}_\mathrm{Na} = 120$).
+
+ABC requires some tuning to achieve different levels of accuracy, which can be time consuming as neural models generally are computationally expensive. 

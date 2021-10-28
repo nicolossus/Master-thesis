@@ -30,6 +30,37 @@ ABC methods have several disadvantages. Firstly, the methods are highly computat
 
 the success of ABC inference depends on the choice of summary statistics. If the summary statistics are not capturing enough information from the data or the relevant information for the parameters of interest, then the posterior distributions will appear similar to the prior distribution, suggesting that the data are noninformative. 
 
+
+\section{Weighting scheme}
+
+pearson correlation coefficient
+
+Use Pearson's Coefficient of Correlation to weight importance of summary statistics.
+
+* This is a simple approach for producing weighted statistics 
+    * Method developed by H. Jung and P. Marjoram (2011) is more advanced and likely better
+* The correlation coefficient, $r$, relates $Y$ to $X$ 
+* The squared correlation coefficient, $r^2$, indicates the proportion of variance in $Y$ that is shared with (or accounted for) by $X$.
+
+**Cons of using Pearson's Coefficient of Correlation:**
+
+* Assumes:
+    1. Normality of data (meaning that the data should approximate the normal distribution; most data points should tend to hover close to the mean)
+    2. Homoscedasticity (means ‘equal variances’), i.e. a situation in which the variance of the dependent variable is the same for all the data.
+    3. Linearity; simply means that the data follows a linear relationship. 
+* (2. and 3. can be checked visually by scatter plot)
+* Is sensitive to outliers; outliers can can significantly skew the correlation coefficient and make it inaccurate. Outliers are also easy to spot visually from the scatter plot
+
+* vekte utifra sensitivitet
+
+\textbf{Relevant papers:}
+
+H. Jung and P. Marjoram (2011). "Choice of Summary Statistic Weights in Approximate Bayesian Computation". \url{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3192002/}
+
+* Develops a Genetic Algorithm that computes how one should weight the summary statistics 
+
+* Fairly advanced, so we won't implement their approach, but should be mentioned in thesis
+
 \section{ABC methods}
 
 rejection abc not efficient if the prior .. posterior. MCMC, as discussed in theory section, improves on this by ... 

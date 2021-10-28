@@ -78,6 +78,7 @@
 \usepackage{xfrac}      % provides \sfrac
 \usepackage{bm} 
 \usepackage{bbm} 
+\usepackage{nicefrac}
 
 %---------- tikz environment --------------
 \usepackage{tikz}
@@ -131,7 +132,8 @@
     
 \usepackage[nameinlink,capitalize]{cleveref} % must be loaded after hyperref  
 
-\crefname{equation}{Equation}{}
+\crefname{equation}{Equation}{Equations}
+\crefname{algocf}{Algorithm}{Algorithms}
 
 \def\algorithmautorefname{Algorithm}
 
@@ -139,12 +141,14 @@
   \renewcommand{\sectionautorefname}{Section}%
   \renewcommand{\subsectionautorefname}{Section}%
   \renewcommand{\subsubsectionautorefname}{Section}%
+  \renewcommand{\algorithmautorefname}{Algorithm}%
 }
     
 %---------------- algorithm -------------------
-\usepackage{algorithm}
-\usepackage{algpseudocode}
-\usepackage{algpascal}
+%\usepackage{algorithm}
+%\usepackage{algpseudocode}
+%\usepackage{algpascal}
+\usepackage[ruled, vlined, algochapter]{algorithm2e}
 
 %------------------ code  ----------------------
 \usepackage{minted}     %Source Code Highlighting

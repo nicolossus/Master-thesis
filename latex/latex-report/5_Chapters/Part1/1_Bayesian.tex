@@ -12,7 +12,7 @@ The aim of statistical inference is to learn about underlying properties of a po
 
 %This chapter introduces the fundamentals of Bayesian inference, with a particular focus on parameter inference. The content of this chapter is mainly based on the material in the Bayesian textbooks \cite{BDA}, \cite{BAP} and \cite{Sivia}.
 
-This chapter introduces the fundamentals of Bayesian inference, with a particular focus on parameter inference. The content of this chapter is based on the material in the Bayesian textbooks \cite{BDA}, \cite{BAP} and \cite{Sivia}.
+This chapter introduces the fundamentals of Bayesian inference, with a particular focus on parameter inference. The content of this chapter is mainly based on the material in the Bayesian textbooks \cite{BDA}, \cite{BAP} and \cite{Sivia}.
 
 
 %================================================================
@@ -80,7 +80,7 @@ The core of Bayesian inference is encapsulated in \autoref{eq:bayes_theorem} and
 %\section{Single-parameter Models}\label{sec:single_inference}
 %================================================================  
 
-The way in which Bayes' theorem operates is best seen through examples. In the following we discuss Bayesian inference in the context of statistical models where closed forms are available. Such models are sometimes unrealistic, but their analysis often provides a useful starting point when it comes to constructing more realistic models. The focus of this section will be on how we can summarize the obtained posteriors with various graphical checks and numerical measures. 
+The way in which Bayes' theorem operates is best seen through examples. In the following we discuss Bayesian inference in the context of a statistical model where the closed form is available. Such models are sometimes unrealistic, but their analysis often provides a useful starting point when it comes to constructing more realistic models.  
 
 %The way in which Bayes’s theorem operates is best seen through examples. In the following we develop some problem formulations to apply Bayesian analysis on for parameter inference. We will focus on situations where closed forms are available, that is, situations where we can use probability models based on the standard distributions. In particular, we will look at probability models based on the binomial and normal distributions. The binomial distribution is motivated from counting exchangeable outcomes, and the normal distribution applies to a random variable that is the sum of many exchangeable or independent terms. Such models are sometimes unrealistic, but their analysis often provides a useful starting point when it comes to constructing more realistic models. The toy problems developed in this section will later serve as benchmark problems. 
 
@@ -173,45 +173,142 @@ with $\alpha'=\alpha+y$ and $\beta' = \beta + n - y$. We recognize that the expr
     \label{fig:coin_flip_posterior}
 \end{figure} 
 
- 
-Non-, weakly and informative priors. 
-
-\url{http://www.stat.columbia.edu/~gelman/research/published/p039-_o.pdf}
-
-An informative prior expresses specific, definite information about a variable. (then an example that I didn't understand).
-
-An uninformative prior or diffuse prior expresses vague or general information about a variable. The term "uninformative prior" is somewhat of a misnomer. Such a prior might also be called a not very informative prior, or an objective prior, i.e. one that's not subjectively elicited. Uninformative priors can express "objective" information such as "the variable is positive" or "the variable is less than some limit".
-
-%Two further curious points may be noted: (i) it takes quite a lot of flips to be able to estimate the bias-weighting with some degree of confidence (about a thousand to pin it down between 0.2 and 0.3); (ii) the posterior pdfs for the solid and dotted lines converge together quite quickly, but the dashed case takes much longer. The answer to the first observation is that it just does, but the number of flips required will depend on the actual bias-weighting of the coin. If the coin was tossed ten times and came up tails on every occasion, we would rapidly conclude that it was biased; on the other hand, the result of 45 heads and 55 tails in a hundred flips would still leave us somewhat uncertain as to whether the coin was fair. With regard to the second point, both the flat (solid) and the spiky (dotted) priors encode a large degree of ignorance about the nature of the coin. Despite the peculiar shape of the latter, it is fairly flat for most values of H; the strange-looking spikes at H = 0 and H = 1 disappear as soon as a head and a tail have been observed. The ‘fair-minded’ prior (dashed line), however, claims to be moderately well-informed about the character of the coin regardless of the data. It, therefore, takes much more to be convinced that the coin is not fair. Even though the prior probability for H = 0.5 was about a million times greater than that of H = 0.25, a thousand flips were enough to drag it (kicking and screaming, perhaps) to the conclusion that the value of H was less than 0.3 (but more than 0.2).
-
-%non-, weakly and informative priors.
-
-%These rules of thumb follow directly from the nature of the Bayesian analysis procedure:
-
-%If the prior is uninformative, the posterior is very much determined by the data (the posterior is data-driven)
-
-%If the prior is informative, the posterior is a mixture of the prior and the data
-
-%The more informative the prior, the more data you need to "change" your beliefs, so to speak because the posterior is very much driven by the prior information
-
-%If you have a lot of data, the data will dominate the posterior distribution (they will overwhelm the prior) 
+Priors are often categorized by the information they incorporate about parameters as either \textit{noninformative}, \textit{weakly informative} or \textit{informative}. If the prior is noninformative, the posterior is data-driven, as illustrated by the uniform (blue) prior in \autoref{fig:coin_flip_posterior}. On the other hand, if the prior is informative, as illustrated by the bell curve (orange) prior in \autoref{fig:coin_flip_posterior}, the posterior is a mixture of the prior and the data. However, as mentioned and seen in the figure, the data will overwhelm the prior and dominate the posterior in the case of large amounts of data. Weakly informed priors are constructed to purposely include less information than we actually have. They can be useful if we want to let the data speak but not model complete ignorance.
 
 
+
+%================================================================
 \section{Bayesian Computation}
+%================================================================
 
-Move section to here?
+While conceptually simple, Bayesian analysis can be mathematically and numerically challenging. For a long time, Bayesians restricted their attention to conjugate families where posteriors can be computed analytically in closed form. However, realistic probabilistic models often lead to analytically intractable expressions. The arrival of the computational era and development of sampling-based numerical methods have transformed the Bayesian analysis practice. In this section we discuss estimating the posterior numerically using algorithms from the Markov Chain Monte Carlo (MCMC) family. 
 
-As we saw in the previous section, conjugacy ensures analytic tractability. However, often the prior will not be the conjugate prior for the likelihood
 
-In practice, ... not analytical
+%================================================================
+\subsection{Markov Chain Monte Carlo}
+%================================================================
 
-continuous data, normal model 
+There have been devised a suite of methods for constructing and sampling from arbitrary posterior distributions, but Markov chain Monte Carlo (MCMC) methods have become the predominant computational strategy for Bayesian inference. The term \textit{Monte Carlo} refers to methods that rely on the generation of random samples from a distribution of interest. In general, a \textit{Markov chain} is a sequence of states for which the probability of transitioning to the next state depends only on the present state. That the next state is only conditional on the present state and thus independent of the previous states is known as the Markov property. By providing a starting point, such a chain can perform a random walk between the states according to the transition probabilities. Hence, the main idea of MCMC is to draw samples of $\theta_t$ sequentially with the distribution of sampled draws depending on the previous sample $\theta_{t-1}$ to construct a Markov chain $\qty{\theta_t, t=0,1,2,...}$. The key to the method's success is finding a Markov chain with transitions proportional to the target posterior distribution, $\posterior$. In other words, the success is determined by whether the chain is able to improve the sampling distribution at each step in the simulations, in the sense of converging to the posterior distribution. 
 
-the derivation is quite tedious on the algebraic side, so we will here just provide the results and refer to ... for a full derivation.
 
-...
+%================================================================
+\subsection{The Metropolis Algorithm}
+%================================================================
 
-where .. is the mean and .. the var. These are so-called summary statistics ... often used to derive
+The Metropolis algorithm is one of the most established MCMC sampling methods and was originally proposed in \cite{Metropolis}. It was later generalized by Hastings in \cite{Hastings} into the Metropolis-Hastings algorithm. In its original form, the Metropolis algorithm is an adaptation of a random walk that explores the local neighborhood of the current value of the Markov chain. It uses an acceptance/rejection rule to converge to the specified target distribution. The algorithm proceeds as follows:
+
+\begin{enumerate}
+    \item Initialize the Markov chain with a starting point $\theta_0$ for which $\pi \qty(\theta_0 \mid y)>0$. Conceptually, it makes most sense to draw $\theta_0$ from the prior $\pi(\theta)$, though it can be chosen by making an educated guess. 
+    \item For each iteration of $t$, with $t=1, 2, ...$: 
+    \begin{itemize}
+        \item[(a)] Sample a \textit{proposal} parameter $\theta^*$ from the \textit{proposal distribution} (also called the \textit{jumping distribution}) $q \qty(\theta^* \mid \theta_{t-1})$ from which sampling is easily done. For the Metropolis algorithm (but not the Metropolis-Hastings algorithm), the proposal distribution must be symmetric, satisfying the condition $q \qty(\theta^* = \theta_a \mid \theta_{t-1} = \theta_b) = q \qty(\theta^* = \theta_b \mid \theta_{t-1} = \theta_a)$ for all $\theta_a$, $\theta_b$ and $t$. Both the normal and uniform distributions are examples of symmetric distributions that satisfies this condition. 
+        \item[(b)] Evaluate the quality of the proposal $\theta^*$ by calculating the ratio of posterior densities: 
+        \begin{equation}\label{eq:metropolis_ratio}
+            r = \frac{\pi \qty(\theta^* \mid y)}{\pi \qty(\theta_{t-1} \mid y)} = \frac{p \qty(y \mid \theta^*) \pi \qty(\theta^*)}{p \qty(y \mid \theta_{t-1}) \pi \qty(\theta_{t-1})}.
+        \end{equation} 
+        Note that we do not actually use the posterior directly, but rather the proportionality given by Bayes' theorem (\autoref{eq:bayes_unnorm}). If the posterior density of $\theta^*$ is greater than that of $\theta_{t-1}$, the ratio of the posterior densities will be greater than 1 and we will accept the proposal as the next state of the chain. If the posterior density is greater for $\theta_{t-1}$, we will not necessarily discard the proposal $\theta^*$. Less probable parameter values are accepted probabilistically:
+        \item[(c)] Calculate the Metropolis acceptance criterion:
+        \begin{equation}\label{eq:metropolis_acceptance}
+            \alpha = \min \qty(1, r),
+        \end{equation}
+        and set
+        \begin{equation*}
+            \theta_t = \begin{cases}
+            \theta^* &\qquad \text{with probability } \alpha 
+            \\
+            \theta_{t-1} &\qquad \text{with probability } 1 - \alpha 
+            \end{cases}.
+        \end{equation*}
+        In this way, the Metropolis algorithm ensures that the chain tends to move towards the highest density regions of the posterior, but it can still move away from these high-density regions and towards the tails of the posterior. The chain being able to assume all possible states, given enough time, is called \textit{ergodicity}, and is an important feature of the Metropolis algorithm. 
+    \end{itemize}
+\end{enumerate}
+
+To implement the algorithm in a computer program, step (c) requires, after computing $\alpha$ for $\theta^*$, the generation of a uniform random number $u \sim \mathrm{U}(0,1)$. If $u \leq \alpha$, we accept the proposal and set $\theta_t = \theta^*$. If $u > \alpha$, we reject the proposal and set $\theta_t = \theta_{t-1}$ instead. Note that when the proposal is not accepted, this still counts as an iteration of the algorithm. 
+
+The normal distribution, $\mathrm{N}\qty(\mu, \sigma^2)$, is an example of a symmetric proposal distribution. Conditioning the normal distribution on the previous value $\theta_{t-1}$ of the chain means that the location parameter $\mu=\theta_{t-1}$. The scale parameter $\sigma$ is a tuning parameter that we increase or decrease if the acceptance rate of the simulations is too high or low, respectively. According to \cite{BDA}, the optimal acceptance rate is 0.44 for single parameter inference problems and 0.23 for for inference problems concerning several parameters. 
+
+\cref{alg:metropolis} summarizes the Metropolis algorithm.  
+
+\begin{algorithm}[H]
+\caption{Metropolis sampling}
+\label{alg:metropolis}
+\SetAlgoLined
+\DontPrintSemicolon
+ % Algorithm 
+ \textbf{Inputs\,:}\;
+ \vspace{-5mm}
+ \begin{itemize}
+     \item A target posterior density $\posterior \propto \lhood \prior$ consisting of a prior $\prior$ and likelihood $\lhood$. 
+     \item A symmetric Markov proposal density $q \qty(\theta^* \mid \theta)$.
+     \item An integer $N>0$.
+ \end{itemize}
+ 
+ \vspace{5mm}
+ \textbf{Initialize\,:}\;
+ Sample $\theta_0 \sim \prior$.\;
+
+ \vspace{5mm}
+ \textbf{Sampling\,:}\;
+ \For{$t=1, ..., N$}{ 
+ Generate proposal $\theta^* \sim q \qty(\theta^* \mid \theta_{t-1})$. \; 
+ Calculate acceptance criterion $\alpha = \min \qty(1, \dfrac{p \qty(y \mid \theta^*) \pi \qty(\theta^*)}{p \qty(y \mid \theta_{t-1}) \pi \qty(\theta_{t-1})})$. \;
+ Sample $u \sim \mathrm{U}(0,1)$. \; 
+ \vspace{2mm}
+ \eIf{$u \leq \alpha$}{
+   $\theta_t = \theta^*$\;
+   }{
+   $\theta_t = \theta_{t-1}$\;
+  }
+ }
+\end{algorithm}
+
+
+
+%================================================================
+\section{Density Estimation}
+%================================================================ 
+
+The probability density function (pdf) is a fundamental concept in statistics. When we estimate the posterior numerically, we obtain random samples of $\theta$ drawn from the posterior density $\posterior$ but not the posterior pdf itself. In this section, we briefly discuss \textit{density estimation}, that is, methods for constructing an estimate of the pdf from sample data. The focus will be on \textit{nonparametric} approaches to density estimation. The content of this section is based on the material in the statistical learning textbooks \cite{ESL} and \cite{Bishop}.
+
+\subsection{Histograms} 
+
+
+---
+
+The most basic density estimator is the histogram [1]. A histogram is an approximate representation of data that divides the data into discrete bins and counts the number of points that fall in each bin. In a more general mathematical sense, a histogram is defined as follows [1]. We denote the density estimator by $\hat{f}$ and assume we are given a sample of $n$ observations $X_1, ..., X_n$ whose underlying density is to be estimated. Given an origin $x_0$ and a bin width $h$, the bins of the histogram are defined as the intervals $[x_0 + mh, x_0 + (m+1)h)$ for $m$ positive and negative integers. The histogram is then defined by
+
+\begin{equation*}
+    \hat{f}(x) = \frac{1}{nh} \times (\text{no. of } X_i \text{ in the same bin as } x)
+\end{equation*}
+
+The histogram can be generalized by allowing the bin widths to vary. Then the estimate becomes 
+
+\begin{equation*}
+    \hat{f}(x) = \frac{1}{n} \times \frac{(\text{no. of } X_i \text{ in the same bin as } x)}{\text{width of bin containing }x}
+\end{equation*}
+
+
+---
+
+
+\subsubsection*{Original papers:} 
+
+Scott, D. (1979). On optimal and data-based histograms \url{http://biomet.oxfordjournals.org/content/66/3/605}
+
+Freedman, D. and Diaconis, P. (1981). On the histogram as a density estimator: L2 theory \url{http://www.springerlink.com/content/mp364022824748n3/}
+
+\textbf{See also SNL thesis:} Primer on density estimation (parametric/non-parametric) and includes neural density estimators. 
+
+
+non-parametric way to estimate the probability density function of a random variable
+
+\subsection{Kernel Density Estimation}
+
+Histograms have been a popular visualization option since at least the 18th century, in part because they are easily generated by hand. More recently, as extensive computing power has become available in everyday devices such as laptops and cell phones, we see them increasingly being replaced by density plots. In a density plot, we attempt to visualize the underlying probability distribution of the data by drawing an appropriate continuous curve (Figure 7.3). This curve needs to be estimated from the data, and the most commonly used method for this estimation procedure is called kernel density estimation. In kernel density estimation, we draw a continuous curve (the kernel) with a small width (controlled by a parameter called bandwidth) at the location of each data point, and then we add up all these curves to obtain the final density estimate
+
+Analogous to the binwidth of a histogram, a density plot has a parameter called the bandwidth that changes the individual kernels and significantly affects the final result of the plot. The plotting library will choose a reasonable value of the bandwidth for us (by default using the ‘scott’ estimate)
+
+With many data points the rug plot can become overcrowded, but for some datasets, it can be helpful to view every data point. The rug plot also lets us see how the density plot “creates” data where none exists because it makes a kernel distribution at each data point. These distributions can leak over the range of the original data and give the impression that Alaska Airlines has delays that are both shorter and longer than actually recorded. We need to be careful about this artifact of density plots and point it out to viewers!
 
 %================================================================
 %\section{Gaussian Models and Posterior Checks}\label{sec:gaussian_models}
@@ -219,12 +316,13 @@ where .. is the mean and .. the var. These are so-called summary statistics ... 
 %\section{Summarizing the Posterior}
 %================================================================ 
 
-The result of a Bayesian analysis is a posterior distribution which contains all the current information about the parameters $\theta$. 
+The result of a Bayesian analysis is a posterior distribution which contains all the current information about the parameters $\theta$. The focus of this section will be on how we can summarize the obtained posteriors with various graphical checks and numerical measures.
 
+---
 
 In this section, we will look at both numerical and graphical ways to summarize the posterior:
 
-
+See Performance Metrics in introduction !!!!!
 
 
 \subsection{Posterior Plot}
@@ -293,6 +391,9 @@ Following the same logic, prior predictive distribution
 Goodness of fit in Bayesian analyses is routinely assessed using a method referred to as the ‘Bayesian p-value’ and posterior predictive checks (Gelman et al., 1996).
 
 s. 166/167 i BDA 
+
+
+Fourth, when applying SNPE (or any other model-identification approach), validation of the results is of crucial importance, both to assess the accuracy of the inference procedure, as well as to identify possible limitations of the mechanistic model itself. In the example applications, we used several procedures for assessing the quality of the inferred posteriors. One common ingredient of these approaches is to sample from the inferred model, and search for systematic differences between observed and simulated data, e.g. to perform posterior predictive checks (Cook et al., 2006; Talts et al., 2018; Liepe et al., 2014; Lueckmann et al., 2017; Greenberg et al., 2019; Figure 2g, Figure 3f,g, Figure 4c, and Figure 5d). These approaches allow one to detect ‘failures’ of SNPE, that is, cases in which samples from the posterior do not reproduce the data. However, when diagnosing any Bayesian inference approach, it is challenging to rigorously rule out the possibility that additional parameter-settings (e.g. in an isolated ‘island’) would also explain the data. Thus, it is good practice to use multiple initializations of SNPE, and/or a large number of simulations in the initial round. There are challenges and opportunities ahead in further scaling and automating simulation-based inference approaches. However, in its current form, SNPE will be a powerful tool for quantitatively evaluating mechanistic hypotheses on neural data, and for designing better models of neural dynamics.
 
 %================================================================
 %\section{Gaussian Models and Posterior Checks}\label{sec:gaussian_models}
