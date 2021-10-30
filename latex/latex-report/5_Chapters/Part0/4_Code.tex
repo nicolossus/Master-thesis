@@ -1,65 +1,38 @@
 %================================================================
-\section{Code and Documentation}
+\section{Code}
 %================================================================ 
 
-(reproducible)
+As part of the thesis, we developed the Python packages \cw{pyLFI} and \cw{NeuroModels}.
 
-All code used to carry out the present study is made publicly available in the GitHub repository:
-
-\begin{center}
-    \url{https://github.com/nicolossus/Master-thesis}
-\end{center}
-
-
-The \cw{pyLFI} package is located in a separate repository:
+\cw{pyLFI} uses likelihood-free inference (LFI), also known as simulation-based inference, methods for estimating the posterior distributions over model parameters. Specifically, we have implemented parallelized ABC rejection and Markov chain Monte Carlo (MCMC) samplers as well as procedures for linear and local linear regression adjustment. As a side note: We ended up not using the ABC MCMC sampler or the linear regression adjustment in the present work, as they did not provide any additional insights into the objective of the thesis. The package is made publicly available in the GitHub repository:
 
 \begin{center}
     \url{https://github.com/nicolossus/pylfi}
 \end{center}
 
-The \cw{pyLFI} package documentation can be found at:
+We choose to implement our own ABC software for several reasons: 
+\begin{enumerate}
+    \item This being a thesis under a computational science master programme, programming and software development are central aspects. 
+    \item Obtaining “under the hood” knowledge about a method might provide insights about its weaknesses and strengths, as well as a thorough understanding in general. 
+    \item Flexibility. Other software might not facilitate the means for the particular analyses we want to carry out. 
+\end{enumerate}
+
+The \cw{NeuroModels} toolbox provides a framework for the simulator models and methods for extracting summary statistics from the simulated neural data. The package is located in a separate repository:
 
 \begin{center}
-    \url{https://pylfi.readthedocs.io/en/latest/}
+    \url{https://github.com/nicolossus/neuromodels}
 \end{center}
 
-NeuroModels mostly made for convenience, but pyLFI made out of need
+Both \cw{pyLFI} and \cw{NeuroModels} are available via the Python Package Index (PyPI). Implementation details are given in \autoref{chap:comp_approach}.
 
-\textbf{Justify why pyLFI was made} 
+The SNPE algorithm(s) is implemented in the \cw{sbi} Python package \cite{sbi}: 
 
-\begin{itemize}
-    \item computational science master: programming and software development are central aspects
-    \item Useful to obtain "under the hood" knowledge in order to find strengths, weaknesses, improvements etc. as well as a thorough understanding 
-    \item flexibility. the standardized toolboxes does not necessarily facilitate the means for analyses we want to carry out 
-    \item we will however use standard toolboxes for both comparison and analyses, as they have several years of development behind them and offers more complex/refined and efficient software
-\end{itemize} 
+\begin{center}
+    \url{https://github.com/mackelab/sbi}
+\end{center}
 
-\begin{lstlisting}[language=python]
-class ABCBase(metaclass=ABCMeta):
-    def __init__(self, observation, simulator, priors, distance, rng, seed):
-        """
-        simulator : callable
-            simulator model
-        summary_calculator : callable, defualt None
-            summary statistics calculator. If None, simulator should output
-            sum stat
-        distance : str
-            Can be a custom function or one of l1, l2, mse
-        distance_metric : callable
-            discrepancy measure
-        """
-        self._obs = observation
-        self._simulator = simulator
-        self._priors = priors
-        self._rng = rng
-        self._seed = seed
+All code used to carry out the present study is also made publicly available in the GitHub repository:
 
-        # Select distance function.
-        if callable(distance):
-            self._distance = distance
-        elif isinstance(distance, str):
-            check_distance_str(distance)
-            self._distance = self._choose_distance(distance)
-        else:
-            raise TypeError()
-\end{lstlisting}
+\begin{center}
+    \url{https://github.com/nicolossus/Master-thesis}
+\end{center}

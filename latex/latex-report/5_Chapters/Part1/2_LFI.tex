@@ -2,7 +2,7 @@
 
 
 %================================================================
-\chapter{Simulation-Based Inference}\label{chap:LFI}
+\chapter{Simulation-Based Inference}\label{chap:sbi}
 %================================================================
 
 Intro, models without an explicit likelihood function, how to do Bayesian inference?
@@ -34,6 +34,7 @@ Approximate Bayesian Computation (ABC) constitutes a class of computational meth
 
 ABC methods have been successfully applied to a wide range of real-world problems, and have also paved the way for a range of other likelihood-free approaches. However, even though ABC methods are mathematically well-founded, they inevitably make assumptions and approximations whose impact needs to be carefully assessed \cite{ABCprimer}. In the following, three types of ABC methods will be discussed: the vanilla \textit{rejection ABC}, and the more sophisticated variant \textit{Markov chain Monte Carlo (MCMC) ABC}.
 
+The choice of summary statistics is crucial for the performance of ABC methods, hence, the topic has been the subject of much research. See Blum et al. (2013) for a comprehensive review of methods for dimension reduction or statistics selection. SL and ABC methods share some requirements regarding the choice of summary statistics. More specifically, in parameter, estimation problems, the summary statistics should contain as much information as possible about the parameters, so that $\pi \qty(\theta \mid y_\mathrm{obs})$ will be approximately proportional to $\pi \qty(\theta \mid y_\mathrm{obs})$. \cite{ABC_ch20} 
 
 %================================================================
 \subsection{Rejection ABC}\label{sec:rejection_abc}
@@ -164,6 +165,36 @@ Similarly to rejection ABC, the acceptance probability of MCMC ABC decreases as 
 %================================================================
 
 TODO
+
+%===============================================================
+\subsection{Sequential Neural Posterior Estimation}
+%===============================================================
+Sequential Neural Posterior Estimation (SNPE)\footnote{Source code available at \url{https://github.com/mackelab/delfi}} is a novel method for parameter inference. The method uses ABC to learn a neural network which maps features of observed data to the posterior distribution over parameters. The strategy was originally proposed by Papamakarios and Murray in \cite{papamakarios2016fast} and further developed by Lueckmann et al. in \cite{SNPE17} and \cite{SNPE19}. In the literature, the variant of Papamakarios and Murray is often referred to as SNPE-A and the variant of Lueckmann et al. as SNPE-B. In this essay, SNPE refer to the particular method by Lueckmann et al.
+
+A \textit{conditional neural density estimator} is a parametric density model $q_{\bm{\phi}}$ (such as a neural network), where $\bm{\phi}$ are distribution parameters. With a pair of datapoints $(\bm{u}, \bm{v})$ as input, the model outputs a conditional probability density $q_{\bm{\phi}}(\bm{u}\mid \bm{v})$. Given a set of training data $\qty{\bm{u}_n, \bm{v}_n}_{1\colon N}$ that are independent and identically distributed according to a joint probability density $p(\bm{u}, \bm{v})$, $q_{\bm{\phi}}$ is trained by minimizing the loss $\mathcal{L} = - \sum_n \log q_{\bm{\phi}}(\bm{u}_n, \bm{v}_n)$ with respect to $\bm{\phi}$. With enough training data, and with a sufficiently flexible model, $q_{\bm{\phi}}(\bm{u}\mid \bm{v})$ will learn to approximate the conditional $p(\bm{u}\mid \bm{v})$ \cite{SNL18}. 
+
+A neural density estimator $q_{\bm{\phi}}(\bm{\theta} \mid \bm{x})$ can be used to approximate the posterior $p \qty(\bm{\theta}\mid \bm{x}_0)$ as follows. First, a set of samples $\qty{\bm{\theta}_n , \bm{x}_n}_{1\colon N}$ is obtained from the joint distribution $p (\bm{\theta}, \bm{x})$, by $\bm{\theta}_n \sim \prior$ and $\bm{x}_n \sim p \qty(\bm{x} \mid \bm{\theta}_n)$ for $n=1, ..., N$. Then, $q_{\bm{\phi}}$ is trained using $\qty{\bm{\theta}_n , \bm{x}_n}_{1\colon N}$ as training data in order to a global approximation of $\posterior$. Finally, $p \qty(\bm{\theta} \mid \bm{x}_0)$ can be simply estimated by $q_{\bm{\phi}} \qty(\bm{\theta} \mid \bm{x}_0)$. In order to obtain an accurate posterior fit, this approach may require a large number of simulations to sample enough training data in the vicinity of $\bm{x}_0$ \cite{SNL18}. 
+
+SNPE is a strategy for reducing the number of simulations needed by conditional neural estimation. Since simulations from parameters with low posterior density $p \qty(\bm{\theta} \mid \bm{x}_0)$ may not be useful in training $q_{\bm{\phi}}$, the key idea of SNPE is to generate parameter samples $\bm{\theta}_n$ from a proposal $\tilde{p}(\bm{\theta})$, that generates data $\bm{x}_n$ more likely to be in the vicinity of $\bm{x}_0$,  instead of the prior $\prior$ \cite{SNL18}. However, minimizing $\mathcal{L}$ on samples drawn from a proposal $\tilde{p}(\bm{\theta})$ no longer yields the target posterior but rather the \textit{proposal posterior}
+\begin{equation}
+    \tilde{p}(\bm{\theta} \mid \bm{x}) = p (\bm{\theta} \mid \bm{x}) \frac{\tilde{p}(\bm{\theta}) p(\bm{x}) }{\prior \tilde{p}(\bm{x}) },
+\end{equation}
+where $\tilde{p}(\bm{x}) = \int \tilde{p} (\bm{\theta}) \lhood d\bm{\theta}$ and it is assumed that $\tilde{p} (\bm{\theta})=0$ where $\prior = 0$ \cite{apt}. Hence, to account for sampling from a proposal $\tilde{p}(\bm{\theta})$, an adjustment of either the learned posterior or the proposed samples must be made. 
+
+Lueckmann et al. deal with this problem by adjusting the parameter samples $\bm{\theta}_n$ by assigning them weights $w_n = p \qty(\bm{\theta}_n)/ \tilde{p} \qty(\bm{\theta}_n)$. During training SNPE minimizes an importance weighted loss $- \sum_n w_n \log q_{\bm{\phi}}(\bm{\theta}_n \mid \bm{x}_n)$, which allows for direct recovery of $p \qty(\bm{\theta} \mid \bm{x})$ from $q_{\bm{\phi}}$ with no correction and no restrictions on $p(\bm{\theta})$, $\tilde{p}(\bm{\theta})$ or $q_{\bm{\phi}}$ \cite{apt}. However, the weights can have a high variance, which can lead to slow or inaccurate inference \cite{SNL18}.
+  
+In \autoref{fig:snpe}, a conceptual overview of the SNPE method is shown.
+
+\begin{figure}[H]
+\begin{center}\includegraphics[scale=0.65]{snpe}
+\end{center}
+\caption{Parameter estimation by Sequential Neural Posterior Estimation (SNPE): a conceptual overview. Retrieved from \cite[Figure 1]{SNPE19}.}
+\label{fig:snpe}
+\end{figure}
+
+
+
+
 
 %================================================================
 \subsection{Population Monte Carlo ABC}\label{sec:pmc_abc}

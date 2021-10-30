@@ -1,5 +1,4 @@
 %================================================================
-%\chapter{The Bayesian Paradigm}\label{chap:bayesian}
 \chapter{Bayesian Inference}\label{chap:bayesian}
 %================================================================
 
@@ -8,30 +7,14 @@
 
 The aim of statistical inference is to learn about underlying properties of a population from observed data.  In statistical inference, there are, broadly speaking, two paradigms for the analysis of observed data: \textit{frequentist} inference and \textit{Bayesian} inference. These often differ with each other on the fundamental interpretation of probability. In the frequentist view, the probabilities of events are defined as their relative frequencies in a repeatable objective process, and are thus ideally devoid of opinion. From a Bayesian perspective, probabilities are measures that quantifies the uncertainty level of statements based on the degree of belief about the state of the world. Probabilities can be assigned to any statement, even when a random process is not involved. Bayesian inference is the process of revising beliefs about the state of the world in the light of new evidence.     
 
-%The Bayesian view of probability, on the other hand, is based on the degree of belief about the state of the world, and probabilities can be assigned to any statement, even when a random process is not involved. Bayesian inference is the process of revising beliefs about the state of the world in the light of new evidence.   
-
-%This chapter introduces the fundamentals of Bayesian inference, with a particular focus on parameter inference. The content of this chapter is mainly based on the material in the Bayesian textbooks \cite{BDA}, \cite{BAP} and \cite{Sivia}.
-
 This chapter introduces the fundamentals of Bayesian inference, with a particular focus on parameter inference. The content of this chapter is mainly based on the material in the Bayesian textbooks \cite{BDA}, \cite{BAP} and \cite{Sivia}.
 
 
 %================================================================
-%\section{Bayesian Inference}\label{sec:bayes_paradigm}
 \section{Bayes' Theorem}\label{sec:bayes_paradigm}
 %================================================================
 
 In terms of parameter inference, the Bayesian approach differs from the frequentist in that unknown parameters $\theta$ are treated as random variables rather than fixed quantities. In the Bayesian paradigm, all available information about an unknown parameter is incorporated in a \textit{prior probability distribution}, expressing our beliefs before some evidence is taken into account. We usually have a prior pdf $\prior$, since there will typically be a continuum of possible values of a parameter rather than just a discrete set. In the case of substantial prior knowledge about a parameter $\theta$, the prior pdf is narrow and concentrated about some central value, whereas a lack of information yield a wider and relatively flat prior pdf as shown in \autoref{fig:prior_illustration}. The prior is often specified by a particular distribution among a set of well-known and tractable distributions, with the purpose of making evaluation of prior probabilities and random generation of $\theta$ values straightforward.
-
-%In terms of parameter inference, the Bayesian approach differs from the frequentist in that unknown parameters $\theta$ are treated as random variables rather than fixed quantities. In the Bayesian paradigm, all available information about an unknown parameter is incorporated in a \textit{prior probability distribution}, expressing our beliefs before some evidence is taken into account. We usually have a prior pdf $\prior$, since there will typically be a continuum of possible values of a parameter rather than just a discrete set. In the case of substantial prior knowledge about a parameter $\theta$, the prior pdf is narrow and concentrated about some central value, whereas a lack of information yield a wider and relatively flat prior pdf as shown in \autoref{fig:prior_illustration}. The prior is often specified by a particular distribution among a set of well-known and tractable distributions (see \autoref{sec:Appendix A}), with the purpose of making evaluation of prior probabilities and random generation of $\theta$ values straightforward.
-
-%\begin{figure}[H]
-%    \centering
-%    \includegraphics[scale=0.6]{./3_Images/prior_illustration.png}
-%    \caption{A narrow concentrated prior about some central value and a wider less informative prior.}
-%    \label{fig:prior_illustration}
-%    \source{Figure 14.3 in \cite{STK}.}
-%\end{figure}
-
 
 \begin{figure}[H]
     \centering
@@ -65,24 +48,35 @@ In this formulation, $\lhood$ is taken as a function of $\theta$ and not $y$.
 
 The core of Bayesian inference is encapsulated in \autoref{eq:bayes_theorem} and \autoref{eq:bayes_unnorm}. The principal task is to develop the joint probability model $\joint$ and perform the computations to obtain the posterior $\posterior$.
 
-%The core of Bayesian inference is encapsulated in \autoref{eq:bayes_theorem} and \autoref{eq:bayes_unnorm}. The principal task is to develop the joint probability model $\joint$ and perform the computations to summarize the posterior $\posterior$.
-
 
 %================================================================
+\section{Prior and Posterior Predictive Distributions}\label{sec:predictive_dist}
 %\section{Prior and Posterior Predictive Distributions}\label{sec:predictive}
 %\section{Single-parameter Models}\label{sec:single_inference}
 %================================================================  
 
+Before observing any data $y$, we simply have the chosen model, i.e., the likelihood, $\lhood$, and the prior distribution of $\theta$, $\prior$. To make predictive inference about the expected future data, $\hat{y}$, encoded in the prior assumptions, we calculate the marginal distribution of $y$, that is, the distribution of $y \mid \theta$ averaged over all possible values of $\theta$:
+
+\begin{equation}\label{eq:prior_pred}
+    p \qty(\hat{y}) = \int \lhood \prior \dd{\theta}.
+\end{equation}
+
+\autoref{eq:prior_pred} is called the \textit{prior predictive distribution}. 
+
+Once we have a posterior, it is possible to generate predictions $\hat{y}$ following a similar logic. The \textit{posterior predictive distribution} is calculated by marginalizing the distribution of $\hat{y} \mid \theta$ over the posterior distribution: 
+
+\begin{equation}\label{eq:post_pred}
+    p \qty( \hat{y} \mid y ) =\int p \qty(\hat{y} \mid \theta) \posterior \dd{\theta}.
+\end{equation} 
+
+Thus, the posterior predictive distribution is an average of conditional predictions over the posterior distribution of $\theta$.
 
 
 %================================================================
 \section{Parameter Inference}\label{sec:param_inference}
-%\section{Single-parameter Models}\label{sec:single_inference}
 %================================================================  
 
-The way in which Bayes' theorem operates is best seen through examples. In the following we discuss Bayesian inference in the context of a statistical model where the closed form is available. Such models are sometimes unrealistic, but their analysis often provides a useful starting point when it comes to constructing more realistic models.  
-
-%The way in which Bayes’s theorem operates is best seen through examples. In the following we develop some problem formulations to apply Bayesian analysis on for parameter inference. We will focus on situations where closed forms are available, that is, situations where we can use probability models based on the standard distributions. In particular, we will look at probability models based on the binomial and normal distributions. The binomial distribution is motivated from counting exchangeable outcomes, and the normal distribution applies to a random variable that is the sum of many exchangeable or independent terms. Such models are sometimes unrealistic, but their analysis often provides a useful starting point when it comes to constructing more realistic models. The toy problems developed in this section will later serve as benchmark problems. 
+The way in which Bayes' theorem operates is best seen through examples. In the following we discuss Bayesian inference in the context of a statistical model where the closed form is available. %Such models are sometimes unrealistic, but their analysis often provides a useful starting point when it comes to constructing more realistic models.  
 
 %================================================================
 \subsection{The Beta-Binomial Model and the Effect of Priors}\label{sec:coin_flipping}
@@ -92,7 +86,6 @@ The beta-binomial model is one of the simplest Bayesian models, and useful for i
 
 In the coin-flipping problem, we toss a coin $n$ times and record the observations: either \textit{heads} or \textit{tails}. Based on this data, we try to answer questions such as \textit{is the coin fair?} Or, more generally, \textit{how biased is the coin?} In order to estimate the bias of a coin in a Bayesian setting, we need observed data, a probabilistic model of the data generating process, i.e., the likelihood, and a prior placed on the unknown model parameter. For this example, we assume that the data-gathering part is already done and we have recorded the number of heads after a number of coin flips. The bias of the coin is represented by the $\theta$ parameter, and we say that a coin with $\theta=1$ will always land heads, one with $\theta=0$ always tails and one with $\theta=0.5$ has an equal chance of landing either heads or tails. Assuming that only two outcomes are possible, heads or tails, and the random variable \textit{coin toss} is independent and identically distributed (iid), a candidate for the likelihood is the binomial distribution: 
 
-% p \qty(y \mid \theta)
 \begin{equation}\label{eq:coin_flip_likelihood}
     \lhood = \binom{n}{y} \theta^y \qty(1 - \theta)^{n-y}.
 \end{equation}
@@ -109,6 +102,7 @@ This is a discrete distribution returning the probability of getting $y$ heads (
 \end{figure} 
 
 If the value of $\theta$ is known, the binomial distribution tells us the expected distribution of heads. However, $\theta$ is an unknown model parameter, and thus we need to place a prior on it. For mathematical convenience, we choose a family of prior densities that lead to simple posterior densities. Considered as a function of $\theta$, \autoref{eq:coin_flip_likelihood} is of the form: 
+
 \begin{equation*}
     \lhood \propto \theta^a \qty(1 - \theta)^b.
 \end{equation*} 
@@ -273,6 +267,19 @@ The probability density function (pdf) is a fundamental concept in statistics. W
 \subsection{Histograms} 
 
 
+--- 
+
+Standard histograms simply partition $x$ into distinct bins of width $\Delta_i$ and then count the number $n_i$ observations of $x$ falling in bin $i$. In order to turn this count into a normalized probability density we simply divide by the total number $N$ of observations and by the width $\Delta_i$ of the bins to obtain probability values for each bin given by 
+
+$$ p_i = \frac{n_i}{N \Delta_i}$$ 
+
+for which it is easily seen that $\int p(x) dx = 1$. This gives a model for the density $p(x)$ that is constant over the width of each bin, and often the bins are chosen to have the same width $\Delta_i = \Delta$.
+
+
+---
+
+rules-of-thumb like Scott’s rule and the Freedman-Diaconis rule are fast and convenient, but their strong assumptions about the data might make them less ideal for complicated distributions. 
+
 ---
 
 The most basic density estimator is the histogram [1]. A histogram is an approximate representation of data that divides the data into discrete bins and counts the number of points that fall in each bin. In a more general mathematical sense, a histogram is defined as follows [1]. We denote the density estimator by $\hat{f}$ and assume we are given a sample of $n$ observations $X_1, ..., X_n$ whose underlying density is to be estimated. Given an origin $x_0$ and a bin width $h$, the bins of the histogram are defined as the intervals $[x_0 + mh, x_0 + (m+1)h)$ for $m$ positive and negative integers. The histogram is then defined by
@@ -316,7 +323,7 @@ With many data points the rug plot can become overcrowded, but for some datasets
 %\section{Summarizing the Posterior}
 %================================================================ 
 
-The result of a Bayesian analysis is a posterior distribution which contains all the current information about the parameters $\theta$. The focus of this section will be on how we can summarize the obtained posteriors with various graphical checks and numerical measures.
+The result of a Bayesian analysis is a posterior distribution which contains all the current information about the parameters $\theta$. The focus of this section will be on how we can summarize the obtained posteriors with graphical checks and numerical measures.
 
 ---
 
@@ -358,6 +365,12 @@ THIS IS NEW
 The result of a Bayesian analysis is a posterior distribution, and all the information about the parameters given a dataset and a model is contained in the posterior distribution. Thus, by summarizing the posterior, we are summarizing the logical consequences of a model and data. A common practice is to report, for each parameter, the mean (or mode or median) to have an idea of the location of the distribution and some measure, such as the standard deviation, to have an idea of the dispersion and hence the uncertainty in our estimate. The standard deviation works well for normal-like distributions but can be misleading for other type of distributions, such as skewed ones. So, an alternative is to use the following measure.
 
 \subsection{Posterior Predictive Check}
+
+The generated predictions $\hat{y}$ from the posterior predictive distribution, \autoref{eq:post_pred}, can be used to validate and criticize the model by comparing them with the observed data $y$. This is known as \textit{posterior predictive checks}. 
+
+The main goal is to check for auto-consistency. The generated data and the observed data should look more or less similar, otherwise there was some problem during the modelling or some problem feeding the data to the model. But even in the absence of mistakes, differences could arise. Trying to understand the mistakes could lead us to improve models or at least to understand their limitations.  
+
+---
 
 To make inferences about an unknown variable, often called predictive inferences, we follow a similar logic. Before the data $y$ are considered, the distribution of unknown but observable $y$ is 
 
@@ -485,72 +498,8 @@ RMSE, true value, SEM
 
 In practice, we generally do not have the value of the true parameter $\theta$ at hand. Instead, we have an estimation in the form of a posterior distribution. Thus, what we can do is find out the value of $\hat{\theta}$ that minimizes the expected loss function. By expected loss function, we mean the loss function averaged over the whole posterior distribution. 
 
-%================================================================
-%\subsubsection{With Unknown Mean and Variance}
-%================================================================
-
-%The comprehensive derivation can be found in appendix B. 
 
 
-
-
-%================================================================
-%\section{The Influence of the Prior and How to Choose One}\label{sec:prior}
-%================================================================
-
-%\url{http://www.stat.columbia.edu/~gelman/research/published/p039-_o.pdf}
-
-%\begin{itemize}
-%    \item Flat
-%    \item Uninformative
-%    \item Diffuse
-%    \item The Jeffreys’ Prior: Suppose we cannot easily find the natural scale on which the likelihood is in data-translated format, or that such a decomposition does not exist. Jeffreys (1961) proposed a general prior in such cases, based on the Fisher information I of the likelihood. 
-%    \item When a prior distribution is not integrable it is said to be \textit{improper}
-%\end{itemize}
-
-
-%================================================================
-%\subsection{Conjugate Prior Distributions}
-%================================================================
-
-%In Bayesian probability theory, if posterior distributions are in the same family as the prior distributions, then both prior and posterior are called conjugate distributions and the prior is called conjugate prior.
-
-%Conjugacy is formally defined as follows. If $\mathcal{F}$ is a class of sampling distributions $p \left(y | \theta \right)$, and $\mathcal{P}$ is a class of prior distributions for $\theta$, then the class $\mathcal{P}$ is \textit{conjugate} for $\mathcal{F}$ if
-
-%\begin{equation}
-%    \pi \left(\theta | y \right) \in \mathcal{P} \, \forall p \left(\cdot | \theta \right) \in \mathcal{F} \land \pi (\cdot) \in \mathcal{P}
-%\end{equation}
-
-%This definition is formally vague since if we choose $\mathcal{P}$ as the class of all distributions, then $\mathcal{P}$ is always conjugate no matter what class of sampling distributions is used. We are most interested in \textit{natural} conjugate prior families, which arise by taking $\mathcal{P}$ to be the set of all densities having the same functional form as the likelihood \cite{ABC_ch1}.
-
-%A conjugate prior of a likelihood is a prior that, when used in combination with a given likelihood, returns a posterior with the same functional form as the prior. cite BAP
-
-%================================================================
-%\section{Prior and Posterior Predictive Checks}
-%================================================================
-
-%\begin{itemize}
-    %\item \url{https://docs.pymc.io/notebooks/posterior_predictive.html}
-    %\item \url{https://avehtari.github.io/masterclass/slides_ppc.pdf}
-    %\item \url{https://vasishth.github.io/bayescogsci/book/sec-priorpred.html}
-    %\item \url{https://betanalpha.github.io/assets/case_studies/principled_bayesian_workflow.html#113_Prior_Predictive_Checks}
-    %\item \url{http://bebi103.caltech.edu.s3-website-us-east-1.amazonaws.com/2018/tutorials/t6a_model_generation_and_prior_predictive_checks.html} python
-%\end{itemize}
-
-%================================================================
-%\section{Uncertainty/Sensitivty Analysis in the Bayesian Paradigm}
-%================================================================
-
-
-
-
-
-
-%================================================================
-%\subsection{The Prior and Posterior Predictive Distributions}\label{sec:predictive}
-%================================================================
-
-%BDA, side 7
 
 
 

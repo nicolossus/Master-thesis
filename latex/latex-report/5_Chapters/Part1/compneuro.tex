@@ -14,6 +14,8 @@
 \section{The Hodgkin-Huxley Model}
 %================================================================
 
+Alan Hodgkin and Andrew Huxley described the model in 1952 to explain the ionic mechanisms underlying the initiation and propagation of action potentials in the squid giant axon.[1] They received the 1963 Nobel Prize in Physiology or Medicine for this work.
+
 \autoref{fig:hh_states} plot states
 
 \begin{figure}[H]
@@ -37,6 +39,10 @@
 %================================================================
 \section{The Brunel Network Model}
 %================================================================
+
+The network may be in several different states of spiking activity, largely dependent on the values of the synaptic weight parameters.
+
+In neuroscience and computer science, synaptic weight refers to the strength or amplitude of a connection between two nodes, corresponding in biology to the amount of influence the firing of one neuron has on another.
 
 \subsection{Leaky integrate and fire neurons}
 
@@ -89,6 +95,9 @@ In practice, we usually have to bin the spike trains in bins of $\Delta t$ to ob
 
 In practice, have to use histogram: Bin the spike trains in bins of $\Delta t$
 
+
+The population activity is defined as the number of spikes fired in a short instant of time, averaged across the population. Since each neuron in a population receives input from many others (either from the same and/or from other populations) its total input at each moment in time depends on the activity of the presynaptic population(s). Hence the population activity A(t) controls the mean drive of a postsynaptic neuron.
+
 \subsection{Recurrent network of LIF}
 
 
@@ -135,6 +144,16 @@ Theoretical analysis and computational modeling are important tools for characte
 The questions what, how, and why are addressed by descriptive, mechanistic, and interpretive models, each of which we discuss in the following chapters. Descriptive models summarize large amounts of experimental data compactly yet accurately, thereby characterizing what neurons and neural circuits do. These models may be based loosely on biophysical, anatomical, and physiological findings, but their primary purpose is to describe phenomena, not to explain them. Mechanistic models, on the other hand, address the question of how nervous systems operate on the basis of known anatomy, physiology, and circuitry. Such models often form a bridge between descriptive models couched at different levels. Interpretive models use computational and information-theoretic principles to explore the behavioral and cognitive significance of various aspects of nervous system function, addressing the question of why nervous systems operate as they do.
 
 It is often difficult to identify the appropriate level of modeling for a particular problem. A frequent mistake is to assume that a more detailed model is necessarily superior. Because models act as bridges between levels of understanding, they must be detailed enough to make contact with the lower level yet simple enough to provide clear results at the higher level.
+
+
+\subsubsection{Threshold effects}
+Many introductory textbooks of neuroscience state that neurons fire an action potential if the membrane potential reaches a threshold. Since the onset of an action potential is characterized by a rapid rise of the voltage trace, the onset points can be detected in experiment recordings (Fig. 4.1A). Intuitively, the onset of an action potential occurs when the membrane potential crosses the firing threshold.
+
+The firing threshold is not only a useful concept for experimental neuroscience, it is also at the heart of most integrate-and-fire models and therefore central for Parts II and III of this book. But does a firing threshold really exist?
+
+Experimentalists inject currents into a single neuron to probe its firing characteristics. There is a large choice of potential current wave forms, but only few of these are routinely used in many labs. In this section we use current pulses and steps in order to explore the threshold behavior of the Hodgkin-Huxley model.
+
+\url{https://neuronaldynamics.epfl.ch/online/Ch4.S1.html}
 
 \section{Modeling Electrical Activity in Neurons}
 

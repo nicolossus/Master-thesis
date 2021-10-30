@@ -19,6 +19,25 @@ Flip-ordering, accept prob first then simulation
 
 MCMC-ABC was also implemented in pyLFI, however, in order to focus the study on the objective, it is not included in the following analyses as it would not give any significant insights into the questions we seek than the more naive rejection sampler would. 
 
+\subsection{Sample Prior and Posterior Predictive} 
+
+Computationally, we approximate the integral in \autoref{eq:post_pred} as an iterative two-step process: 
+
+\begin{enumerate}
+    \item We sample a value of $\theta$ from the posterior $\posterior$. 
+    \item We feed the value of $\theta$ to the likelihood $\lhood$ in the case of Bayesian computation or the simulator model $\mathrm{M}(\theta)$ in the case of approximate Bayesian computation. 
+\end{enumerate}
+
+
+We can completely avoid doing the integration by generating samples from the prior distribution instead. Here is one way to generate prior predictive distributions: 
+
+Repeat the following many times: 
+
+\begin{enumerate}
+    \item Take one sample from each of the priors
+    \item Plug those samples into the probability density function to generate $\hat{y}$.
+\end{enumerate}
+
 
 \subsection{Distance function}
 
@@ -151,7 +170,30 @@ toward such synchronized states as soon as the excitation starts to dominate ove
 
 Post-sampling Adjustment
 
+\section{Sample The Prior and Posterior Predictive Distributions}
 
+See BAP 
+
+\section{Performance Metrics}
+
+by definition, there will be more posterior samples in the regions of high density in the KDE representation of the posterior. Thus, by averaging over all the posterior samples, we obtain an implicitly weighted error estimate that takes the width of the posterior into account. 
+
+A performance metric in isolation does not necessarily tell the full story, but by using several measures we should be able to assess the goodness of fit. For each posterior over a model parameter we will therefore find the posterior RMSPE, the 95\%-HDI, the MAP estimate and do a PPC.
+
+---
+
+sbi benchmark 
+
+
+Choice of a suitable performance metric is central to any benchmark. As the goal of SBI algorithms is to perform full inference, the ‘gold standard’ would be to quantify the similarity between the true posterior and the inferred one with a suitable distance (or di- vergence) measure on probability distributions. This would require both access to the ground-truth posterior, and a reliable means of estimating similarity between (potentially) richly structured distributions. Several performance metrics have been used in past research, depending on the constraints imposed by knowledge about ground-truth and the inference algorithm (see Table 1). In real-world applications, typically only the observation x0 is known. However, in a benchmarking setting, it is reasonable to assume that one has at least access to the ground-truth parameters theta0. There are two commonly used metrics which only require theta0 and
+x0, but suffer severe drawbacks for our purposes:
+
+
+Bayesian inference is a principled approach for determining parameters consistent with empirical observations: Given a prior over parameters, a stochastic simulator, and observations, it returns a posterior distribution. In cases where the simulator likelihood can be evaluated, many methods for approximate Bayesian
+inference exist (e.g., [1, 2, 3, 4, 5]). For more general simulators, however, evaluating the likelihood of data
+given parameters might be computationally intractable. Traditional algorithms for this ‘likelihood-free’
+setting [6] are based on Monte-Carlo rejection [7, 8], an approach known as Approximate Bayesian Computation (ABC). More recently, algorithms based on neural networks have been developed [9, 10, 11, 12, 13].
+These algorithms are not based on rejecting simulations, but rather train deep neural conditional density estimators or classifiers on simulated data. 
 
 %================================================================
 \subsection{Regression Adjustment}\label{sec:reg_adjust}
@@ -170,7 +212,7 @@ Post-sampling Adjustment
 "Variability of Firing of Hodgkin-Huxley and FitzHugh-Nagumo Neurons with Stochastic Synaptic Input", David Brown, Jianfeng Feng, and Stuart Feerick 
 
 %================================================================
-\chapter{Computational Approach}\label{chap:computational}
+\chapter{Computational Approach}\label{chap:comp_approach}
 %================================================================
 
 See: Automatically Selecting a Suitable Integration Scheme for Systems of Differential Equations in Neuron Models

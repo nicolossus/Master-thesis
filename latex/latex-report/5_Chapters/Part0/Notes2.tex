@@ -1,0 +1,139 @@
+\begin{itemize}
+    \item Explore LFI methods, ABC in particular, on toy problems
+    \item Find optimal ABC "settings", i.e.: 
+    \begin{itemize}
+        \item Best overall algorithm 
+        \item Threshold schedules
+        \item Post-sampling regression method 
+    \end{itemize}
+    \item KDE on toy problems
+    \item Same with neural density estimators 
+    \item Apply on neuro models; Hodgkin-Huxley, multicompartment, Brunel network
+    \item Different stimuli 
+    \item Compare performance between domain knowledge features and automatically learned features 
+    \begin{itemize}
+        \item Weight summary statistics; general procedure can be to find correlation between feature and model parameter and use correlation coefficient as weight
+        \item Plot number of spikes vs $\bar{g}_X$
+        \item Perhaps different sum stats are better for different thetas
+        \item See uncertainpy sobol indices
+    \end{itemize}
+    \item Bayesian analysis, sensitivity etc. 
+    \item Insights the ABC methods can give, especially with regards to network models
+    \item Test on real experimental data?
+\end{itemize}
+
+
+
+
+%================================================================ 
+\subsubsection{Overall Objectives} 
+%================================================================  
+
+\begin{enumerate}
+    \item Explore LFI methods and develop a Python toolbox -- \cw{pyLFI}
+    \item Of particular interest: Compare summary statistics obtained via domain knowledge vs statistical learning methods
+    \item Sensitivity analysis
+    \item Insights the LFI methods can provide to neuroscientific models, especially network models
+\end{enumerate}
+
+%================================================================ 
+\subsubsection{In more detail} 
+%================================================================  
+
+\begin{enumerate}
+    \item Dissect LFI methods, ABC in particular
+    \begin{itemize}
+        \item Goal:
+        \begin{itemize}
+            \item Develop a Python toolbox 
+            \item Find robust ABC settings, i.e. which improves sampling efficiency and accuracy
+        \end{itemize}
+        \item Use tractable probability models:
+        \begin{itemize}
+            \item Binomial 
+            \item Gaussian with unknown mean and variance 
+        \end{itemize}
+        \item Inference schemes:
+        \begin{itemize}
+            \item Rejection 
+            \item MCMC
+            \item SMC 
+            \item PMC
+        \end{itemize}
+        \item Summary statistics:  
+        \begin{itemize}
+            \item Sufficient
+            \item Informative (approximate)
+        \end{itemize}
+        \item Weighting summary statistics:
+        \begin{itemize}
+            \item Correlation
+            \item AIC and BIC? 
+            \item Weighted Euclidean distance. weight=1/scale. Possible scales (obtained from prior predictive distribution):
+            \begin{itemize}
+                \item Standard deviation 
+                \item Median absolute deviation (MAD)
+                \item Standard deviation of residuals (linear regression - sdreg)
+                \item Absolute deviation to observation (ADO)
+                \item See \url{https://github.com/dennisprangle/ABCDistances.jl/blob/master/src/distances.jl}
+            \end{itemize}
+        \end{itemize}
+        \item Learning summary statistics:
+        \begin{itemize}
+            \item See \cw{ABCpy} and \cw{sbi} 
+            \item CNN 
+        \end{itemize}
+        \item Threshold:
+        \begin{itemize}
+            \item Fixed
+            \item Adaptive
+        \end{itemize}
+        \item Regression adjustment:
+        \begin{itemize}
+            \item Linear
+            \item Local linear
+            \item Ridge
+            \item Lasso 
+            \item FFNN
+            \item Scedasticity? 
+        \end{itemize}
+        \item Density Estimation:
+        \begin{itemize}
+            \item Histogram
+            \begin{itemize}
+                \item Bin rules
+            \end{itemize}
+            \item KDE
+            \begin{itemize}
+                \item Bandwidth rules
+                \item Bandwidth selection with cross-validation
+                \item Algorithm?
+            \end{itemize}
+        \end{itemize}
+        \item Neural Density Estimators
+        \begin{itemize}
+            \item Implement simple MDN to get a feel 
+            \item Will mainly use \cw{sbi} (SNPE) for this
+        \end{itemize}
+    \end{itemize}
+    \item Neuro Models 
+    \begin{itemize}
+        \item Hodgkin-Huxley
+        \begin{itemize}
+            \item Inferential study on conductance's with mock-up data
+            \item Overall aim: Use LFI methods to investigate the identifiability of the HH model by refitting the ODEs to the author's original published data
+            \item Can also look at different voltage protocols and the effect they have on constraining the model 
+        \end{itemize}
+        \item Multi-compartment model? 
+        \item Brunel network 
+        \begin{itemize}
+            \item Inferential study on synaptic connection weights with mock-up data
+            \item Compare identifiability of model parameters based on high-frequency part of extracellular electrical potentials, i.e. neuronal spikes, and low-frequency part of the signal, i.e. the local field potential (LFP)
+             \item For the latter, see analysis in 'Estimation of neural network model parameters from local field potentials'
+             \item Overal aim: Assessing performance and validity of LFI methods for inverse modelling of brain network dynamics
+        \end{itemize}
+    \end{itemize}
+\end{enumerate}
+
+
+One could argue that it is essential in data analysis to not only provide a good model but also an uncertainty estimate of the conclusions. The Bayesian approach offers a systematic framework for reasoning about model uncertainty. 
