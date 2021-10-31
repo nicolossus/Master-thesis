@@ -168,7 +168,11 @@ TODO
 
 %===============================================================
 \subsection{Sequential Neural Posterior Estimation}
+%\subsection{Neural Density Estimation}
 %===============================================================
+
+Sequential Neural Posterior Estimation (SNPE) is a novel algorithm for simulation-based inference. Dissecting all of the intricacies of SNPE is beyond the scope of this thesis. We will in this section provide an overview of the algorithm. For all details we refer the reader to the original articles \cite{SNL_first}, \cite{SNPE_first} and \cite{SNPE_apt}.
+
 Sequential Neural Posterior Estimation (SNPE)\footnote{Source code available at \url{https://github.com/mackelab/delfi}} is a novel method for parameter inference. The method uses ABC to learn a neural network which maps features of observed data to the posterior distribution over parameters. The strategy was originally proposed by Papamakarios and Murray in \cite{papamakarios2016fast} and further developed by Lueckmann et al. in \cite{SNPE17} and \cite{SNPE19}. In the literature, the variant of Papamakarios and Murray is often referred to as SNPE-A and the variant of Lueckmann et al. as SNPE-B. In this essay, SNPE refer to the particular method by Lueckmann et al.
 
 A \textit{conditional neural density estimator} is a parametric density model $q_{\bm{\phi}}$ (such as a neural network), where $\bm{\phi}$ are distribution parameters. With a pair of datapoints $(\bm{u}, \bm{v})$ as input, the model outputs a conditional probability density $q_{\bm{\phi}}(\bm{u}\mid \bm{v})$. Given a set of training data $\qty{\bm{u}_n, \bm{v}_n}_{1\colon N}$ that are independent and identically distributed according to a joint probability density $p(\bm{u}, \bm{v})$, $q_{\bm{\phi}}$ is trained by minimizing the loss $\mathcal{L} = - \sum_n \log q_{\bm{\phi}}(\bm{u}_n, \bm{v}_n)$ with respect to $\bm{\phi}$. With enough training data, and with a sufficiently flexible model, $q_{\bm{\phi}}(\bm{u}\mid \bm{v})$ will learn to approximate the conditional $p(\bm{u}\mid \bm{v})$ \cite{SNL18}. 
