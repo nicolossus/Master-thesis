@@ -16,6 +16,17 @@
 %--------- color ------------
 \usepackage[usenames,dvipsnames,svgnames,table,cmyk]{xcolor} 
 
+%---------------- algorithm -------------------
+%\usepackage{algorithm}
+%\usepackage{algpseudocode}
+%\usepackage{algpascal}
+%\usepackage[noend, ruled, vlined, algochapter, linesnumbered]{algorithm2e}
+\usepackage[noend, ruled, vlined, algochapter]{algorithm2e}
+
+%\usepackage{etoolbox}
+%\AtBeginEnvironment{algorithm}{\addvspace{2\baselineskip}}
+%\AfterEndEnvironment{algorithm}{\addvspace{2\baselineskip}}
+
 %----- document formatting ---- 
 % Begin paragraphs with an empty line rather than an indent:
 \usepackage[parfill]{parskip} 
@@ -43,6 +54,7 @@
 %------ sections layout --------
 \usepackage{appendix}
 \usepackage{epigraph}
+\usepackage[section]{placeins}
 %\usepackage{sectsty}
 %\sectionfont{\fontsize{12}{15}\selectfont}
 %\subsectionfont{\fontsize{10}{15}\selectfont}
@@ -145,11 +157,7 @@
   \renewcommand{\chapterautorefname}{Chapter}%
 }
     
-%---------------- algorithm -------------------
-%\usepackage{algorithm}
-%\usepackage{algpseudocode}
-%\usepackage{algpascal}
-\usepackage[ruled, vlined, algochapter]{algorithm2e}
+
 
 %------------------ code  ----------------------
 \usepackage{minted}     %Source Code Highlighting

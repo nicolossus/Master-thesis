@@ -14,7 +14,7 @@ This chapter introduces the fundamentals of Bayesian inference, with a particula
 \section{Bayes' Theorem}\label{sec:bayes_paradigm}
 %================================================================
 
-In terms of parameter inference, the Bayesian approach differs from the frequentist in that unknown parameters $\theta$ are treated as random variables rather than fixed quantities. In the Bayesian paradigm, all available information about an unknown parameter is incorporated in a \textit{prior probability distribution}, expressing our beliefs before some evidence is taken into account. We usually have a prior pdf $\prior$, since there will typically be a continuum of possible values of a parameter rather than just a discrete set. In the case of substantial prior knowledge about a parameter $\theta$, the prior pdf is narrow and concentrated about some central value, whereas a lack of information yield a wider and relatively flat prior pdf as shown in \autoref{fig:prior_illustration}. The prior is often specified by a particular distribution among a set of well-known and tractable distributions, with the purpose of making evaluation of prior probabilities and random generation of $\theta$ values straightforward.
+In terms of parameter inference, the Bayesian approach differs from the frequentist in that unknown parameters $\theta$ are treated as random variables rather than fixed quantities. In the Bayesian paradigm, all available information about an unknown parameter is incorporated in a \textit{prior probability distribution}, expressing our beliefs before some evidence is taken into account. We usually have a prior probability density function (pdf), $\prior$, since there will typically be a continuum of possible values of a parameter rather than just a discrete set. In the case of substantial prior knowledge about a parameter $\theta$, the prior pdf is narrow and concentrated about some central value, whereas a lack of information yield a wider and relatively flat prior pdf as shown in \autoref{fig:prior_illustration}. The prior is often specified by a particular distribution among a set of well-known and tractable distributions, with the purpose of making evaluation of prior probabilities and random generation of $\theta$ values straightforward.
 
 \begin{figure}[H]
     \centering
@@ -24,7 +24,7 @@ In terms of parameter inference, the Bayesian approach differs from the frequent
     %\source{Figure 14.3 in \cite{STK}.}
 \end{figure}
 
-Our prior state of knowledge is modified by data $y$, obtained by performing experiments, through the conditional \textit{sampling distribution} $\lhood$. When regarded as a function of $\theta$, for fixed $y$, $\lhood$ is called the \textit{likelihood function}. In order to make probability statements about $\theta$ given sample data $y$, a probabilistic model representing the joint probability distribution for $\theta$ and $y$ must be provided. The joint pmf or pdf can be written as a product of the prior distribution $\prior$ and the likelihood function $\lhood$:
+Our prior state of knowledge is modified by data $y$, obtained by performing experiments, through the conditional \textit{sampling distribution} $\lhood$. When regarded as a function of $\theta$, for fixed $y$, $\lhood$ is called the \textit{likelihood function}. In order to make probability statements about $\theta$ given sample data $y$, a probabilistic model representing the joint probability distribution for $\theta$ and $y$ must be provided. The joint pdf can be written as a product of the prior distribution $\prior$ and the likelihood function $\lhood$:
 
 \begin{equation*}
     \joint = \lhood \prior .
@@ -157,7 +157,7 @@ with $\alpha'=\alpha+y$ and $\beta' = \beta + n - y$. We recognize that the expr
 
 \autoref{fig:coin_flip_posterior} shows how the posteriors for the priors in \autoref{fig:beta_distribution} evolve as more and more data become available. For easier comparison, they have all been scaled vertically to have the same maximum value. \autoref{fig:coin_flip_posterior} clearly reveals the effect of the different priors; when there are few data, the shape of the posteriors vary in detail; as the number of data increases, the shape and location of the posteriors tend to converge and they all become sharply peaked. Since the priors reflect the different information or assumptions before the results, and the posteriors the updated knowledge in the light of data, this seems quite reasonable. If the data only are the outcome of a few flips, the analysis of these data is dominated by the prior information. However, as the data increases, the posterior is dominated by the likelihood and we are eventually led to the same conclusions regardless of our initial beliefs. In the limit of infinite data, all priors will provide the same posterior. From a practical point of view, we could obtain nearly indistinguishable posteriors for a finite amount of data. Thus, the choice of the prior becomes largely irrelevant given a sufficiently large amount of data.
 
-\begin{figure}[H]
+\begin{figure}[!htb]
     \centering
     \includegraphics[scale=1]{coin_flip_posterior}
     \caption{The effect of different priors on the posterior as the number of data available increases. To aid in the comparison, they have all been scaled vertically to have the same maximum value. The number of data analyzed is indicated at the upper right-hand corner of each panel. In the first panel there are zero flips, and thus the densities represent the priors from \autoref{fig:beta_distribution}. The ground truth, $\theta=0.5$ (the coin is indeed fair), is indicated by the black vertical line. 
@@ -170,7 +170,7 @@ Priors are often categorized by the information they incorporate about parameter
 
 
 %================================================================
-\section{Bayesian Computation}
+\section{Bayesian Computation}\label{sec:bayesian_computation}
 %================================================================
 
 While conceptually simple, Bayesian analysis can be mathematically and numerically challenging. For a long time, Bayesians restricted their attention to conjugate families where posteriors can be computed analytically in closed form. However, realistic probabilistic models often lead to analytically intractable expressions. The arrival of the computational era and development of sampling-based numerical methods have transformed the Bayesian analysis practice. In this section we discuss estimating the posterior numerically using algorithms from the Markov Chain Monte Carlo (MCMC) family. 
@@ -221,7 +221,7 @@ The normal distribution, $\mathrm{N}\qty(\mu, \sigma^2)$, is an example of a sym
 
 \cref{alg:metropolis} summarizes the Metropolis algorithm.  
 
-\begin{algorithm}[H]
+\begin{algorithm}[!htb]
 \caption{Metropolis sampling}
 \label{alg:metropolis}
 \SetAlgoLined
@@ -237,19 +237,19 @@ The normal distribution, $\mathrm{N}\qty(\mu, \sigma^2)$, is an example of a sym
  
  \vspace{5mm}
  \textbf{Initialize\,:}\;
- Sample $\theta_0 \sim \prior$.\;
+ \nl Sample $\theta_0 \sim \prior$.\;
 
  \vspace{5mm}
  \textbf{Sampling\,:}\;
  \For{$t=1, ..., N$}{ 
- Generate proposal $\theta^* \sim q \qty(\theta^* \mid \theta_{t-1})$. \; 
- Calculate acceptance criterion $\alpha = \min \qty(1, \dfrac{p \qty(y \mid \theta^*) \pi \qty(\theta^*)}{p \qty(y \mid \theta_{t-1}) \pi \qty(\theta_{t-1})})$. \;
- Sample $u \sim \mathrm{U}(0,1)$. \; 
+ \nl Generate proposal $\theta^* \sim q \qty(\theta^* \mid \theta_{t-1})$. \; 
+ \nl Calculate acceptance criterion $\alpha = \min \qty(1, \dfrac{p \qty(y \mid \theta^*) \pi \qty(\theta^*)}{p \qty(y \mid \theta_{t-1}) \pi \qty(\theta_{t-1})})$. \;
+ \nl Sample $u \sim \mathrm{U}(0,1)$. \; 
  \vspace{2mm}
  \eIf{$u \leq \alpha$}{
-   $\theta_t = \theta^*$\;
+ \nl  $\theta_t = \theta^*$\;
    }{
-   $\theta_t = \theta_{t-1}$\;
+  \nl $\theta_t = \theta_{t-1}$\;
   }
  }
 \end{algorithm}
@@ -313,15 +313,15 @@ Kernel density estimates (KDEs) are closely related to histograms, but avoid som
 where $h>0$ is the smoothing parameter, $K(u)$ the kernel of a pdf and $u = \norm{x - \tilde{x}_i}$ with $\norm{\cdot}$ denoting the Euclidean distance. The kernel estimator for the pdf is thus: 
 
 \begin{equation}\label{eq:kde}
-    \hat{p} = \frac{1}{n} \sum_{i=1}^n K_h \qty(\norm{x - \tilde{x}_i})
+    \hat{p}(x) = \frac{1}{n} \sum_{i=1}^n K_h \qty(\norm{x - \tilde{x}_i})
 \end{equation}
 
-The smoothing parameter $h$ is often called the \textit{bandwidth} in the context of kernel smoothing, and corresponds to the scale of the kernel. Intuitively, the kernel estimator is a sum of “bumps” placed at the sample points, as illustrated by \autoref{fig:kde_figure}. The kernel determines the shape of the bumps and the bandwidth their width. 
+The smoothing parameter $h$ is often called the \textit{bandwidth} in the context of kernel smoothing, and corresponds to the scale of the kernel. There are also rules-of-thumb for setting the bandwidth, such as Silverman's rule \cite{silverman_rule}. Intuitively, the kernel estimator is a sum of “bumps” placed at the sample points. The kernel determines the shape of the bumps and the bandwidth their width. \autoref{fig:kde_figure} provides an illustration of this, and also compares the histogram and kernel density estimate using the same data. The smoothness of the KDE compared to the discreteness of the histogram illustrates how KDEs converge faster to the underlying pdf.
 
-\begin{figure}[htb]
+\begin{figure}[!htb]
     \centering
     \includegraphics[scale=0.1]{Comparison_of_1D_histogram_and_KDE}
-    \caption{Comparison of the histogram (left) and kernel density estimate (right) constructed using the same six data samples. For the histogram, the data is partitioned into $k=6$ bins, each of width $h=2$. If more than one data point falls inside the same bin, the density (height) of the bin increases. Note the discontinuities that are due to the bin edges. For the kernel density estimate (KDE), the kernel is Gaussian with bandwidth $h=2.25$. The kernel is placed on each of the six data samples (indicated by the red dashed curves), and the kernels are summed to make the KDE (solid blue curve). The smoothness of the KDE compared to the discreteness of the histogram illustrates how KDEs converge faster to the underlying pdf. The data samples are shown as the rug plot on the horizontal axis.
+    \caption{Comparison of the histogram (left) and kernel density estimate (right) constructed using the same six data samples. For the histogram, the data is partitioned into $k=6$ bins, each of width $h=2$. If more than one data point falls inside the same bin, the density (height) of the bin increases. Note the discontinuities that are due to the bin edges. For the kernel density estimate (KDE), the kernel is Gaussian with bandwidth $h=2.25$. The kernel is placed on each of the six data samples (indicated by the red dashed curves), and the kernels are summed to make the KDE (solid blue curve). The data samples are shown as the rug plot on the horizontal axis.
     }
     \label{fig:kde_figure}
     \source{\cite{kde_figure}.}
@@ -344,12 +344,12 @@ and the Epanechnikov kernel:
     \end{cases}.
 \end{equation}
 
-Figure shows the Gaussian and Epanechnikov kernels. 
+\autoref{fig:kde_kernels} shows the Gaussian and Epanechnikov kernels. Kernels may or may not have finite support. Kernels with finite support are defined on a domain such as $[-1, 1]$, and kernels without on $(-\infty, \infty)$. The Gaussian kernel does not have finite support, while the Epanechnikov kernel has. 
 
-\begin{figure}[htb]
+\begin{figure}[!htb]
     \centering
-    \includegraphics[scale=0.1]{kde_kernels}
-    \caption{caption
+    \includegraphics[scale=0.85]{kde_kernels}
+    \caption{The Gaussian and Epanechnikov kernels defined by \autoref{eq:gaussian_kernel} and \autoref{eq:epkov_kernel}, respectively.
     }
     \label{fig:kde_kernels}
 \end{figure}
@@ -363,182 +363,66 @@ The result of a Bayesian analysis is a posterior distribution which contains all
 
 \subsection{Visualization} 
 
+Visualizing the posterior is a useful first-step in assessing the results of an inference, as the shape of the posterior quickly tells us how well the procedure was. However, we generally obtain estimated posterior samples and not the posterior density itself. In order to examine the location and width of the posterior, we therefore have to generate a visual representation by using density estimation, in particular KDE. If $\theta$ is a one- or two dimensional vector, we can simply plot the full posterior, which will be a joint posterior in the latter case. If the parameter vector has more than two dimensions, we can plot the marginal posterior for each parameter.
 
+However, it is useful to also derive summary statistics from the posterior, as numerical summaries often are easier to present and interpret than the full posterior. 
 
+\subsection{Bayesian Point Estimates}
 
-In principle, the posterior distribution contains all the information about the possible parameter values. In practice, we must also present the posterior distribution somehow. If the examined parameter $\theta$
-  is one- or two dimensional, we can simply plot the posterior distribution. Or when we use simulation to obtain values from the posterior, we can draw a histogram or scatterplot of the simulated values from the posterior distribution. If the parameter vector has more than two dimensions, we can plot the marginal posterior distributions of the parameters of interest.
-  
- However, we often also want to summarize the posterior distribution numerically. The usual summary statistics, such as the mean, median, mode, variance, standard devation and different quantiles, that are used to summarize probability distributions, can be used. These summary statistics are often also easier to present and interpret than the full posterior distribution.
+\textit{Bayesian point estimates} are properties of the posterior. The most common point estimates, $\hat{\theta}$, are the:
 
-\subsection{Point estimates}
+\begin{itemize}
+    \item Posterior mean: 
+    \begin{equation}\label{eq:posterior_mean}
+        \hat{\theta}_\mathrm{mean} = \E \qty[\theta \mid y] = \int \theta \posterior \dd{\theta}, 
+    \end{equation}
+    which simply is the expected value of the posterior distribution. 
+    \item Posterior median: 
+    \begin{equation}\label{eq:posterior_median}
+        \hat{\theta}_\mathrm{median} = \mathrm{F}_{\theta \mid y}^{-1} \qty(0.5),
+    \end{equation}
+    where the cumulative posterior distribution $F_{\theta \mid y} \qty(\tilde{\theta}_p) = \int_{\infty}^{\tilde{\theta}_p} \posterior \dd{\theta}$. Here, $\tilde{\theta}_p$ is the value of $\theta$ at the $p$-quantile. For example, the median is the 0.5-quantile and the value of the cumulative posterior distribution is thus $F_{\theta \mid y} \qty(\tilde{\theta}_{0.5}) = 0.5$. The median being the $0.5$-quantile entails that it is the value of $\theta$ which divides the posterior in half.
+    \item Posterior mode which is also called the maximum a posteriori probability (MAP) estimate: 
+    \begin{equation}\label{eq:posterior_map}
+        \hat{\theta}_\mathrm{MAP} = \max_\theta \posterior,
+    \end{equation}
+    and is the point at which the density is highest. 
+\end{itemize}
 
-People often choose the median, just because it is more robust to outliers than the mean, or use the mean just because is a simple and familiar concept, or because they think their observable is truly the average of some process at some level, like molecules bouncing to each other or genes interacting with themselves and the environment.
+As seen by the definitions above, each of the location summaries has its own interpretation. In general, there is no particular summary statistic that is preferred, and there will be different reasons to use each summary statistic. The mean is often used because it is a simple and familiar concept, or the observable is truly believed to be the average of some process. However, the mean might be a misleading point estimate for more complex and skewed distributions, such that $\hat{\theta}$ ends up in a region of low posterior density. The median is more robust to outliers than the mean, and we might prefer an estimate in the middle of the distribution. However, as with the mean, the median might also end up in regions of low density for more complex posteriors. The MAP estimate is closely related to the frequentist maximum likelihood estimate (MLE), and may be interpreted as the single “most likely” value. Providing an estimate of the MAP is more involved as we need to construct a KDE, which also may affect the quality of the estimate, based on the posterior samples and then find the mode of the KDE. The MAP estimate is most sensible to use for unimodal posteriors that have well-defined peaks. The MAP of a multimodal posterior might happen to be at one extreme and if the posterior is mostly flat the MAP might end up at an arbitrary location.  
 
-Commonly used summaries of location are the mean, median and mode(s) of the distribution; variation is commonly summarized by the standard deviation, the interquartile range and other quantiles. Each summary has its own interpretation: for example, the mean is the posterior expectation of the parameter, and the mode may be interpreted as the single 'most likely' value, given the data (and the model).
 
-\url{https://en.wikipedia.org/wiki/Maximum_a_posteriori_estimation}
+\subsection{Posterior Uncertainty} 
 
-\url{http://bebi103.caltech.edu.s3-website-us-east-1.amazonaws.com/2015/tutorials/l06_credible_regions.html}
+In addition to posterior point estimates, it is important to report posterior uncertainty. The uncertainty can be characterized by the posterior standard deviation,
 
-\url{https://bookdown.org/mrwhalen/bayes_book/summarizing-posterior-distributions.html}
+\begin{equation*}
+    \mathrm{sd} \qty(\theta \mid y) = \sqrt{\mathrm{var}\qty(\theta \mid y)} = \sqrt{\int \qty(\theta - \bar{\theta})^2 \posterior \dd{\theta}},
+\end{equation*} 
 
-\url{https://vasishth.github.io/bayescogsci/book/sec-priorpred.html}
+where $\mathrm{var}\qty(\theta \mid y)$ is the posterior variance and $\bar{\theta} = \E \qty[\theta \mid y]$ the posterior mean. The standard deviation works well for Gaussian-like distributions, but can be misleading for other, in particular skewed, distributions. An alternative is to use \textit{credible intervals} to quantify the posterior uncertainty. In the Bayesian paradigm, a credible interval is an interval within which $\theta$ falls with a particular probability. They are the Bayesian analogue of a frequentist confidence interval, though the interpretation, as usual, is different. In the Bayesian setting, an interval having a posterior probability $.95$ gives a 95\% probabilistic belief that the parameter is in that interval. A $100(1-\alpha)\%$ credible interval is a subset of $\theta$ such that
 
-\url{https://vioshyvo.github.io/Bayesian_inference/summarizing-the-posterior-distribution.html}
+\begin{equation*}
+    \int \posterior \dd{\theta} = 1 - \alpha,
+\end{equation*}
 
-\subsection{Posterior quantiles and intervals}
+where $\alpha$ is the confidence level. If the confidence level is $\alpha=0.05$, we have a 95\% credible interval. 
 
+Credible intervals are not unique on a posterior. This means that we have to define a condition to construct a suitable interval. A common condition is to use the set of points for which the posterior density is higher than for any outside this set. This will be the narrowest interval on the posterior for some given confidence level, and is often referred to as the \textit{highest posterior density interval} (HPDI) or just the \textit{highest density interval} (HDI). 
 
 
+\subsection{Posterior Predictive Checks}
 
-THIS IS NEW
+The generated predictions $\hat{y}$ from the posterior predictive distribution, \autoref{eq:post_pred}, can be used to validate and criticize the model by comparing them with the observed data $y$. This is known as \textit{posterior predictive checks} (PPCs). The main idea of a PPC is to check for auto-consistency. The predicated data are simulated by typical posterior parameter values. If the predictions do not fit the observed patterns of interest, this might inform us on potential limitations of the model.  
 
-The result of a Bayesian analysis is a posterior distribution, and all the information about the parameters given a dataset and a model is contained in the posterior distribution. Thus, by summarizing the posterior, we are summarizing the logical consequences of a model and data. A common practice is to report, for each parameter, the mean (or mode or median) to have an idea of the location of the distribution and some measure, such as the standard deviation, to have an idea of the dispersion and hence the uncertainty in our estimate. The standard deviation works well for normal-like distributions but can be misleading for other type of distributions, such as skewed ones. So, an alternative is to use the following measure.
 
-\subsection{Posterior Predictive Check}
 
-The generated predictions $\hat{y}$ from the posterior predictive distribution, \autoref{eq:post_pred}, can be used to validate and criticize the model by comparing them with the observed data $y$. This is known as \textit{posterior predictive checks}. 
 
-The main goal is to check for auto-consistency. The generated data and the observed data should look more or less similar, otherwise there was some problem during the modelling or some problem feeding the data to the model. But even in the absence of mistakes, differences could arise. Trying to understand the mistakes could lead us to improve models or at least to understand their limitations.  
 
----
 
-To make inferences about an unknown variable, often called predictive inferences, we follow a similar logic. Before the data $y$ are considered, the distribution of unknown but observable $y$ is 
 
-\begin{equation}\label{eq:prior_predictive}
-    \pi (y) = \int \lhood \prior \dd{\theta}
-\end{equation}
 
-%BDA, side 7
 
-Posterior predictive check
-Comparing the data to the posterior predictions of the model is called a posterior predictive check. When there appear to be systematic discrepancies that would be meaningful to address, you should consider expanding or changing the model so it may be a better description of the data.
 
-One way to evaluate whether the least unbelievable parameter values are any good is via a posterior predictive check. A posterior predictive check is an inspection of patterns in simulated data that are generated by typical posterior parameters values. The idea of a posterior predictive check is as follows: If the posterior parameter values really are good descriptions of the data, then the predicted data from the model should actually “look like” real data. If the patterns in the predicted data do not mirror the patterns in the actual data, then we are motivated to invent models that can produce the patterns of interest.
 
----
 
-Posterior Predictive Distributions
-For evaluating the fit of a model, perhaps the most flexible approach is to examine the Bayesian posterior predictive distribution. The posterior predictive distribution is the distribution of future observable data, based on the posterior distribution. It is defined as: 
-
-eq same as 6.1 in BDA 
-
-In this equation, $y_{rep}$ is future data that could be drawn from the posterior distribution, $y$ is the current data, and $\theta$ is the model parameter. Notice that the last two terms (prior to $d\theta$) are the posterior density for the parameter. The first term is the sampling density for future data, conditional on the parameter. This equation simply specifies a form for the distribution of future data, given the model parameter and data. If a model fits the current data well, then we expect that simulated future data should look much like the current data. Thus, we can simulate data from the posterior predictive distribution, compare it to the observed data, and determine whether the model has an appropriate fit. 
-
----
-
-Following the same logic, prior predictive distribution  
-
-
-\subsection{Measures of Predictive Accuracy}
-
-Goodness of fit in Bayesian analyses is routinely assessed using a method referred to as the ‘Bayesian p-value’ and posterior predictive checks (Gelman et al., 1996).
-
-s. 166/167 i BDA 
-
-
-Fourth, when applying SNPE (or any other model-identification approach), validation of the results is of crucial importance, both to assess the accuracy of the inference procedure, as well as to identify possible limitations of the mechanistic model itself. In the example applications, we used several procedures for assessing the quality of the inferred posteriors. One common ingredient of these approaches is to sample from the inferred model, and search for systematic differences between observed and simulated data, e.g. to perform posterior predictive checks (Cook et al., 2006; Talts et al., 2018; Liepe et al., 2014; Lueckmann et al., 2017; Greenberg et al., 2019; Figure 2g, Figure 3f,g, Figure 4c, and Figure 5d). These approaches allow one to detect ‘failures’ of SNPE, that is, cases in which samples from the posterior do not reproduce the data. However, when diagnosing any Bayesian inference approach, it is challenging to rigorously rule out the possibility that additional parameter-settings (e.g. in an isolated ‘island’) would also explain the data. Thus, it is good practice to use multiple initializations of SNPE, and/or a large number of simulations in the initial round. There are challenges and opportunities ahead in further scaling and automating simulation-based inference approaches. However, in its current form, SNPE will be a powerful tool for quantitatively evaluating mechanistic hypotheses on neural data, and for designing better models of neural dynamics.
-
-%================================================================
-%\section{Gaussian Models and Posterior Checks}\label{sec:gaussian_models}
-\subsection{Bayesian Analysis}
-%\section{Summarizing the Posterior}
-%================================================================
-
-
-Posterior - all information
-
-We will use a Gaussian model with unknown mean and variance to illustrate the following, since it is continuous and
-
-The Bayesian Toolkit
-
-One point that must be clear from the beginning is that the Bayesian approach is a complete inferential approach. Therefore, it covers confidence evaluation, testing, prediction, model checking, and point estimation. We will progres- sively cover the different facets of Bayesian analysis in other chapters of this book, but we address here the issue of confidence intervals because it is rather a straightforward step from point estimation.
-
-normal models important blabla
-
-As we saw in the previous section, conjugacy ensures tractable posteriors. Sufficent summary statistics, (mean and variance for normal)
-
-The derivation requires some tedious algebra, so we simply state the result (Murphy, 07)
-
-\url{https://en.wikipedia.org/wiki/Conjugate_prior#When_likelihood_function_is_a_continuous_distribution}
-
-
-The comprehensive derivation can be found in appendix B. 
-
-Devore, p. 781 
-
-Note that the posterior mean $\mu_0'$ is a weighted average of the prior mean $\mu_0$ and the data mean $\bar{x}$, with weights that are the reciprocals of the prior variance and the variance of $\bar{x}$. It makes sense to define the \textbf{precision} as the reciprocal of the variance because a lower variance implies a more precise measurement and the weights then are the corresponding precisions. Furthermore, the posterior variance is the reciprocal of the sum of the reciprocals of the two variances, but this can be described much more simply by saying that the posterior precision is the sum of the prior precision plus the precision of $\bar{x}$.  
-
-
-Sufficient statistics are useful in algebraic manipulations of likelihoods and posterior distributions.
-
-sufficient summary statistics, lfi for cogsci, side 16, Fisher-Neyman Factorization Theorem
-
-\url{https://bookdown.org/mrwhalen/bayes_book/summarizing-posterior-distributions.html}
-
-Summarizing Posterior Distributions
-Obtaining a posterior distribution is great, but does not provide us with much concrete to discuss or convey to others. Therefore, we need ways to distill the distribution into point estimates, or summary statistics. The most common summary statistics for posterior distributions will be the posterior mean, posterior mode and posterior median.
-
-At times, there will be different reasons to use each summary statistic, but most often a safe assumption is to report the posterior mean $\pm$ posterior standard devition.
-
-From a decision theory standpoint there technically are mathematical ways to determine which point estimate is the best to use in certian instances, but that is beyond the scope of this tutorial. However, here are the answers that come from magic (maybe I will post the proofs in the appendix:
-
-1. If the loss function is quadratic, the best estimate is the posterior mean.
-2. If the loss function is an absolute loss, the best estimate is the posterior median.
-3. If the loss function is an All-or-nothing loss, the best estimate is the posterior mode
-
-The posterior mode is just the expected value of the parameter estimate, using the posterior distribution.
-
-Recall that a mode is simply the most frequent point in a data set. In a Bayesian distribution, this refers to the peak of the distribution (the parameterestimate with the highest overall weight). 
-
-The posterior median refers to the value which divides the distribution in half. This is a bit more challenging to calculate by hand (and is the least frequently used summary statistic) but it is worth seeing where this value comes from.
-
-We need to find the value $\theta$ which has 50\% of the probability to the left and 50\% to the right. It is also worth noting that the median is tricky to calculate for discrete distributions (hence why it is rarely seen).
-
-
-Credible Intervals
-
-There is a lot to say about the difference between Bayesian Credible Intervals and Classical Confidence Intervals. I will avoid this entire discourse and just say that in Bayesian statistics a Credible Interval is the interval in which we have a 95\% probabilistic belief the parameter is in that interval.
-
-In Chapter 1, Thinking Probabilistically, we introduced the concept of posterior predictive checks, and, in subsequent chapters, we have used it as a way to evaluate how well models explain the same data that's used to fit the model. The purpose of posterior predictive checks is not to dictate that a model is wrong; we already know that! By performing posterior predictive checks, we hope to get a better grasp of the limitations of a model, either to properly acknowledge them, or to attempt to improve the model. Implicit, in the previous statement is the fact that models will not generally reproduce all aspects of a problem equally well. This is not generally a problem given that models are built with a purpose in mind. A posterior predictive check is a way to evaluate a model in the context of that purpose; thus, if we have more than one model, we can use posterior predictive checks to compare them.
-
-%================================================================
-%\section{Summarizing the Posterior}
-%================================================================
-
-In Bayesian inference, posterior beliefs about parameters are updated according to \textit{Bayes' theorem} upon observing data.  
-
-The mean of this posterior distribution gives a point estimate of $\theta$. 
-
-An interval having a posterior probability $.95$ gives a $95\%$ \textit{credibility} interval, an interval within which an unobserved parameter value falls with a particular probability, the Bayesian analogue of a $95\%$ confidence interval \cite[p. 777]{STK}.
-
-Credible intervals 
-
-HDI 
-
-Energy
-
-- mean, median, mode: point estimates
-
-- variance and standard deviation: spread -> uncertainty 
-
-- credible intervals, highest density posterior (hdp) 
-
-
-RMSE, true value, SEM 
-
-In practice, we generally do not have the value of the true parameter $\theta$ at hand. Instead, we have an estimation in the form of a posterior distribution. Thus, what we can do is find out the value of $\hat{\theta}$ that minimizes the expected loss function. By expected loss function, we mean the loss function averaged over the whole posterior distribution. 
-
-
-
-
-
-
-
-
-%================================================================
-%\section{Why Bayes?}
-%================================================================
-
-%End chapter with this? No, move to introduction

@@ -12,6 +12,14 @@ To avoid computational overflows and underflows, one should compute with the log
 
 \subsection{Numerical integration} 
 
+\section{Automatic Threshold Selection}
+
+Determining the tolerance parameter $\epsilon$ can be quite finicky.
+Requires knowledge about which distances we can expect between simulated and observed summary statistics.
+We can use the $p$-quantile as a criterion for automatic acceptance threshold selection
+We define the threshold as the $p$-quantile of the distances from from $N$ samples.
+pyLFI has procedures for this. We only need to provide the $p$-quantile instead of $\epsilon$. Using the 0.5-quantile amounts to accepting 50\% of the simulations, the 0.3-quantile 30\% of the simulations and so on. 
+
 
 \subsection{MCMC-ABC}
 
@@ -175,6 +183,19 @@ Post-sampling Adjustment
 See BAP 
 
 \section{Performance Metrics}
+
+The standard error of the mean (SEM) is the expected value of the standard deviation of means of several samples, this is estimated from a single sample as: 
+
+\begin{equation}
+    \mathrm{SEM} = \frac{s}{\sqrt{n}},
+\end{equation}
+
+where $s$ is standard deviation of the sample mean, $n$ is the sample size.
+
+RMSE, true value, SEM 
+
+In practice, we generally do not have the value of the true parameter $\theta$ at hand. Instead, we have an estimation in the form of a posterior distribution. Thus, what we can do is find out the value of $\hat{\theta}$ that minimizes the expected loss function. By expected loss function, we mean the loss function averaged over the whole posterior distribution. 
+
 
 by definition, there will be more posterior samples in the regions of high density in the KDE representation of the posterior. Thus, by averaging over all the posterior samples, we obtain an implicitly weighted error estimate that takes the width of the posterior into account. 
 

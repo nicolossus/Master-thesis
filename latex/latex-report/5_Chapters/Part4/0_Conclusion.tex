@@ -2,98 +2,13 @@
 \chapter{Summary}\label{chap:summary}
 %================================================================
 
-%================================================================
-\chapter{Conclusions}\label{chap:conclusions}
-%================================================================
-
-Armed with these insights
-
-We now turn to a discussion of
+Mechanistic models of neural dynamics are poorly suited for inference and lead to challenging inverse problems. The objective of this thesis is to investigate the ability and utility of simulation-based inference for identifying parameters in mechanistic models of neural dynamics. We have used two simulation-based inference algorithms; (i) \textit{Approximate Bayesian Computation} (ABC) with quantile-based rejection sampling and post-sampling regression adjustment; (ii) the neural density estimator \textit{Sequential Neural Posterior Estimation} (SNPE); to infer model parameters in the Hodgkin-Huxley model \cite{HH1952} and the Brunel network model \cite{Brunel2000}. The primary focus of the study was on ABC, and SNPE results are mostly for comparison. In this chapter, we summarize our findings. 
 
 %================================================================
-\chapter{Future Research}\label{chap:future}
-%================================================================
+\section{Sensitivity Analysis}
+%================================================================ 
 
-
-%================================================================
-\chapter{Summary \& Conclusions}\label{chap:Conclusion}
-%\chapter{Conclusion \& Future Research}\label{chap:Conclusion}
-%================================================================
-
-Introduce chapter briefly, remind reader of objective and what has been done. 
-
-In this thesis, we aim assess the ability and utility of simulation-based inference on mechanistic models of neural dynamics. We do this by using approximate Bayesian computation (ABC) with quantile-based rejection sampling and post-sampling local linear regression adjustment and snpe ... to investigate the identifiability of the Hodgkin-Huxley model and Brunel network model. 
-
-We have used the simulation-based inference algorithms called approximate Bayesian computation and snpe.
-
----
-
-SNL thesis
-
-In practice, in order to maintain the acceptance probability at manageable levels, we typically transform the data into a small number of features, also known as summary statistics, in order to reduce the dimensionality D. If the summary statistics are sufficient for inferring $\theta$, then turning data into summary statistics incurs no loss of information about $\theta$ (for a formal definition of sufficiency, see e.g. Wasserman, 2010, definition 9.32). However, it can be hard to find sufficient summary statistics, and so in practice summary statistics are often chosen based on domain knowledge about the inference task. A large section of the ABC literature is devoted to constructing good summary statistics (see e.g. Blum et al., 2013; Charnock et al., 2018; Fearnhead and Prangle, 2012; Prangle et al., 2014, and references therein).
-
-Sum stat discussion (from SNPE paper)
-
-When fitting mechanistic models to data, it is common to target summary features to isolate specific behaviors, rather than the full data. For example, the spike shape is known to constrain sodium and potassium conductances (Druckmann et al., 2007; Pospischil et al., 2008; Hay et al., 2011). When modeling population dynamics, it is often desirable to achieve realistic firing rates, rate-correlations and response nonlinearities (Rubin et al., 2015; Bittner et al., 2019), or specified oscillations (Prinz et al., 2004). Choice of summary features might also be guided by known limitations of either the model or the measurement approach, or necessitated by the fact that published data are only available in summarized form.  In all cases, care is needed when interpreting models fit to summary features, as choice of features can influence the results (Blum et al., 2013; Jiang et al., 2017; Izbicki et al., 2019).
-
-
-\section{Identifiability} 
-
-see HH ABC 
-
-We will assess the identifiability of the potassium and sodium conductance parameters by examining the width of the resulting posterior estimates. A wide, flat posterior on a parameter indicates a large number of equally optimal values, which suggests that the parameter may be unidentifiable.
-
-Application of these new techniques also allows us to explore the issue of model identifiability. By examining posterior distributions over model parameters, we can quantify and characterize model uncertainty, which can either inform us as to the ability of our data to constrain the model or the degree of biological variability in the system, as we outline below.
-
-If a cellular model were to have a non-unique optimal parametrization, with either several or infinitely many equally likely possibilities, the model may be deemed 'unidentifiable'. Unidentifiability can be divided into two types: structural unidentifiability, where the model is overly complex to describe the system (this is often called over-parametrization), and practical unidentifiability, where there are not enough data to fully constrain the model. Distinguishing between the two types of unidentifiability can be important for experimental design. Pinpointing a structural  unidentifiability, which is characterized by a functional relationship between several parameters (and thus infinitely many equally optimal parametrizations), may be cause for concern, and prompt changes in model formulation before attempting further experimentation. However, if there is a high degree of prior faith in the model formulation, this may instead suggest a biologically important redundancy in the system characterized by the functional relationship between biophysical parameters. Practical unidentifiability, on the other hand, may inform how additional experimental data might be collected in an effort to further constrain the model, or may be a representation of inherent variability of the biophysical parameters in the experimental system. 
-
-While there is no universally accepted automated means to assess identifiability, many different methods, such as parameter sensitivity analysis and analysis of curvature of an objective function, have been applied to cardiac cell models.   
-
-
-- parameter sensitivity analysis: uncertainpy 
-
-- analysis of curvature of an objective function: druckmann
-
-... have been applied to models of neural dynamics
-
----
-
-
-\section{ABC}
-
-ABC discussion 
-
-One of the principal topics of research in likelihood-free inference is how to obtain state-of-the-art results with fewer simulations. By dissecting and studying the methods in great detail, another aim is to contribute to this research within the time and scope a master thesis permits. 
-
-
-When in doubt, multiple prior distributions can be considered to assess the robustness of the results. 
-
-The resulting summary statistics (multiple statistics are allowed) from the simulated data set are compared to those from the empirical data, and if close enough, the parameter values used to simulate the data are retained and contribute to the posterior distribution. If, however, the simulated summary statistics are not close in value to those of the empirical data, the parameters are rejected. This process is repeated until enough replicates (at least a few thousand) are retained. 
-
-A major methodological advance in ABC is that rather than implementing the algorithm described above, parameter sets can be more heavily weighted if the resulting simulation more closely matches the summaries of real data (Beaumont et al. 2002). In this framework, one can accept parameter values that are not as close a match to the empirical data, increasing the efficiency of the ABC. This framework has been implemented in local linear regression models (Beaumont et al. 2002) as well as other nonlinear regression approaches (Blum \& Francois 2010). 
-
-ABC methods have several disadvantages. Firstly, the methods are highly computationally intensive, often involving billions of coalescent simulations, which may limit the parameter space explored and can lead to incorrect inference. However, the simplest ABC approaches are easily parallelizable and computational power is continuing to increase, potentially ameliorating this concern. Secondly, ABC approaches may not be efficient if the prior distributions are wide or if the type of model being considered is unlikely to generate the observed data. Under these conditions, a high proportion of parameter values will be rejected, although the local regression  approach discussed above will mitigate some of this concern. A more serious drawback is that the success of ABC inference may depend on the choice of summary statistics. If the summary statistics are not capturing enough information from the data or the relevant information for the parameters of interest, then the posterior distributions will appear similar to the prior distribution, suggesting that the data are noninformative. 
-
-
-The tuning necessary is also a challenge
-
-The efficiency of the method is, however, largely dependent on the efficieny of the simulator model. As an informal side note: all results in this thesis were produced on a personal laptop. Inference on the most time-consuming model, the Brunel network, took about 2 hours with ABC (2000 simulations) and 2.5 hours with SNPE (running 1000 (adaptively proposed) simulations to train the network). 
-
-Having found the optimal settings for the Hodgkin-Huxley model, the final posteriors only needed the results of all the all simulations presented
-
-\section{Sum stats}
-
-figure x shows how the Hodgkin-Huxley model is more tightly constrained by increasing the number of summary statistics. Though, if we use summary statistics that do not capture relevant information for the parameters of interest it might lead to worse inference, as seen in the figure for the latency to first spike and accommodation index statistics.  
-
-However, this result showcases the importance of carrying out a sensitivity analysis on the model parameters. Uncertainpy
-
-explanatory power
-
-the success of ABC inference depends on the choice of summary statistics. If the summary statistics are not capturing enough information from the data or the relevant information for the parameters of interest, then the posterior distributions will appear similar to the prior distribution, suggesting that the data are noninformative. 
-
-Expected unidentifiability: SR state Brunel, biophysical explanation. In this state of neurons firing almost synchronously at high rates, the spiking activity is to a large extent generated by the network population itself due to the recurrent connections. (Positive feedback). Thus, will the external input play a lesser role. The $\eta$ parameter that describes the amount/strength of external input (background rate) will therefore be overshadowed by the internal drive of the activity if the internal rate is significantly larger. Also seen in/confirmed by Uncertainpy analysis.
-
-\section{Weighting scheme}
+What we did, and what we found, why pearson might not be the best approach
 
 pearson correlation coefficient
 
@@ -115,26 +30,96 @@ Use Pearson's Coefficient of Correlation to weight importance of summary statist
 
 * vekte utifra sensitivitet
 
-\textbf{Relevant papers:}
+%================================================================
+\section{Approximate Bayesian Computation}
+%================================================================ 
 
-H. Jung and P. Marjoram (2011). "Choice of Summary Statistic Weights in Approximate Bayesian Computation". \url{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3192002/}
+One of the principal topics of research in likelihood-free inference is how to obtain state-of-the-art results with fewer simulations. By dissecting and studying the methods in great detail, another aim is to contribute to this research within the time and scope a master thesis permits. 
 
-* Develops a Genetic Algorithm that computes how one should weight the summary statistics 
+ABC: Sampling and rejection methods. In this essay, two types of ABC methods were discussed: the vanilla rejection ABC, and the more sophisticated variant Markov chain Monte Carlo ABC. There are, however, more advanced refinements that can be explored further, such as partial least squares dimension reductions for summaries and post-processing regression adjustments. An excellent point of departure for material on improvements is the video lecture by Nott [11].
+• ABC: General pitfalls and remedies. ABC has been successfully applied to a wide range of problems with an complex or absent associated likelihood. There are, however, several pitfalls to be aware of. The approach is simulation intensive, requires tuning of the tolerance threshold, discrepancy function and weighting function, and suffers from a curse of dimensionality of the summary statistic [5, p. 322]. Therefore, refinements to the methods that may remedy some of the pitfalls should be explored. A point of departure could be [5] and its suggested further reading. 
 
-* Fairly advanced, so we won't implement their approach, but should be mentioned in thesis
+---
 
-\section{ABC methods}
+A major methodological advance in ABC is that rather than implementing the algorithm described above, parameter sets can be more heavily weighted if the resulting simulation more closely matches the summaries of real data (Beaumont et al. 2002). In this framework, one can accept parameter values that are not as close a match to the empirical data, increasing the efficiency of the ABC. This framework has been implemented in local linear regression models (Beaumont et al. 2002) as well as other nonlinear regression approaches (Blum \& Francois 2010). 
+
+ABC methods have several disadvantages. Firstly, the methods are highly computationally intensive, often involving billions of coalescent simulations, which may limit the parameter space explored and can lead to incorrect inference. However, the simplest ABC approaches are easily parallelizable and computational power is continuing to increase, potentially ameliorating this concern. Secondly, ABC approaches may not be efficient if the prior distributions are wide or if the type of model being considered is unlikely to generate the observed data. Under these conditions, a high proportion of parameter values will be rejected, although the local regression  approach discussed above will mitigate some of this concern. A more serious drawback is that the success of ABC inference may depend on the choice of summary statistics. If the summary statistics are not capturing enough information from the data or the relevant information for the parameters of interest, then the posterior distributions will appear similar to the prior distribution, suggesting that the data are noninformative. 
+
+
+The tuning necessary is also a challenge
+
+
+
+%================================================================
+\subsection{Choice of ABC Algorithm}
+%================================================================
+
+
+The efficiency of the method is, however, largely dependent on the efficieny of the simulator model. As an informal side note: all results in this thesis were produced on a personal laptop. Inference on the most time-consuming model, the Brunel network, took about 2 hours with ABC (2000 simulations) and 2.5 hours with SNPE (running 1000 (adaptively proposed) simulations to train the network). 
 
 rejection abc not efficient if the prior .. posterior. MCMC, as discussed in theory section, improves on this by ... 
 
 There are more advanced importance sampling ABC methods that builds on the MCMC approach: SMC, PMC, HMC - ABC (link to papers)
 
+%================================================================
+\subsection{Choice of Summary Statistics}
+%================================================================
 
-\section{Uncertainpy}
+For our purposes, requiring that S.Y/ be sufficient is problematic because we
+can’t examine an unknown or intractable likelihood to determine if the Fisher- Neyman Factorization Theorem holds. Although there are a growing number of different strategies for resolving the sufficiency problem [42], the most common approach has been to select a large set of summary statistics and hope that this set of statistics is large enough that it is at least close to being jointly sufficient for the parameters of interest. While adding more summary statistics to this set will
+
+tend to provide more information about theta, sufficiency can still never be guaranteed, and some summary statistics may provide identical information about the model parameters. When a set of summary statistics are not sufficient for the parameters, then the influence of the information conveyed by the observed data will be weaker, resulting in posterior distributions that are inaccurate, particularly with respect to the degree of variability in the estimated posteriors
+
+
+---
+
+A further motivation for this approach is that real-world experiments often are interested in capturing summary statistics of the experimental data. 
+
+In practice, in order to maintain the acceptance probability at manageable levels, we typically transform the data into a small number of features, also known as summary statistics, in order to reduce the dimensionality D. If the summary statistics are sufficient for inferring $\theta$, then turning data into summary statistics incurs no loss of information about $\theta$ (for a formal definition of sufficiency, see e.g. Wasserman, 2010, definition 9.32). However, it can be hard to find sufficient summary statistics, and so in practice summary statistics are often chosen based on domain knowledge about the inference task. A large section of the ABC literature is devoted to constructing good summary statistics (see e.g. Blum et al., 2013; Charnock et al., 2018; Fearnhead and Prangle, 2012; Prangle et al., 2014, and references therein).
+
+
+figure x shows how the Hodgkin-Huxley model is more tightly constrained by increasing the number of summary statistics. Though, if we use summary statistics that do not capture relevant information for the parameters of interest it might lead to worse inference, as seen in the figure for the latency to first spike and accommodation index statistics.  
+
+However, this result showcases the importance of carrying out a sensitivity analysis on the model parameters. Uncertainpy
+
+explanatory power
+
+the success of ABC inference depends on the choice of summary statistics. If the summary statistics are not capturing enough information from the data or the relevant information for the parameters of interest, then the posterior distributions will appear similar to the prior distribution, suggesting that the data are noninformative. 
+
+
+%================================================================
+\subsection{Choice of Distance Metric}
+%================================================================ 
+
+While the choice of summary statistics is of primary importance, the choice of distance metric can also have a substantial impact on the quality of the posterior approximation. In the present study, we used the Euclidean distance. This amounts to a circular acceptance region, as illustrated by \autoref{fig:abc_illustration}, which implies independence and identical scales of the summary statistics. In order to suppress domination of the summary statistics with largest scale, we used a weighted version of the Euclidean distance that scaled the summary statistics with their respective standard deviation estimated from the prior predictive distribution. Moreover, we also weighted the importance of the summary statistics based on the sensitivity analysis. Despite these efforts, the Euclidean distance might not have the acceptance region that results in the most accurate ABC posterior approximation. If we, reasonably, suppose that the different summary statistics are dependent and on different scales, their true distribution under the model may be better represented by an elliptical acceptance region rather than a circular. However, the different levels of information encoded by the different summary statistics make finding the optimal acceptance region a challenge. Even with different scales and dependences, a circular acceptance region might result in a more accurate ABC posterior approximation than an elliptical region because the circular is better tied up with the most informative statistics. How the best acceptance region is connected with the choice of summary statistics is discussed by Prangle in \cite{prangle_distance}. 
+
+
+%================================================================
+\section{Identifiability}
+%================================================================  
+
+see HH ABC 
+
+We will assess the identifiability of the potassium and sodium conductance parameters by examining the width of the resulting posterior estimates. A wide, flat posterior on a parameter indicates a large number of equally optimal values, which suggests that the parameter may be unidentifiable.
+
+Application of these new techniques also allows us to explore the issue of model identifiability. By examining posterior distributions over model parameters, we can quantify and characterize model uncertainty, which can either inform us as to the ability of our data to constrain the model or the degree of biological variability in the system, as we outline below.
+
+If a cellular model were to have a non-unique optimal parametrization, with either several or infinitely many equally likely possibilities, the model may be deemed 'unidentifiable'. Unidentifiability can be divided into two types: structural unidentifiability, where the model is overly complex to describe the system (this is often called over-parametrization), and practical unidentifiability, where there are not enough data to fully constrain the model. Distinguishing between the two types of unidentifiability can be important for experimental design. Pinpointing a structural  unidentifiability, which is characterized by a functional relationship between several parameters (and thus infinitely many equally optimal parametrizations), may be cause for concern, and prompt changes in model formulation before attempting further experimentation. However, if there is a high degree of prior faith in the model formulation, this may instead suggest a biologically important redundancy in the system characterized by the functional relationship between biophysical parameters. Practical unidentifiability, on the other hand, may inform how additional experimental data might be collected in an effort to further constrain the model, or may be a representation of inherent variability of the biophysical parameters in the experimental system. 
+
+%================================================================
+\subsection{The Hodgkin-Huxley Model}
+%================================================================ 
 
 Hodgkin-Huxley, reason for why $\bar{g}_\mathrm{K}$ is better constrained than $\bar{g}_\mathrm{Na}$:
 
 The sensitivity analysis reveals that the variance in the membrane potential mainly is due to the uncertainty in two parameters: the maximum conductance of the $\mathrm{K}^+$ channel, $\bar{g}_\mathrm{K}$, and the $\mathrm{Na}^+$ reversal potential, $E_\mathrm{Na}$.
+
+A similar study of using ABC to constrain the Hodgkin-Huxley model parameters was carried out in .. hh abc .. They primarily focused on constraining the rate parameters, and were also able to successfully identify the parameters.  
+
+
+%================================================================
+\subsection{The Brunel Network Model}
+%================================================================ 
 
 Brunel 
 
@@ -146,7 +131,43 @@ Supported by the findings of (uncertainpy paper), where a sensitivity analysis o
 
 In the AI state, the network was found to be most sensitive to the relative strength of inhibitory synapses $g$. The $\eta$ parameter also plays a role in the AI state, but not as much as $g$. The synaptic delay $D$ plays no role. 
 
+SNPE both Brunel states
+
+Expected unidentifiability: SR state Brunel, biophysical explanation. In this state of neurons firing almost synchronously at high rates, the spiking activity is to a large extent generated by the network population itself due to the recurrent connections. (Positive feedback). Thus, will the external input play a lesser role. The $\eta$ parameter that describes the amount/strength of external input (background rate) will therefore be overshadowed by the internal drive of the activity if the internal rate is significantly larger. Also seen in/confirmed by Uncertainpy analysis.
+
+%================================================================
+\subsection{Constraining Model Parameters}
+%================================================================ 
+
+
+When fitting mechanistic models to data, it is common to target summary features to isolate specific behaviors, rather than the full data. For example, the spike shape is known to constrain sodium and potassium conductances (Druckmann et al., 2007; Pospischil et al., 2008; Hay et al., 2011). When modeling population dynamics, it is often desirable to achieve realistic firing rates, rate-correlations and response nonlinearities (Rubin et al., 2015; Bittner et al., 2019), or specified oscillations (Prinz et al., 2004). Choice of summary features might also be guided by known limitations of either the model or the measurement approach, or necessitated by the fact that published data are only available in summarized form.  In all cases, care is needed when interpreting models fit to summary features, as choice of features can influence the results (Blum et al., 2013; Jiang et al., 2017; Izbicki et al., 2019).
+
+
+While there is no universally accepted automated means to assess identifiability, many different methods, such as parameter sensitivity analysis and analysis of curvature of an objective function, have been applied to cardiac cell models.   
+
+
+- parameter sensitivity analysis: uncertainpy 
+
+- analysis of curvature of an objective function: druckmann
+
+... have been applied to models of neural dynamics
+
+\textbf{Relevant papers:}
+
+H. Jung and P. Marjoram (2011). "Choice of Summary Statistic Weights in Approximate Bayesian Computation". \url{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3192002/}
+
+* Develops a Genetic Algorithm that computes how one should weight the summary statistics 
+
+* Fairly advanced, so we won't implement their approach, but should be mentioned in thesis
+
+%================================================================
 \section{Scalability}
+%================================================================ 
+
+We now turn to a discussion of scalability ... not investigated in this thesis. 
+
+SNPE has also been applied by the creators on several models of neural dynamics in \cite{SNPE_applied}. They were able to use SNPE to identify up to ... parameters. (scalability)
+
 
 We have only demonstrated the success of simulation-based inference on low dimensional problems, i.e., few parameters to identify. 
 
@@ -156,25 +177,20 @@ ABC have been shown to scale poorly to higher dimensions
 
 SNPE have been demonstrated to obtain good results for systems with about X free parameters (ref paper), but has yet to demonstrate scalability to problems like the V1 model. In its current state, one of the principal investigators behind SNPE, J. Macke, stated that SNPE is only able to infer up to a couple of dozen parameters, depending on the problem (ref: in conference).
 
+%================================================================
+\chapter{Conclusions}\label{chap:conclusions}
+%================================================================
 
-%----------------------------------------------------------------
-\section{Summary}\label{sec:summary}
-%----------------------------------------------------------------
-
-Summarize main findings. Connect results to the literature. 
-
-%----------------------------------------------------------------
-\section{Conclusion}\label{sec:conclusion}
-%----------------------------------------------------------------
+Armed with these insights .. conclusion
 
 Concluding remarks.
 
 A limiting factor of the ABC methods are that they are simulation intensive and the efficiency of the procedure depends on the the computational demands of the simulator.  
-ABC has been successfully applied to a wide range of problems with an complex or absent associated likelihood. There are, however, several pitfalls to be aware of. The approach is simulation intensive, requires tuning of the tolerance threshold, discrepancy function and weighting function, and suffers from a curse of dimensionality of the summary statistic.  
+ABC has been successfully applied to a wide range of problems with an complex or absent associated likelihood. There are, however, several pitfalls to be aware of. The approach is simulation intensive, requires tuning of the tolerance threshold, discrepancy function and weighting function, and suffers from a curse of dimensionality of the summary statistic. 
 
-%----------------------------------------------------------------
-\section{Future Research}\label{sec:future}
-%----------------------------------------------------------------
+%================================================================
+\chapter{Future Research}\label{chap:future}
+%================================================================
 
 Possible future studies. Reference other relevant studies. 
 
