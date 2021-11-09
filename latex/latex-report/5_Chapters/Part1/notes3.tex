@@ -1,0 +1,197 @@
+%================================================================ 
+\subsubsection{HH in neural simulation software}
+%================================================================ 
+
+\url{http://nelson.beckman.illinois.edu/courses/physl317/part1/Lec3_HHsection.pdf}
+
+In neural simulation software packages, the rate constants in HH-style models are often parameterized using a generic functional form:
+
+\begin{equation*}
+    \alpha (V) = \frac{A + BV}{C + H \exp \qty(\frac{V+D}{F})}
+\end{equation*}
+
+In general, this functional form may require up to six parameters $(A, B, C, D, F, H)$ to fully specify the rate equation. However, in many cases adequate fits to the data can be obtained using far fewer parameters. Fortunately, Eq. 29 is flexible enough that it can be transformed into simpler functional forms by setting certain parameters to either 0 or 1. For example, if the voltage clamp data can be adequately fit by an exponential function over the relevant range of voltages, then setting $B=0$, $C=0$, $D=0$ and $H=1$ in Eq. 29, results in a simple exponential form,
+$\alpha(V) = A \exp(-V / F)$ , with just two free parameters ($A$ and $F$) to be fit to the data. Similarly, setting B=0, C=1 and H=1 gives a sigmoidal function with three free parameters ($A$, $D$, and $F$).
+
+One other technical note is that certain function forms can become indeterminate at
+certain voltage values. For example, the expression for $(V)$ an in Eq. 23 evaluates to the indeterminate form $0/0$ at $V=10$. The solution to this problem is to apply L’Hospital’s rule, which states that if $f(x)$ and $g(x)$ approach $0$ as $x$ approaches $a$, and $f'(x)/ g'( x)$ approaches $L$ as $x$ approaches $a$, then the ratio $f (x)/ g( x)$ approaches $L$ as well. Using this rule, it can be shown
+that $\alpha_n (10) = 0.1$. When implementing HH-style rate functions in computer code, care must be taken to handle such cases appropriately.
+
+Stability
+
+\url{https://timvieira.github.io/blog/post/2014/02/11/exp-normalize-trick/}
+
+\url{https://gregorygundersen.com/blog/2020/02/09/log-sum-exp/}
+
+
+Suggestions for how to diagnose the problems you may encounter:
+
+\begin{enumerate}
+    \item Start small and add complexities incrementally, testing at every step. It doesn't matter how smart you are, how facile you may be with programming, or how hard you work -- frustration and debugging nightmares are guaranteed if you try to do it all in one pass.
+    \item Use modlunit to verify consistency of units. modlunit will also pick up many programming errors.
+    \item Make sure that all ionic conductances have the desired properties. Plot the alphas and betas as functions of membrane potential. Do "voltage clamp" experiments on a single compartment model and plot the time course of m, h, n, gna, gk, ina, and ik. Also make sure that leak current has the correct voltage dependence.
+    \item Use L'hospital's rule to avoid rate constant formulas that become indeterminate (0/0) (alphan and alpham). Look at hh.mod for an example. \url{https://github.com/neuronsimulator/nrn/blob/master/src/nrnoc/hh.mod}
+\end{enumerate}
+
+\section{SNPE}
+
+Sequential Neural Posterior Estimation (SNPE)\footnote{Source code available at \url{https://github.com/mackelab/delfi}} is a novel method for parameter inference. The method uses ABC to learn a neural network which maps features of observed data to the posterior distribution over parameters. The strategy was originally proposed by Papamakarios and Murray in \cite{papamakarios2016fast} and further developed by Lueckmann et al. in \cite{SNPE17} and \cite{SNPE19}. In the literature, the variant of Papamakarios and Murray is often referred to as SNPE-A and the variant of Lueckmann et al. as SNPE-B. In this essay, SNPE refer to the particular method by Lueckmann et al.
+
+A \textit{conditional neural density estimator} is a parametric density model $q_{\bm{\phi}}$ (such as a neural network), where $\bm{\phi}$ are distribution parameters. With a pair of datapoints $(\bm{u}, \bm{v})$ as input, the model outputs a conditional probability density $q_{\bm{\phi}}(\bm{u}\mid \bm{v})$. Given a set of training data $\qty{\bm{u}_n, \bm{v}_n}_{1\colon N}$ that are independent and identically distributed according to a joint probability density $p(\bm{u}, \bm{v})$, $q_{\bm{\phi}}$ is trained by minimizing the loss $\mathcal{L} = - \sum_n \log q_{\bm{\phi}}(\bm{u}_n, \bm{v}_n)$ with respect to $\bm{\phi}$. With enough training data, and with a sufficiently flexible model, $q_{\bm{\phi}}(\bm{u}\mid \bm{v})$ will learn to approximate the conditional $p(\bm{u}\mid \bm{v})$ \cite{SNL18}. 
+
+A neural density estimator $q_{\bm{\phi}}(\bm{\theta} \mid \bm{x})$ can be used to approximate the posterior $p \qty(\bm{\theta}\mid \bm{x}_0)$ as follows. First, a set of samples $\qty{\bm{\theta}_n , \bm{x}_n}_{1\colon N}$ is obtained from the joint distribution $p (\bm{\theta}, \bm{x})$, by $\bm{\theta}_n \sim \prior$ and $\bm{x}_n \sim p \qty(\bm{x} \mid \bm{\theta}_n)$ for $n=1, ..., N$. Then, $q_{\bm{\phi}}$ is trained using $\qty{\bm{\theta}_n , \bm{x}_n}_{1\colon N}$ as training data in order to a global approximation of $\posterior$. Finally, $p \qty(\bm{\theta} \mid \bm{x}_0)$ can be simply estimated by $q_{\bm{\phi}} \qty(\bm{\theta} \mid \bm{x}_0)$. In order to obtain an accurate posterior fit, this approach may require a large number of simulations to sample enough training data in the vicinity of $\bm{x}_0$ \cite{SNL18}. 
+
+SNPE is a strategy for reducing the number of simulations needed by conditional neural estimation. Since simulations from parameters with low posterior density $p \qty(\bm{\theta} \mid \bm{x}_0)$ may not be useful in training $q_{\bm{\phi}}$, the key idea of SNPE is to generate parameter samples $\bm{\theta}_n$ from a proposal $\tilde{p}(\bm{\theta})$, that generates data $\bm{x}_n$ more likely to be in the vicinity of $\bm{x}_0$,  instead of the prior $\prior$ \cite{SNL18}. However, minimizing $\mathcal{L}$ on samples drawn from a proposal $\tilde{p}(\bm{\theta})$ no longer yields the target posterior but rather the \textit{proposal posterior}
+\begin{equation}
+    \tilde{p}(\bm{\theta} \mid \bm{x}) = p (\bm{\theta} \mid \bm{x}) \frac{\tilde{p}(\bm{\theta}) p(\bm{x}) }{\prior \tilde{p}(\bm{x}) },
+\end{equation}
+where $\tilde{p}(\bm{x}) = \int \tilde{p} (\bm{\theta}) \lhood d\bm{\theta}$ and it is assumed that $\tilde{p} (\bm{\theta})=0$ where $\prior = 0$ \cite{apt}. Hence, to account for sampling from a proposal $\tilde{p}(\bm{\theta})$, an adjustment of either the learned posterior or the proposed samples must be made. 
+
+Lueckmann et al. deal with this problem by adjusting the parameter samples $\bm{\theta}_n$ by assigning them weights $w_n = p \qty(\bm{\theta}_n)/ \tilde{p} \qty(\bm{\theta}_n)$. During training SNPE minimizes an importance weighted loss $- \sum_n w_n \log q_{\bm{\phi}}(\bm{\theta}_n \mid \bm{x}_n)$, which allows for direct recovery of $p \qty(\bm{\theta} \mid \bm{x})$ from $q_{\bm{\phi}}$ with no correction and no restrictions on $p(\bm{\theta})$, $\tilde{p}(\bm{\theta})$ or $q_{\bm{\phi}}$ \cite{apt}. However, the weights can have a high variance, which can lead to slow or inaccurate inference \cite{SNL18}.
+
+
+
+%================================================================
+\section{Elements of Neuronal Systems}
+%================================================================
+
+%================================================================
+\section{The Brain}
+%================================================================
+
+Neuronal modeling, as well as many other subdisciplines within computational neuroscience, grew directly out of Hodg- kin and Huxley’s seminal investigation of the action potential in the squid giant axon (Hodgkin and Huxley 1952d). One could even make a case that this study culminated with the first compartmental model. Using the newly invented voltage- clamp technique, Hodgkin and Huxley recorded ionic currents from the squid giant axon and, using clever ionic substitution and novel voltage-clamp experiments, isolated two voltage- gated conductances (Hodgkin and Huxley 1952a, 1952b, 1952c; Hodgkin et al. 1952). They then performed two stages of data reduction. First, they used standard chemical kinetics to analyze the voltage-dependence of the sodium and potassium conductances, thereby obtaining the rate constants for opening, closing, and inactivation of the conductances. Second, they reduced these rate constants to a small set of algebraic and differential equations describing the time and voltage depen- dence of the channels. This model explained and predicted the basis of the action potential in the squid giant axon (Hodgkin and Huxley 1952d). The entire model was derived from ex- perimental results and contains almost no parameters of unknown value (the values for the maximal conductances and number of gates being manually adjusted by Hodgkin and Huxley).
+
+%================================================================
+\section{The Neuron}
+%================================================================ 
+
+Neurons have a refractory period, a period of time after initiation of a spike that another AP cannot be elicited. There are two phases of the refractory period, the absolute refractory period, during which no matter the amplitude of the current injected, no AP can be initiated, and the relative refractory period, during which APs are inhibited, but not impossible to elicit.
+
+%================================================================
+\subsection{The Neuronal Membrane}
+%================================================================ 
+
+The cell body of every neuron is enclosed by a plasma \textit{membrane}. The electrical properties which underlie the membrane potential arise from the separation of intracellular and extracellular space by a cell membrane. The intracellular medium, cytoplasm, and the extracellular medium contain differing concentrations of various ions. Some key inorganic ions in nerve cells are: 
+
+\begin{itemize}
+    \item Positively charged \textit{cations}:
+    \begin{itemize}
+        \item $\mathrm{K}^+$, potassium
+        \item $\mathrm{Na}^+$, sodium 
+        \item $\mathrm{Ca}^{2+}$, calcium
+        \item $\mathrm{Mg}^{2+}$, magnesium
+    \end{itemize}
+    \item Negatively charged \textit{anions}:
+    \begin{itemize}
+        \item $\mathrm{Cl}^-$, chloride
+    \end{itemize}
+\end{itemize}
+
+
+Within the cell, the charge carried by anions and cations is usually almost balanced, and the same is true of the extracellular space. Typically, there is a greater concentration of extracellular sodium than intracellular sodium, and conversely for potassium. 
+
+The key components of the membrane are: 
+
+\textbf{Lipid bilayers:} The bulk of the membrane is composed of the 5 nm thick lipid bilayer. It is made up of two layers of lipids, which have their hydrophilic ends pointing outwards and their hydrophobic ends pointing inwards. It is virtually impermeable to water molecules and ions. This impermeability can cause a net build-up of positive ions on one side of the membrane and negative ions on the other. This leads to an electrical field across the membrane, similar to that found between the plates of an ideal electrical capacitor. 
+
+\textbf{Ion channels:} are pores in the lipid bilayer, made of proteins, which can allow certain ions to flow through the membrane. Some ion channels are voltage gated, meaning that they can be switched between open and closed states by altering the voltage difference across the membrane. Others are chemically gated, meaning that they can be switched between open and closed states by interactions with chemicals that diffuse through the extracellular fluid. The ion materials include sodium, potassium, chloride, and calcium. The interactions between ion channels and ion pumps produce a voltage difference across the membrane, typically a bit less than 1/10 of a volt at baseline. This voltage has two functions: first, it provides a power source for an assortment of voltage-dependent protein machinery that is embedded in the membrane; second, it provides a basis for electrical signal transmission between different parts of the membrane.
+
+--
+WIKI:
+
+Like all animal cells, the cell body of every neuron is enclosed by a plasma membrane, a bilayer of lipid molecules with many types of protein structures embedded in it. A lipid bilayer is a powerful electrical insulator, but in neurons, many of the protein structures embedded in the membrane are electrically active. These include ion channels that permit electrically charged ions to flow across the membrane and ion pumps that chemically transport ions from one side of the membrane to the other. Most ion channels are permeable only to specific types of ions. Some ion channels are voltage gated, meaning that they can be switched between open and closed states by altering the voltage difference across the membrane. Others are chemically gated, meaning that they can be switched between open and closed states by interactions with chemicals that diffuse through the extracellular fluid. The ion materials include sodium, potassium, chloride, and calcium. The interactions between ion channels and ion pumps produce a voltage difference across the membrane, typically a bit less than 1/10 of a volt at baseline. This voltage has two functions: first, it provides a power source for an assortment of voltage-dependent protein machinery that is embedded in the membrane; second, it provides a basis for electrical signal transmission between different parts of the membrane.
+
+\subsubsection{1. What is the neuronal membrane made of?}
+
+\textit{Lipid bilayers:} The bulk of the membrane is composed of the 5 nm thick lipid bilayer. It is made up of two layers of lipids, which have their hydrophilic ends pointing outwards and their hydrophobic ends pointing inwards. It is virtually impermeable to water molecules and ions. This impermeability can cause a net build-up of positive ions on one side of the membrane and negative ions on the other. This leads to an electrical field across the membrane, similar to that found between the plates of an ideal electrical capacitor.
+
+\textit{Ion channels} are pores in the lipid bilayer, made of proteins, which can allow certain ions to flow through the membrane. 
+
+\textit{Ionic pumps} are membrane-spanning protein structures that actively pump specific ions and molecules in and out of the cell. 
+
+\subsubsection{3. What is meant by the resting membrane potential?}
+
+There is an electrical potential difference across the cell membrane (difference between inside-outside of the neuron), called the \textit{membrane potential}. In neurons the membrane potential is used to transmit and integrate signals, sometimes over large distances. A resting (non-signaling) neuron has a voltage across its membrane called the \textit{resting membrane potential}. 
+
+\subsubsection{4. How big is typically the resting membrane potential?}
+
+The resting membrane potential is typically around -65 mV, meaning that the potential inside the cell is more negative than that outside.
+
+\subsubsection{5. What are the key ions setting up the neuronal membrane potential and mediating electrical signals?}
+
+Some key inorganic ions in nerve cells are: 
+
+\begin{itemize}
+    \item Positively charged \textit{cations}:
+    \begin{itemize}
+        \item $\mathrm{K}^+$, potassium
+        \item $\mathrm{Na}^+$, sodium 
+        \item $\mathrm{Ca}^{2+}$, calcium
+        \item $\mathrm{Mg}^{2+}$, magnesium
+    \end{itemize}
+    \item Negatively charged \textit{anions}:
+    \begin{itemize}
+        \item $\mathrm{Cl}^-$, chloride
+    \end{itemize}
+\end{itemize}
+    
+
+Within the cell, the charge carried by anions and cations is usually almost balanced, and the same is true of the extracellular space. Typically, there is a greater concentration of extracellular sodium than intracellular sodium, and conversely for potassium. 
+
+\subsubsection{6. What is an ion channel?}
+
+\textit{Ion channels} are pores in the lipid bilayer, made of proteins, which can allow certain ions to flow through the membrane. Some ion channels are voltage gated, meaning that they can be switched between open and closed states by altering the voltage difference across the membrane. Others are chemically gated, meaning that they can be switched between open and closed states by interactions with chemicals that diffuse through the extracellular fluid. The ion materials include sodium, potassium, chloride, and calcium. The interactions between ion channels and ion pumps produce a voltage difference across the membrane, typically a bit less than 1/10 of a volt at baseline. This voltage has two functions: first, it provides a power source for an assortment of voltage-dependent protein machinery that is embedded in the membrane; second, it provides a basis for electrical signal transmission between different parts of the membrane.
+
+\subsubsection{7. What are the two main categories of ion channels?}
+
+Active and passive
+
+\subsubsection{8. What is meant by an active channel?}
+
+\textit{Active channels:} can exist in open states, where it is possible for ions to pass through the channel, and closed states, in which ions cannot permeate through the channel. Whether an active channel is in an open or closed state may depend on the membrane potential, ionic concentrations or the presence of bound ligands, such as neurotransmitters.
+
+\subsubsection{9. What is meant by a passive channel?}
+
+\textit{Passive channels:} In contrast, passive channels do not change their permeability in response to changes in the membrane potential. Sometimes a channel’s dependence on the membrane potential is so mild as to be virtually passive.
+
+\subsubsection{10. What is an ion pump?}
+
+\textit{Ionic pumps} are membrane-spanning protein structures that actively pump specific ions and molecules in and out of the cell. Particles moving freely in a region of space always move so that their concentration is uniform throughout the space. Thus, on the high concentration side of the membrane, ions tend to flow to the side with low concentration, thus diminishing the concentration gradient. Pumps counteract this by pumping ions against the concentration gradient.
+
+\subsubsection{11. Which ion pump is particularly important for setting up the resting membrane potential?}
+
+The sodium-potassium exchanger. The sodium–potassium exchanger pushes $K^+$ into the cell and Na$^+$ out of the cell. For every 2 K$^+$ ions pumped into the cell, 3 Na$^+$ ions are pumped out, a net outward current that makes the inside of the cell negative.
+
+\subsubsection{12. What is an electrogenic pump?}
+
+
+\textit{Electrogenic pump:} An ion pump that generates net flow of charge. This requires energy, which is provided by the hydrolysis of one molecule of adenosine triphosphate (ATP), a molecule able to store and transport chemical energy within cells.
+
+The sodium–potassium exchanger is an electrogenic pump, as it genereates a net loss of charge in the neuron. 
+
+An example of a pump which is not electrogenic is the sodium–hydrogen exchanger, which pumps one H$^+$ ion out of the cell against its concentration gradient for every Na$^+$ ion it pumps in. In this pump, Na$^+$ flows down its concentration gradient, supplying the energy required to extrude the H$^+$ ion; there is no consumption of ATP.
+
+
+
+
+
+%================================================================
+\section{Action Potentials}
+%================================================================ 
+
+\subsubsection{Action Potentials 1}
+
+Action potentials are nerve signals. Neurons generate and conduct these signals along their processes in order to transmit them to the target tissues. Upon stimulation, they will either be stimulated, inhibited, or modulated in some way
+
+An action potential is caused by either threshold or suprathreshold stimuli upon a neuron. It consists of four phases; \textit{hypopolarization}, \textit{depolarization}, \textit{overshoot}, and \textit{repolarization}. 
+
+An action potential propagates along the cell membrane of an axon until it reaches the terminal button. Once the terminal button is depolarized, it releases a neurotransmitter into the synaptic cleft. The neurotransmitter binds to its receptors on the postsynaptic membrane of the target cell, causing its response either in terms of stimulation or inhibition.
+
+Action potentials are propagated faster through the thicker and myelinated axons, rather than through the thin and unmyelinated axons. After one action potential is generated, a neuron is unable to generate a new one due to its refractoriness to stimuli.
+
+<img src="figures/AP1.png" width = "400">
+
+
+\textit{Hypopolarization} is the initial increase of the membrane potential to the value of the threshold potential. The threshold potential opens voltage-gated sodium channels and causes a large influx of sodium ions. This phase is called the \textit{depolarization}. During depolarization, the inside of the cell becomes more and more electropositive, until the potential gets closer the \textit{electrochemical equilibrium (reversal potential)} for sodium of +61 mV. This phase of extreme positivity is the \textit{overshoot} phase.
+
+After the overshoot, the sodium permeability suddenly decreases due to the closing of its channels. The overshoot value of the cell potential opens voltage-gated potassium channels, which causes a large potassium efflux, decreasing the cell’s electropositivity. This phase is the \textit{repolarization} phase, whose purpose is to restore the resting membrane potential. Repolarization always leads first to \textit{hyperpolarization}, a state in which the membrane potential is more negative than the default membrane potential. But soon after that, the membrane establishes again the values of membrane potential.

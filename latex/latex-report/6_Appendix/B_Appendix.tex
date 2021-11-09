@@ -1,22 +1,73 @@
 %================================================================
-\chapter{Posterior Derivations of Gaussian Models}\label{sec:Appendix B}
+\chapter{Derivations}\label{sec:Appendix B}
 %================================================================
 
-%----------------------------------------------------------------
-\section{Gaussian with Unknown Mean}
-%---------------------------------------------------------------
+%================================================================ 
+\section{Alternative Hodgkin-Huxley Formulation}
+%================================================================ 
 
-Derivation
+We here provide an example on how the alternative formulation of the original Hodgkin-Huxley model with reversed polarity of the membrane potential and shifted resting potential to $-65\mV$ can be derived. In its original formulation, the potassium channel rate coefficient is on the form: 
+\begin{equation*}
+    \alpha_n = 0.01 \cdot \frac{V+10}{\exp \qty(\frac{V+10}{10})-1}.
+\end{equation*}
 
-%----------------------------------------------------------------
-\section{Gaussian with Unknown Variance}
-%---------------------------------------------------------------
+If we let $A=0.01$, $x=V+10$, and $y=10$, such that
 
-Derivation
+\begin{equation*}
+    \alpha_n = A \cdot \frac{x}{\exp \qty(\frac{x}{y})-1},
+\end{equation*}
 
-%----------------------------------------------------------------
-\section{Gaussian with Unknown Mean and Variance}
-%---------------------------------------------------------------
+we easily find that an alternative form is:
 
-Derivation
+\begin{equation*}
+    \alpha_n = A \cdot \frac{x}{\exp \qty(\frac{x}{y})-1} \cdot \frac{(-1)}{(-1)} = A \cdot \frac{-x}{1-\exp \qty(\frac{x}{y})} 
+\end{equation*}
+
+Reversing the polarity and shifting the resting membrane changes $x=(V+10)$ into $x = - (V+55)$. Inserted into the last equation, we obtain the alternative formulation:
+
+\begin{equation*}
+    \alpha_n = 0.01 \cdot \frac{V+55}{1 - \exp \qty(-\frac{V+55}{10})},
+\end{equation*}
+
+
+%================================================================ 
+\section{Derivation of vtrap}
+%================================================================ 
+
+Here, we provide a derivation of vtrap (\autoref{eq:vtrap}). The point of departure is
+
+\begin{equation*}
+    \mathrm{rate} = \frac{x}{\exp \qty(x/y) - 1}.
+\end{equation*}
+
+The Taylor series expansion of $\exp \qty(x / y)$ is
+
+\begin{equation*}
+    \exp \qty(x/y) = \sum_{n=0}^\infty \frac{\qty(x/y)^n}{n!},
+\end{equation*}
+
+and truncation at the second-order approximation gives 
+
+\begin{equation*}
+    \exp \qty(x/y) \approx 1 + \frac{x}{y} + \frac{\qty(x/y)^2}{2} + ...
+\end{equation*}
+
+Thus, 
+
+\begin{equation*}
+    \mathrm{rate} \approx \frac{x}{1 + \frac{x}{y} + \frac{\qty(x/y)^2}{2} - 1} = \frac{1}{\frac{1}{y} \qty(1 + \frac{x}{2y})} = \frac{y}{1 + \frac{x}{2y}}.
+\end{equation*}
+
+Next, we manipulate the expression further: 
+
+\begin{equation*}
+    \mathrm{rate} \approx \frac{y}{1 + \frac{x}{2y}} \cdot \frac{1 - \frac{x}{2y}}{1 - \frac{x}{2y}} = \frac{y \qty(1 - \frac{x}{2y}) }{1 - \qty(\frac{x}{2y})^2}.
+\end{equation*}
+
+If $x/y << 1$, then the term $\qty(x/2y)^2 \to 0$ much faster than $\qty(x / 2y)$. Thus, we can make the approximation: 
+
+\begin{equation*}
+    \mathrm{rate} \approx y \qty(1 - \frac{x}{2y})
+\end{equation*}
+for $x/y << 1$.
 

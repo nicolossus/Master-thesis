@@ -2,168 +2,83 @@
 \chapter{Methodology}\label{chap:methodology}
 %================================================================
 
-%================================================================
-\section{Computation}
-%================================================================
+% Methodology
+% Tables with model parameters 
+% Sensitivy analysis
+% ABC settings, 
+% - priors info - noninfo, why?
+% - distance 
+% - automatic threshold selection
+% - reg adjust, loc linear, epkov, why?
+% - error measure, RMSPE, SEM
 
-\subsection{Log densities}
+% outline of analysis (perhaps it should be a chapter?)
+% - state that we will (try to) identify gbarK & gbarNa, hh model
+% - create observed data and extract sumstats, verify the implementations
+% - sensitivity analysis
+% - focus on hh with abc under different settings (equal n samples)
+% - inspect posteriors + ppc
+% - test with noisy data -> include eq with current noise
+% - SBI on hh 
+%
+% - Move on to Brunel, eta and g
+% - create observation and extract sum stats, verify implementation
+% -- since brunelnet is expensive, create only a set for AI state
+% - sensitivity analysis
+% - ABC
+% -- check rmspe vs p-quantile, fixed amount of data
+% - posteriors + ppc
+% - SBI
+% - train on AI and SR state
+% - feed one example of each as observation
+% - inspect posteriors + ppc
 
-To avoid computational overflows and underflows, one should compute with the logarithm of posterior densities whenever possible. Exponentiation should be performed only when necessary and as late as possible; for example, in the Metropolis algorithm, the required ratio of two densities (11.1) should be computed as the exponential of the difference of the log-densities \cite[p. 261]{BDA}
+% About MCMC ABC
+% MCMC-ABC was also implemented in pyLFI, however, in order to focus the study on the objective, it is not included in the following analyses as it would not give any significant insights into the questions we seek than the more naive rejection sampler would. 
+% MCMC methods require a great deal of tuning and diagnosis in order to ensure that the chains actually have converged towards the stationary distribution and sample efficiently (has good mixing).
+% The use of MCMC ABC would add an unnecessary layer of complexity to the study.
+% Since the focus of this study is not the tuning of the ABC samplers to that extent, we will use the basic rejection sampler for the following analyses. MCMC ABC will not give any other insights that rejction ABC cannot answer for the study at hand 
+% However, we decided to include it in such detail because of the revolution MCMC methods brought to Bayesian statistics and that many of the advanced ABC samplers actually build on the MCMC approach. 
+% Although rejection and mcmc abc are not the best methods for sampling accurately and efficiently, and scale poorly to higher dimensional problems, they provide a solid basis for understanding more sophisticated/refined sampling schemes and post-hoc adjustments. They showcase that abc provides a robust framework for parameter identification
 
-\subsection{Numerical integration} 
-
-\section{Automatic Threshold Selection}
-
-Determining the tolerance parameter $\epsilon$ can be quite finicky.
-Requires knowledge about which distances we can expect between simulated and observed summary statistics.
-We can use the $p$-quantile as a criterion for automatic acceptance threshold selection
-We define the threshold as the $p$-quantile of the distances from from $N$ samples.
-pyLFI has procedures for this. We only need to provide the $p$-quantile instead of $\epsilon$. Using the 0.5-quantile amounts to accepting 50\% of the simulations, the 0.3-quantile 30\% of the simulations and so on. 
-
-
-\subsection{MCMC-ABC}
-
-Flip-ordering, accept prob first then simulation
-
-MCMC-ABC was also implemented in pyLFI, however, in order to focus the study on the objective, it is not included in the following analyses as it would not give any significant insights into the questions we seek than the more naive rejection sampler would. 
-
-\subsection{Sample Prior and Posterior Predictive} 
-
-Computationally, we approximate the integral in \autoref{eq:post_pred} as an iterative two-step process: 
-
-\begin{enumerate}
-    \item We sample a value of $\theta$ from the posterior $\posterior$. 
-    \item We feed the value of $\theta$ to the likelihood $\lhood$ in the case of Bayesian computation or the simulator model $\mathrm{M}(\theta)$ in the case of approximate Bayesian computation. 
-\end{enumerate}
-
-
-We can completely avoid doing the integration by generating samples from the prior distribution instead. Here is one way to generate prior predictive distributions: 
-
-Repeat the following many times: 
-
-\begin{enumerate}
-    \item Take one sample from each of the priors
-    \item Plug those samples into the probability density function to generate $\hat{y}$.
-\end{enumerate}
-
-
-\subsection{Distance function}
-
-\textbf{Relevant papers:}
-
-* H. Jung and P. Marjoram (2011). "Choice of Summary Statistic Weights in Approximate Bayesian Computation". \url{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3192002/}
-    * Develops a Genetic Algorithm that computes how one should weight the summary statistics 
-    * Fairly advanced, so we won't implement their approach, but should be mentioned in thesis
-* D. Prangle (2015). "Adapting the ABC distance function". \url{https://arxiv.org/pdf/1507.00874.pdf}
-    * Methods for adaptive distances
-    * Won't implement this either, but will use the weighted distance defined in the paper
-* S. Druckmann et al. (2007) "A novel multiple objective optimization framework for constraining conductance-based neuron models by experimental data". 
-    * MOO
-    
-    
-In the ABC algorithms, each simulation is converted to a vector of summary statistics $\mathbf{s} = (s_1, s_2, ..., s_m)$ and a distance between this and the summary statistics of the observed data, $\mathbf{s}_{obs}$, is calculated. Parameters producing distances below some threshold are accepted and form a sample from an approximation to the posterior. 
-
-However, without normalization of the summary statistics, we are comparing oranges with apples. The most variable summaries will dominate the distances because of their larger scales. Handling the scales of the summaries ... blabla ... important.  
-
-Normalizing the summaries so that they vary over roughly the same scale can be achieved by using a weighted Euclidean distance: 
-
-$$ d \left(\mathbf{s}, \mathbf{s}_{obs} \right) = \left[ \sum_{i=1}^m \left( \frac{s_i - s_{obs, i}}{\sigma_i} \right)^2 \right]^{1/2},$$
-
-where $\sigma_i$ is an estimate of the prior predictive standard deviation of the $i$th summary statistic. A convenient estimate is the empirical standard deviation of simulated $s_i$ values. The normalization we acquire from scaling by $\sigma_i$ prevents the distances from being dominated by the most variable summaries.  
-
-Furthermore, we should also weight the importance of the summary statistics ...
-
-\subsection{Sensitivity analysis} 
-
-pearson correlation coefficient
-
-Use Pearson's Coefficient of Correlation to weight importance of summary statistics.
-
-* This is a simple approach for producing weighted statistics 
-    * Method developed by H. Jung and P. Marjoram (2011) is more advanced and likely better
-* The correlation coefficient, $r$, relates $Y$ to $X$ 
-* The squared correlation coefficient, $r^2$, indicates the proportion of variance in $Y$ that is shared with (or accounted for) by $X$.
-
-**Cons of using Pearson's Coefficient of Correlation:**
-
-* Assumes:
-    1. Normality of data (meaning that the data should approximate the normal distribution; most data points should tend to hover close to the mean)
-    2. Homoscedasticity (means ‘equal variances’), i.e. a situation in which the variance of the dependent variable is the same for all the data.
-    3. Linearity; simply means that the data follows a linear relationship. 
-* (2. and 3. can be checked visually by scatter plot)
-* Is sensitive to outliers; outliers can can significantly skew the correlation coefficient and make it inaccurate. Outliers are also easy to spot visually from the scatter plot
-
-* vekte utifra sensitivitet
-
-\textbf{Relevant papers:}
-
-H. Jung and P. Marjoram (2011). "Choice of Summary Statistic Weights in Approximate Bayesian Computation". \url{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3192002/}
-
-* Develops a Genetic Algorithm that computes how one should weight the summary statistics 
-
-* Fairly advanced, so we won't implement their approach, but should be mentioned in thesis
-
-\subsection{Summary statistics weights}
-
-\textbf{Relevant papers:}
-
-H. Jung and P. Marjoram (2011). "Choice of Summary Statistic Weights in Approximate Bayesian Computation". \url{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3192002/}
-
-* Develops a Genetic Algorithm that computes how one should weight the summary statistics 
-
-* Fairly advanced, so we won't implement their approach, but should be mentioned in thesis
-
-* S. Druckmann et al. (2007) "A novel multiple objective optimization framework for constraining conductance-based neuron models by experimental data". 
 
 %================================================================
-\section{Notes}
+\section{Outline of Analyses}
+%================================================================ 
+
+Here, we provide a outline of the analyses that will be carried out, in order to motivate the following methodologies and give the reader an overview of what is to come. We keep this brief, as we will reiterate the objectives and expand on details as we go along. We broadly divide the analyses in two parts, one part concerning the inferential task on the Hodgkin-Huxley (HH) model and the other the Brunel network model. 
+
+%================================================================
+\subsection{Inference on Hodgkin-Huxley}
+%================================================================ 
+
+We use the original HH model for the potassium (\K), sodium (\Na) and leakage channels found in the squid giant axon membrane. We also use a formulation of the model where the membrane voltage has been reversed in polarity from the original HH convention and shifted to reflect a resting potential of $-65 \mV$. An example of how to arrive at the alternative formulation is provided in \autoref{sec:Appendix B}. The objective of the inferential task on the HH model is to identify the maximum conductance of the \K channel, $\gbarK$, and the maximum conductance of the \Na channel, $\gbarNa$. As such, the remaining parametrization will be kept fixed according to their original values, as tabulated in \autoref{tab:hh_model_parameters}.
+
+\begin{table}[!htb]
+  \caption{The parametrization of the Hodgkin-Huxley model.}
+  %\footnotesize%
+  \begin{center}
+    \rowcolors{2}{gray!15}{white}
+    \begin{tabular}{ccc}
+      \toprule
+      \textbf{Symbol} & \textbf{Value} & \textbf{Description} \\
+      \midrule
+      $V_\mathrm{rest}$ &  $-65 \mV$ & Resting membrane potential \\
+      \bottomrule
+    \end{tabular}
+  \end{center}
+  \label{tab:hh_model_parameters}
+\end{table}
+
+\url{https://neuronaldynamics.epfl.ch/online/Ch2.S2.html}
+
+
+In order to not skew the metrics, we will generate the same number of posteriors samples for each variation of a tuning parameter 
+
+%================================================================
+\subsection{Inference on Brunel Network}
 %================================================================
 
-Tabs to open again:
-
-\url{https://learning.oreilly.com/library/view/bayesian-analysis-with/9781789341652/0d1ffa98-7336-4d71-aade-88f0973f4b13.xhtml}
-
-\url{https://arxiv.org/pdf/2012.09612.pdf?fbclid=IwAR1xmEDRcPKHvcHK2KtQ1FO0B8K_yqKRlbPwdYuw0vv3-jjBTTR3CnMQEgY}
-
-\url{https://arxiv.org/pdf/1707.01254.pdf}
-
-\url{https://arxiv.org/pdf/1202.3819.pdf}
-
-\url{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1462356/pdf/12524368.pdf}
-
-\url{https://github.com/pymc-devs/pymc-examples/blob/main/examples/diagnostics_and_criticism/posterior_predictive.ipynb}
-
-\section{Choice of Priors}
-
-\url{https://en.wikipedia.org/wiki/Prior_probability}
-
-
-The choice of priors ... beyond the scope of this thesis. We will mainly be using flat (uniform) or informed (normal centered about the true value)
-
-Non- and weakly informative priors, p. 51 and 55 in BDA
-
-As we saw in sec coin flip, the influence of the prior diminishes as more data is available.  
-
-
-See LFI for cognitive science book, Ch. 2.1
-
-Although the steps listed above may give the impression that all likelihood- free algorithms are simple, this is unfortunately not the case. Many sophisticated techniques have been created in the hopes of increasing the efficiency of an algorithm on a given problem, and as one might expect, the efficiency of the algorithms below do vary by the type of problem to which they are applied. Because the algorithms we present later in this chapter are sometimes complex, we first introduce a few concepts at a high level by describing the different choices one can make at Steps 1, 2, or 3.
-
-
-The model performance when using a chosen active sensing scheme is defined as the Root Mean Squared Error (RMSE) over the predicted measurements, the lower the RMSE, the better the model performance, and hence the more accurate the map.
-
-The model accuracy can be evaluated by comparing the predicted measurements with respect to the ground truth values and evaluating the RMSE to associate a scalar value as a uniform performance measure for the model being considered.
-
-
-Since a single estimate amount to only a single stochastic trial, we perform 10 trials to see the spread. prior predictive distribution 
-
-
-distance 
-
-\url{https://stats.stackexchange.com/questions/15289/when-to-use-weighted-euclidean-distance-and-how-to-determine-the-weights-to-use}
-
-
-\subsection{Brunel Network}
 
 \url{https://link.springer.com/content/pdf/10.1023/A:1008925309027.pdf}
 
@@ -172,17 +87,275 @@ distance
 . However, the analysis does predict the transition
 toward such synchronized states as soon as the excitation starts to dominate over inhibition
 
+simulation budget
+
 %================================================================
-\section{Post-Processing of Posterior Samples}\label{sec:post_processing}
+\section{Computational Strategies}
 %================================================================
 
-Post-sampling Adjustment
+In this section, we present an assortment of computational strategies we will use. 
 
-\section{Sample The Prior and Posterior Predictive Distributions}
+% if no more subsections needs to be added, make the below a section
 
-See BAP 
+% add vtrap?
 
+%================================================================
+\subsection{Log Densities}
+%================================================================
+
+Whenever possible, we compute with logarithmic densities in order to avoid computational overflows and underflows. Exponentiation is performed only when necessary. The Metropolis algorithm (\cref{alg:metropolis}) is an example of where log densities should be used, as it requires evaluation of two densities in the calculation of the ratio. With log densities, the ratio is actually computed as the exponential of the difference of the log densities.   
+
+
+%================================================================
+\subsection{Sample from the Prior and Posterior Predictive} 
+%================================================================
+
+When we want to do posterior predictive checks, we need to sample from the posterior predictive distribution defined by \autoref{eq:post_pred}. This involves an integral which can be completely avoided by the following iterative two-step process:
+\begin{enumerate}
+    \item Sample a value of $\theta$ from the posterior $\posterior$. 
+    \item Generate a prediction $\hat{y}$ by feeding the value of $\theta$ to:
+    \begin{itemize}
+        \item[(a)] The likelihood $\lhood$ in the case of likelihood-based inference;
+        \item[(b)] The simulator model $\mathrm{M}(\theta)$ in the case of simulation-based inference. 
+    \end{itemize}
+\end{enumerate}
+
+The result of one iteration will be one sample from the posterior predictive distribution. 
+
+Following a similar logic, we can sample from the prior predictive distribution defined by \autoref{eq:prior_pred} via: 
+\begin{enumerate}
+    \item Sample a value of $\theta$ from the prior $\prior$. 
+    \item Generate a prediction $\hat{y}$ by feeding the value of $\theta$ to:
+    \begin{itemize}
+        \item[(a)] The likelihood $\lhood$ in the case of likelihood-based inference;
+        \item[(b)] The simulator model $\mathrm{M}(\theta)$ in the case of simulation-based inference. 
+    \end{itemize}
+\end{enumerate}
+
+%================================================================
+\subsection{vtrap} 
+%================================================================
+
+The HH model contains rate equations that are equivalent to expressions on the form:
+
+\begin{equation*}
+    \mathrm{rate} = \frac{x}{\exp \qty(x/y) - 1}.
+\end{equation*}
+
+However, such expressions are prone to computational overflow. If $x/y = 0$ or close to zero, then the denominator is zero or really small which leads to infinite or extremely large output. From Taylor series approximation, we can find that the above expression is approximated by:
+
+\begin{equation*}
+    \mathrm{rate} = y \qty(1 - \frac{x}{2y})
+\end{equation*}
+
+if $x/y << 1$. See \autoref{sec:Appendix B} for the derivation. This expression is similar to how the NEURON simulator \cite{neuron_book} handles indeterminate cases for HH style rate equations, and is called \textit{vtrap} in their software. We will also refer to this approximation as vtrap. The HH model rate equations on this form will thus be computed by:
+
+\begin{equation}\label{eq:vtrap}
+    \mathrm{vtrap} = \begin{cases}
+    y \qty(1 - \frac{x}{2y}) \qquad &\text{if } \frac{x}{y} << 1
+    \\
+    \frac{x}{\exp \qty(x/y) - 1} \qquad &\text{otherwise}
+    \end{cases}
+\end{equation}
+
+%================================================================
+\subsection{Extraction of Spiking Features} 
+%================================================================
+
+
+
+%================================================================
+\subsection{A More Efficient Metropolis Sampler}
+%================================================================
+
+Due to complex simulator models, it is not uncommon for the data generation step in ABC algorithms to be expensive and thereby dominate the computational overheads of the algorithms. In the MCMC ABC algorithm (\cref{alg:mcmcabc}), there is actually no need to run forward the simulator model if the proposal parameter is rejected by the Metropolis acceptance criterion, which typically will be less expensive to evaluate. Therefore, the MCMC ABC algorithm can, in general, be formulated in a more efficient manner by changing the order of the required computations, as shown in \cref{alg:mcmcabc_efficient}. 
+
+\begin{algorithm}[!htb]
+\caption{Efficient MCMC ABC with Metropolis sampler}
+\label{alg:mcmcabc_efficient}
+\SetAlgoLined
+\DontPrintSemicolon
+ % Algorithm 
+ \textbf{Initialize\,:}\;
+ \nl Sample $\theta_0$ by performing one iteration of rejection ABC (\cref{alg:rej_abc}).\;
+
+ \vspace{5mm}
+ \textbf{Sampling\,:}\;
+ \For{$t=1, ..., N$}{ 
+ \nl Generate proposal $\theta^* \sim q \qty(\theta^* \mid \theta_{t-1})$. \; 
+ \nl Calculate acceptance criterion $\alpha = \min \qty(1, \frac{\pi \qty(\theta^*)}{\pi \qty(\theta_{t-1})})$. \; 
+ \nl Sample $u \sim \mathrm{U}(0,1)$. \; 
+ \vspace{2mm}
+ \eIf{$u \leq \alpha$}{
+ \nl Simulate data $\ysim $ from $M \qty(\theta^*)$. \;
+ \nl Calculate $\rho \equiv \rho \qty(S \qty(\ysim), S \qty(\yobs)) = \rho \qty(\ssim, \sobs)$. \; 
+  \eIf{$\rho \leq \epsilon$}{
+  \nl  $\theta_t = \theta^*$\;
+  }{
+  \nl $\theta_t = \theta_{t-1}$\;
+  }
+   }{
+  \nl $\theta_t = \theta_{t-1}$\;
+  }
+ }
+\end{algorithm}
+
+
+%================================================================
+\subsection{Parallelization}
+%================================================================
+
+The ABC algorithms are so-called \textit{embarrassingly parallelizable}, which means there is little to no effort to divide the workload as the computations are independent. We will therefore parallelize the ABC samplers we implement ourselves. In the case of rejection ABC, we sample independent posterior samples. Hence, the prescribed number of posterior samples the sampler has to generate can be fairly divided between all available workers. In the case of MCMC ABC, the posterior samples are not independent due to the dependent Markov chains. Parallelizing a single chain is not a straightforward task, but we could let multiple chains sample independently in parallel. As each chain needs sufficient time to converge towards the stationary distribution, each will need a sufficient number of posterior samples to generate in its workload. 
+
+%================================================================
+\section{Correlation Analysis \& Importance Weights}
+%================================================================
+
+Some summary statistics may carry more information about a model parameter than others. As the ABC methodology is based on comparing simulated and observed summary statistics, the most informative summary statistics will typically be those with higher variability relative to movement of model parameter values. If we weight the summary statistics in accordance with the variability they exhibit relative to changes in model parameter values, the inferential algorithm might be able to constrain the model parameter better. The notion of weighting the summary statistics in this manner can be said to be a form of \textit{importance weighting}. We would then give larger weights to the summary statistics that are most sensitive to changes in model parameter value and smaller weights to those less sensitive. 
+
+There are numerous robust approaches to base the construction of importance weights on, for instance parameter sensitivity analysis \cite{uncertainpy} or analysis of curvature of an objective function \cite{druckmann}. We will, however, develop a rather simplistic approach where the importance weights are constructed based on correlation analysis. We landed on this approach simply because of the limited time available for carrying out a master project, and this aspect is of lesser importance than others in the study. Nevertheless, the idea behind basing the importance weights on correlation analysis follows. 
+
+Correlation analysis is a method to measure the strength of the linear relationship between the relative movements of two variables $X$ and $Y$. A common measure is Pearson's correlation coefficient $r$, which is defined as the ratio between the covariance of the variables and the product of their standard deviations: 
+
+\begin{equation}
+    r = \frac{\mathrm{cov}\qty(X, Y)}{\sigma_X \sigma_Y}.
+\end{equation} 
+
+As $r$ essentially is a normalized measurement of the covariance, the magnitude of the correlation will be a value between -1 and 1, where the sign indicates the direction of the relationship. A high correlation, i.e., when $r$ is close to 1 or -1, indicates a strong relationship, while $r=0$ points to no relation between the variables.
+
+Correlation analysis, in particular examination of the Pearson correlation coefficient matrix, can then be used to assess which model parameters contribute the most variability to the summary statistics.
+
+As this will indicate which of the summary statistics constrain the model parameters the best, correlation analysis can thus be used to select which summary statistics to use under the inference. %rewrite
+
+In practice, this requires us to perform a pilot study where we sample parameters from the prior predictive distribution and generate the corresponding summary statistics with the simulator model.  
+
+Furthermore, we can use the results from the correlation analysis to construct importance weights for the summary statistics. Given a vector of summary statistics $s = \qty(s_1, ..., s_m)$ and a vector of model parameters $\theta = \qty(\theta_1, ..., \theta_l)$, the following procedure will generate a vector of importance weights $w = \qty(w_1, ..., w_m)$: 
+\begin{enumerate}
+    \item Given paired samples $\qty{\qty(\theta_k^{(1)}, s_i^{(1)}), ..., \qty(\theta_k^{(n)}, s_i^{(n)})}$ consisting of $n$ pairs where we let $\qty(\theta_k^{(j)}, s_i^{(j)})$ indicate the $j$th sample, we first compute the Pearson correlation coefficient as:
+    \begin{equation*}
+    r_{i, k} = \frac{\sum_{j=1}^n \qty(\theta_k^{(j)} - \bar{\theta}_k) \qty(s_i^{(j)} - \bar{s}_i)}{\qty[\sum_{j=1}^n \qty(\theta_k^{(j)} - \bar{\theta}_k )^2 \sum_{j=1}^n \qty(s_i^{(j)} - \bar{s}_i )^2 ]^{1/2}},
+    \end{equation*}
+    where $\bar{\theta}_k$ and $\bar{s}_i$ are the sample means of the $k$th model parameter and the $i$th summary statistic, respectively.
+    \item The squared Pearson correlation coefficient, $r_{i,k}^2$, indicates the proportion of variance in $s_{i}$ that is accounted for by (or shared with) $\theta_k$. By definition, $r_{i,k}^2$ will be a number between 0 and 1 that can be used to weight the summary statistics. The summary statistics most sensitive to model parameter movements, will in this way be given a larger weight. Thus, we set the importance weight for $i$th summary statistic for the $k$th model parameter as:
+    \begin{equation*}
+        w_{i, k} = r_{i, k}^2.
+    \end{equation*}
+    \item Since the ABC algorithms do not facilitate comparison of summary statistics for individual model parameters, we need to average over all model parameters to obtain the importance weight of the $i$th summary statistic:
+    \begin{equation*}
+        w_i = \frac{1}{l} \sum_{k=1}^l w_{i, k}.
+    \end{equation*}
+    \item After obtaining all weights, we ensure that $\sum_{i=1}^m w_i = 1$ by setting each $w_i = w_i / \sum_{i=1}^m w_i$.
+\end{enumerate} 
+
+
+
+
+%================================================================
+\section{Configuration of ABC Algorithm}
+%================================================================ 
+
+Configuring an ABC algorithm for inference requires some choices. In particular, for the rejection ABC algorithm we need to set priors over the model parameters, select a discrepancy metric and a tolerance. In this section we discuss the particular choices we will make. 
+
+%================================================================ 
+\subsection{Choice of Priors}
+%================================================================ 
+
+In practice, the choice of priors over model parameters is a study in and of itself and beyond the scope of this thesis. For the present inferential tasks, the choice of priors also becomes artificial since we actually know the ground truths. 
+
+For the HH model's conductance parameters, we will emulate 
+
+For the 
+
+We will 
+
+We will, for the purpose of investigati
+
+The choice of priors is a study in and of itself on itself and beyond the scope of this thesis. We will, for the purpose of looking at two extremes, use priors that are either flat (uniform) or gaussian centered around the groundtruth with a scale that makes a particular parameter range likely to draw.
+
+---
+
+\url{https://en.wikipedia.org/wiki/Prior_probability}
+
+
+The choice of priors ... beyond the scope of this thesis. We will mainly be using flat (uniform) or informed (normal centered about the true value)
+
+since we are only going to deal with synthetic observed data, we have full control over 
+
+use two priors to emulate a situation where we believe all parameters within a range are equally possible, and one where we are a bit more informed - centered at ground truth
+
+Non- and weakly informative priors, p. 51 and 55 in BDA
+
+As we saw in sec coin flip, the influence of the prior diminishes as more data is available.  
+
+
+See LFI for cognitive science book, Ch. 2.1
+
+%================================================================
+\subsection{Discrepancy Metric}
+%================================================================
+
+In ABC algorithms, each simulation is converted to a vector of summary statistics $\ssim = \qty(s_{\mathrm{sim}}^{(1)}, s_{\mathrm{sim}}^{(2)}, ... , s_{\mathrm{sim}}^{(m)})$. We need to define a discrepancy metric that compares each of the simulated statistics in $\ssim$ to the corresponding ones in the vector of observed summary statistics $\sobs$. As discrepancy metric, we will use the Euclidean distance: 
+
+\begin{equation*}
+    \rho \qty(\ssim, \sobs ) = \norm{\ssim - \sobs}_2 = \qty[\sum_{i=1}^m \qty(\ssim^{(i)} - \sobs^{(i)} )^2 ]^{1/2}.
+\end{equation*}
+
+As illustrated by \autoref{fig:abc_illustration}, the Euclidean distance amounts to a circular acceptance region, which implies identical scales of the summary statistics. However, the summary statistics of spiking activity tend to be on quite different scales, and we will thus be in danger of comparing apples with oranges. The summary statistics with largest scales can dominate any distance calculation unless we normalize the summary statistics so that they vary roughly over the same scale. Scaling the summary statistics in such a manner can be achieved by using a weighted Euclidean distance: 
+
+\begin{equation*}
+    \rho \qty(\ssim, \sobs ) = \qty[\sum_{i=1}^m \qty(\frac{\ssim^{(i)} - \sobs^{(i)}}{\sigma^{(i)}} )^2 ]^{1/2},
+\end{equation*}
+
+where $\sigma^{(i)}$ is an estimator of the $i$th summary statistic scale. In practice, we need to sample parameters from the prior predictive, feed the parameters to the simulator model and then calculate the empirical scale from the resulting summary statistics. We will scale the summary statistics according to their standard deviation (SD) estimated from the prior predictive samples.  We could have chosen e.g. the median absolute deviation (MAD) as scale instead, which is a more robust estimator of scale than SD. However, if more than 50\% of the prior predictive samples for a particular summary statistic have identical values, MAD will equal zero. We therefore opt for the more reliable SD as scale. 
+
+To extend the above distance metric to include the importance weighting of the summary statistics, the distance metric will be on the form:
+
+\begin{equation}\label{eq:distance_metric}
+    \rho \qty(\ssim, \sobs ) = \qty[\sum_{i=1}^m w^{(i)} \qty(\frac{\ssim^{(i)} - \sobs^{(i)}}{\sigma^{(i)}} )^2 ]^{1/2},
+\end{equation}
+
+where $w^{(i)}$ is the importance weight of the $i$th summary statistic. If all $w^{(i)}=1$, then the summary statistics are equally weighted. We will use the Euclidean distance on the particular form given by \autoref{eq:distance_metric}. 
+
+%================================================================
+\subsection{Semi-Automatic Tolerance Selection}
+%================================================================
+
+Determining the tolerance parameter $\epsilon$ in the ABC algorithms can be quite finicky, as we usually do not know in advance exactly what a reasonable cutoff might be. Conceptually, it is easier to require the algorithm to accept some small proportion of the simulations rather than setting $\epsilon$ by hand. If we define the tolerance as the $q$-quantile of the distances from $n$ simulations, we avoid manually setting $\epsilon$. With this quantile-based rejection scheme, defining the tolerance as the 0.5-quantile of the distances amounts to accepting 50\% of the simulations, the 0.3-quantile 30\% of the simulations etc. 
+
+%Requires knowledge about which distances we can expect between simulated and observed summary statistics. We can use the $q$-quantile as a criterion for automatic acceptance threshold selection We define the threshold as the $q$-quantile of the distances from from $N$ samples. pyLFI has procedures for this. We only need to provide the $q$-quantile instead of $\epsilon$. Using the 0.5-quantile amounts to accepting 50\% of the simulations, the 0.3-quantile 30\% of the simulations and so on. 
+
+%================================================================
+\section{About MCMC ABC in this Study}
+%================================================================ 
+
+because MCMC methods have been instrumental in advancing Bayesian statistics
+
+MCMC-ABC was also implemented in pyLFI, however, in order to focus the study on the objective, it is not included in the following analyses as it would not give any significant insights into the questions we seek than the more naive rejection sampler would. 
+
+MCMC methods require a great deal of tuning and diagnosis in order to ensure that the chains actually have converged towards the stationary distribution and sample efficiently (has good mixing).
+
+The use of MCMC ABC would add an unnecessary layer of complexity to the study.
+
+Since the focus of this study is not the tuning of the ABC samplers to that extent, we will use the basic rejection sampler for the following analyses. MCMC ABC will not give any other insights that rejection ABC cannot answer for the study at hand 
+
+However, we decided to include it in such detail because of the revolution MCMC methods brought to Bayesian statistics and that many of the advanced ABC samplers actually build on the MCMC approach. 
+
+Although neither rejection nor mcmc abc are not the best methods for sampling accurately and efficiently, and scale poorly to higher dimensional problems, they provide a solid basis for understanding more sophisticated/refined sampling schemes and post-hoc adjustments. They showcase that abc provides a robust framework for parameter identification
+
+
+%================================================================
 \section{Performance Metrics}
+%================================================================
+
+ref sec summarizing the posterior
+
+---
+
+One metric/measure in and of itself might not tell the whole story, but by assessing and comparing the above mentioned measures the hope is that we will learn something about both the application of the method and the model itself
+
+---
+
+comparing the point estimate with the ground truth does not account for the width in the posterior, bad idea/measure. 
 
 The standard error of the mean (SEM) is the expected value of the standard deviation of means of several samples, this is estimated from a single sample as: 
 
@@ -201,6 +374,13 @@ by definition, there will be more posterior samples in the regions of high densi
 
 A performance metric in isolation does not necessarily tell the full story, but by using several measures we should be able to assess the goodness of fit. For each posterior over a model parameter we will therefore find the posterior RMSPE, the 95\%-HDI, the MAP estimate and do a PPC.
 
+The model performance when using a chosen active sensing scheme is defined as the Root Mean Squared Error (RMSE) over the predicted measurements, the lower the RMSE, the better the model performance, and hence the more accurate the map.
+
+The model accuracy can be evaluated by comparing the predicted measurements with respect to the ground truth values and evaluating the RMSE to associate a scalar value as a uniform performance measure for the model being considered.
+
+
+Since a single estimate amount to only a single stochastic trial, we perform 10 trials to see the spread. prior predictive distribution 
+
 ---
 
 sbi benchmark 
@@ -216,12 +396,40 @@ given parameters might be computationally intractable. Traditional algorithms fo
 setting [6] are based on Monte-Carlo rejection [7, 8], an approach known as Approximate Bayesian Computation (ABC). More recently, algorithms based on neural networks have been developed [9, 10, 11, 12, 13].
 These algorithms are not based on rejecting simulations, but rather train deep neural conditional density estimators or classifiers on simulated data. 
 
-%================================================================
-\subsection{Regression Adjustment}\label{sec:reg_adjust}
-%================================================================
 
 %================================================================
-\section{HH Feature Extraction}\label{sec:hh_feature_extract}
+%================================================================
+%================================================================
+%================================================================
+%================================================================
+%================================================================
+
+
+%================================================================
+\chapter{Computational Approach}\label{chap:comp_approach}
+%================================================================ 
+
+
+Showcase pylfi; there are two approaches to implementing rej abc; set n samples or sim budget n sim. We here demonstrate the former, as this will be used on hh to have the same number of posterior samples for each variation of hyperparameters. For bnet however we will use the approach of setting sim budget because of the costly sims
+
+%================================================================
+\section{Computation}
+%================================================================
+
+\subsection{Log densities}
+
+To avoid computational overflows and underflows, one should compute with the logarithm of posterior densities whenever possible. Exponentiation should be performed only when necessary and as late as possible; for example, in the Metropolis algorithm, the required ratio of two densities (11.1) should be computed as the exponential of the difference of the log-densities \cite[p. 261]{BDA}
+
+\subsection{Numerical integration} 
+
+\subsection{MCMC-ABC}
+
+Flip-ordering, accept prob first then simulation
+
+MCMC-ABC was also implemented in pyLFI, however, in order to focus the study on the objective, it is not included in the following analyses as it would not give any significant insights into the questions we seek than the more naive rejection sampler would. 
+
+%================================================================
+\section{Feature Extraction}\label{sec:hh_feature_extract}
 %================================================================
 
 \url{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2570085/pdf/fnins-01-007.pdf}
@@ -232,9 +440,16 @@ These algorithms are not based on rejecting simulations, but rather train deep n
 
 "Variability of Firing of Hodgkin-Huxley and FitzHugh-Nagumo Neurons with Stochastic Synaptic Input", David Brown, Jianfeng Feng, and Stuart Feerick 
 
+
+When fitting mechanistic models to data, it is common to target summary statistics to isolate specific behaviors, rather than the full data. For example, the spike shape is known to constrain potassium and sodium conductances. When modeling population dynamics, it is often desirable to achieve realistic firing rates or rate-correlations. Choice of summary statistics might also be guided by known limitations of either the model or the measurement approach, or necessitated by the fact that published data are only available in summarized form. 
+
+Many features of interest in neural models, e.g., the latency to first spike after stimulus onset, are only well defined in the presence of other features, e.g. the presence of spikes. 
+
+
 %================================================================
-\chapter{Computational Approach}\label{chap:comp_approach}
+\section{Notes}
 %================================================================
+
 
 See: Automatically Selecting a Suitable Integration Scheme for Systems of Differential Equations in Neuron Models
 
@@ -416,14 +631,6 @@ Uses continuous integration (CI) workflows, facilitated by GitHub Actions, to bu
 Sphinx to build the documentation. Readthedocs hosts the documentation and build environment. 
 
 PyPI to publish packages. 
-
-%================================================================
-\section{Method}\label{sec:Method}
-%================================================================
-
-%----------------------------------------------------------------
-\subsection{Project Method 1}\label{sec:project method}
-%----------------------------------------------------------------
 
 % the LFI methods: used own implementations (pylfi) and well-managed Python packages (ABCpy, sbi). => one goal is to see how they compare
 % optimization beyond the scope of this thesis => use the established tools for the final (complex) analyses. 

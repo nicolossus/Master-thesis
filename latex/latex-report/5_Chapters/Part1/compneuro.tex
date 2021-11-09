@@ -9,10 +9,40 @@
 \chapter{Neuroscientific Models}\label{chap:compneuro}
 %================================================================
 
+Conductance-based models
+The goal of conductance-based models is to model the biophysical mechanisms that give rise to action potentials in neurons and thereby get accurate predictions of neuron dynamics, such as the action potential shape. The various components related to the generation of action potentials are modeled as electrical circuit elements, and we are typically interested in how the membrane potential evolves with time.
+
+As ions are electrically charged, they exert forces on and experience forces from other ions. The force acting on an ion is proportional to the ion's charge. This impermeability can cause a net build-up of positive ions on one side of the membrane and negative ions on the other. This leads to an electrical field across the membrane, similar to that found between the plates of an ideal electrical capacitor.
 
 %================================================================
 \section{The Hodgkin-Huxley Model}
-%================================================================
+%================================================================ 
+
+\subsection{Channel Kinetics}
+
+In the standard HH model, the primary contribution to the initiation and propagation of single action potentials is made by the fast \Na channel. A single noninactivating voltage-dependent \K current provides spike repolarization. 
+
+The \Na current is calculated using the standard ohmic relation 
+
+\begin{equation*}
+    I_\mathrm{Na} = \gbarNa m^3 h \qty(V_\mathrm{m} - E_\mathrm{Na}),
+\end{equation*}
+
+where $I_\mathrm{Na}$ is the \Na current, $V_\mathrm{m}$ is the membrane potential, $E_\mathrm{Na}$ is the equilibrium potential for \Na (assumed to be $+50\mV$, and $m$ and $h$ are the activation and inactivation state variables, respectively. The variable $m$ ranges from $0$ (not activated) to $1$ (fully activated), and $h$ ranges from $0$ (fully inactivated) to $1$ (no inactivation). The maximal conductance is the product $\gbarNa = \gamma_\mathrm{Na} \rho_\mathrm{Na}$, where $\gamma_\mathrm{Na}$ is the single channel conductance and $\rho_\mathrm{Na}$ is the channel density. $I_\mathrm{Na}$ activation is described by the usual first order kinetic reaction, \ch{open <=> closed}, which yields steady-state value $m_\infty$ and time constant $\tau_m$ given by 
+
+\begin{align*}
+    m_\infty &= \frac{\alpha}{\alpha + \beta},
+    \\
+    \tau_m &= \frac{1}{\alpha + \beta},
+\end{align*}
+
+where $\alpha$ and $\beta$, the forward (opening) and backward (closing) reaction rates, respectively, are function of the local membrane potential.
+
+\subsection{HH}
+
+Unlike in the voltage clamp mode, where the membrane potential is held at a level determined by the experimenter, in "current clamp" mode the membrane potential is free to vary, and the amplifier records whatever voltage the cell generates on its own or as a result of stimulation.
+
+conductance - the degree to which an object conducts electricity, calculated as the ratio of the current which flows to the potential difference present. This is the reciprocal of the resistance, and is measured in siemens or mhos.
 
 Alan Hodgkin and Andrew Huxley described the model in 1952 to explain the ionic mechanisms underlying the initiation and propagation of action potentials in the squid giant axon.[1] They received the 1963 Nobel Prize in Physiology or Medicine for this work.
 
@@ -35,6 +65,16 @@ Alan Hodgkin and Andrew Huxley described the model in 1952 to explain the ionic 
     }
     \label{fig:hh_different_gs}
 \end{figure}
+
+
+%================================================================
+\subsection{Spike Statistics}\label{sec:spike_statistics}
+%================================================================ 
+
+
+\begin{equation}\label{eq:accomm_index}
+    A = \frac{1}{N -k - 1} \sum_{i=k}^N \frac{\mathrm{ISI}_i - \mathrm{ISI}_{i-1}}{\mathrm{ISI}_i + \mathrm{ISI}_{i-1}}
+\end{equation}
 
 %================================================================
 \section{The Brunel Network Model}
@@ -127,23 +167,15 @@ SI slow: Slow oscillation of the global activity, neurons firing irregularly at 
 \section{Notes}
 %================================================================
 
-%================================================================
-%\chapter{Computational Neuroscience}\label{chap:compneuro}
-%================================================================
+Neuronal modeling, as well as many other subdisciplines within computational neuroscience, grew directly out of Hodg- kin and Huxley’s seminal investigation of the action potential in the squid giant axon (Hodgkin and Huxley 1952d). One could even make a case that this study culminated with the first compartmental model. Using the newly invented voltage- clamp technique, Hodgkin and Huxley recorded ionic currents from the squid giant axon and, using clever ionic substitution and novel voltage-clamp experiments, isolated two voltage- gated conductances (Hodgkin and Huxley 1952a, 1952b, 1952c; Hodgkin et al. 1952). They then performed two stages of data reduction. First, they used standard chemical kinetics to analyze the voltage-dependence of the sodium and potassium conductances, thereby obtaining the rate constants for opening, closing, and inactivation of the conductances. Second, they reduced these rate constants to a small set of algebraic and differential equations describing the time and voltage depen- dence of the channels. This model explained and predicted the basis of the action potential in the squid giant axon (Hodgkin and Huxley 1952d). The entire model was derived from ex- perimental results and contains almost no parameters of unknown value (the values for the maximal conductances and number of gates being manually adjusted by Hodgkin and Huxley).
 
-From Theoretical neuroscience : computational and mathematical modeling of neural
-systems / Peter Dayan and L.F. Abbott.
+%Computational neuroscience is an approach to understanding the information content of neural signals by modeling the nervous system at many different structural scales, including the biophysical, the circuit, and the systems levels. Computer simulations of neurons and neural networks are complementary to traditional techniques in neuroscience. This book series welcomes contributions that link theoretical studies with experimental approaches to understanding information processing in the nervous system. Areas and topics of particular interest include biophysical mechanisms for computation in neurons, computer simulations of neural circuits, models of learning, representation of sensory information in neural networks, systems models of sensory-motor integration, and computational analysis of problems in biological sensing, motor control, and perception.
 
+%Theoretical analysis and computational modeling are important tools for characterizing what nervous systems do, determining how they function, and understanding why they operate in particular ways. Neuroscience encompasses approaches ranging from molecular and cellular studies to human psychophysics and psychology. Theoretical neuroscience encourages crosstalk among these subdisciplines by constructing compact representations of what has been learned, building bridges between different levels of description, and identifying unifying concepts and principles. In this book, we present the basic methods used for these purposes and discuss examples in which theoretical approaches have yielded insight into nervous system function.
 
-Computational neuroscience is an approach to understanding the information content of neural signals by modeling the nervous system at many different structural scales, including the biophysical, the circuit, and the systems levels. Computer simulations of neurons and neural networks are complementary to traditional techniques in neuroscience. This book series welcomes contributions that link theoretical studies with experimental approaches to understanding information processing in the nervous system. Areas and topics of particular interest include biophysical mechanisms for computation in neurons, computer simulations of neural circuits, models of learning, representation of sensory information in neural networks, systems models of sensory-motor integration, and computational analysis of problems in biological sensing, motor control, and perception.
+%The questions what, how, and why are addressed by descriptive, mechanistic, and interpretive models, each of which we discuss in the following chapters. Descriptive models summarize large amounts of experimental data compactly yet accurately, thereby characterizing what neurons and neural circuits do. These models may be based loosely on biophysical, anatomical, and physiological findings, but their primary purpose is to describe phenomena, not to explain them. Mechanistic models, on the other hand, address the question of how nervous systems operate on the basis of known anatomy, physiology, and circuitry. Such models often form a bridge between descriptive models couched at different levels. Interpretive models use computational and information-theoretic principles to explore the behavioral and cognitive significance of various aspects of nervous system function, addressing the question of why nervous systems operate as they do.
 
---
-
-Theoretical analysis and computational modeling are important tools for characterizing what nervous systems do, determining how they function, and understanding why they operate in particular ways. Neuroscience encompasses approaches ranging from molecular and cellular studies to human psychophysics and psychology. Theoretical neuroscience encourages crosstalk among these subdisciplines by constructing compact representations of what has been learned, building bridges between different levels of description, and identifying unifying concepts and principles. In this book, we present the basic methods used for these purposes and discuss examples in which theoretical approaches have yielded insight into nervous system function.
-
-The questions what, how, and why are addressed by descriptive, mechanistic, and interpretive models, each of which we discuss in the following chapters. Descriptive models summarize large amounts of experimental data compactly yet accurately, thereby characterizing what neurons and neural circuits do. These models may be based loosely on biophysical, anatomical, and physiological findings, but their primary purpose is to describe phenomena, not to explain them. Mechanistic models, on the other hand, address the question of how nervous systems operate on the basis of known anatomy, physiology, and circuitry. Such models often form a bridge between descriptive models couched at different levels. Interpretive models use computational and information-theoretic principles to explore the behavioral and cognitive significance of various aspects of nervous system function, addressing the question of why nervous systems operate as they do.
-
-It is often difficult to identify the appropriate level of modeling for a particular problem. A frequent mistake is to assume that a more detailed model is necessarily superior. Because models act as bridges between levels of understanding, they must be detailed enough to make contact with the lower level yet simple enough to provide clear results at the higher level.
+%It is often difficult to identify the appropriate level of modeling for a particular problem. A frequent mistake is to assume that a more detailed model is necessarily superior. Because models act as bridges between levels of understanding, they must be detailed enough to make contact with the lower level yet simple enough to provide clear results at the higher level.
 
 
 \subsubsection{Threshold effects}
@@ -236,140 +268,10 @@ where $A$ is a rate constant, $V_{1/2}$ is the half-activation voltage, and $k$ 
 (See Table 1 and 2 in article)
 
 
-%================================================================ 
-\subsubsection{HH in neural simulation software}
-%================================================================ 
-
-\url{http://nelson.beckman.illinois.edu/courses/physl317/part1/Lec3_HHsection.pdf}
-
-In neural simulation software packages, the rate constants in HH-style models are often parameterized using a generic functional form:
-
-\begin{equation*}
-    \alpha (V) = \frac{A + BV}{C + H \exp \qty(\frac{V+D}{F})}
-\end{equation*}
-
-In general, this functional form may require up to six parameters $(A, B, C, D, F, H)$ to fully specify the rate equation. However, in many cases adequate fits to the data can be obtained using far fewer parameters. Fortunately, Eq. 29 is flexible enough that it can be transformed into simpler functional forms by setting certain parameters to either 0 or 1. For example, if the voltage clamp data can be adequately fit by an exponential function over the relevant range of voltages, then setting $B=0$, $C=0$, $D=0$ and $H=1$ in Eq. 29, results in a simple exponential form,
-$\alpha(V) = A \exp(-V / F)$ , with just two free parameters ($A$ and $F$) to be fit to the data. Similarly, setting B=0, C=1 and H=1 gives a sigmoidal function with three free parameters ($A$, $D$, and $F$).
-
-One other technical note is that certain function forms can become indeterminate at
-certain voltage values. For example, the expression for $(V)$ an in Eq. 23 evaluates to the indeterminate form $0/0$ at $V=10$. The solution to this problem is to apply L’Hospital’s rule, which states that if $f(x)$ and $g(x)$ approach $0$ as $x$ approaches $a$, and $f'(x)/ g'( x)$ approaches $L$ as $x$ approaches $a$, then the ratio $f (x)/ g( x)$ approaches $L$ as well. Using this rule, it can be shown
-that $\alpha_n (10) = 0.1$. When implementing HH-style rate functions in computer code, care must be taken to handle such cases appropriately.
-
-Stability
-
-\url{https://timvieira.github.io/blog/post/2014/02/11/exp-normalize-trick/}
-
-\url{https://gregorygundersen.com/blog/2020/02/09/log-sum-exp/}
 
 
-Suggestions for how to diagnose the problems you may encounter:
-
-\begin{enumerate}
-    \item Start small and add complexities incrementally, testing at every step. It doesn't matter how smart you are, how facile you may be with programming, or how hard you work -- frustration and debugging nightmares are guaranteed if you try to do it all in one pass.
-    \item Use modlunit to verify consistency of units. modlunit will also pick up many programming errors.
-    \item Make sure that all ionic conductances have the desired properties. Plot the alphas and betas as functions of membrane potential. Do "voltage clamp" experiments on a single compartment model and plot the time course of m, h, n, gna, gk, ina, and ik. Also make sure that leak current has the correct voltage dependence.
-    \item Use L'hospital's rule to avoid rate constant formulas that become indeterminate (0/0) (alphan and alpham). Look at hh.mod for an example. \url{https://github.com/neuronsimulator/nrn/blob/master/src/nrnoc/hh.mod}
-\end{enumerate}
 
 
-%================================================================ 
-\subsubsection{Derivations}
-%================================================================ 
-
-In HH paper (1952): 
-
-\begin{equation*}
-    \alpha_n = 0.01 \cdot \frac{V+10}{\exp \qty(\frac{V+10}{10})-1}
-\end{equation*}
-
-Let $A=0.01$, $x=V+10$, and $y=10$, such that
-
-\begin{equation*}
-    \alpha_n = A \cdot \frac{x}{\exp \qty(\frac{x}{y})-1}
-\end{equation*}
-
-An alternative form for the above equation can be found by: 
-
-\begin{equation*}
-    \alpha_n = A \cdot \frac{x}{\exp \qty(\frac{x}{y})-1} \cdot \frac{(-1)}{(-1)} = A \cdot \frac{-x}{1-\exp \qty(\frac{x}{y})} 
-\end{equation*}
-
-Changing $x=V+10 \rightarrow x = - (V+55)$ and inserting in the last equation gives:
-
-\begin{equation*}
-    \alpha_n = 0.01 \cdot \frac{V+55}{1 - \exp \qty(-\frac{V+55}{10})},
-\end{equation*}
-
-which is the form found in Sterratt.
-
-%================================================================ 
-\subsubsection{Deriving Vtrap}
-%================================================================ 
-
-The general form for this equation is:
-
-vtrap = x/(exp(x/y) - 1)
-
-however as can be easily seen if x/y is 0, or close to zero, then the denominator of the given equation is really small or zero, leading to and infinite or very large output. To get around this when x/y is really small the output is given as:
-
-vtrap = y*(1 - x/y/2) or as I prefer y - x/2
-
----
-
-The rate equations becomes indeterminate at certain membrane potentials, for instance, $\alpha_n (-55) = 0 / 0$. 
-
-
-A Taylor Series is an expansion of some function into an infinite sum of terms,
-
-The Taylor series of
-
-We can use the first few terms of a Taylor Series to get an approximate value for a function.
-
-
-A Taylor series is a series expansion of a function about a point. A one-dimensional Taylor series is an expansion of a real function f(x) about a point x=a is given by
-
-%%%
-
-Traps for 0 in denominator of rate eqns. 
-
-Alternative func name: SafeExp
-
-
-The vtrap function was correct in its original form, which approximated x/(exp(x/y) - 1) by a straight line segment with the appropriate slope in the near neighborhood of |x/y|==0. You just replaced that approximation with something that will cause a discontinuity of a voltage-dependent gating parameter when v lands within a narrow band centered on x/y==0. Will that cause problems for you or anyone who reuses your code in the future? Maybe, if adaptive integration is used--the adaptive integrators require voltage-dependent parameters to be continuous functions of membrane potential, but the occasional violation of continuity may not always cause a noticeable problem.
-
-
-Remember, you're dealing with a computational representation of physical system which is continuous in space and time (when viewed at the scale of microns and microseconds). The continuous system is described by a PDE, but you're using numerical solution of a set of ODEs to approximate the solution to the PDE, and that requires discretizing both space and time. Spatial discretization approximates the PDE by a family of ODEs, where each ODE describes the time course of state variables at a different point in space. Accuracy of the entire solution depends not only on dt, the interval at which you sample time, but also on dx, the interval at which you sample space. Make dt very small, and you will expose spatial errors, which become predominant at short times.
-
-avoid numerical under flow
-
-To help get you started, here's a little background on vtrap and some hints:
-
-HH-style model rate equations often contain expressions that are equivalent to
-
-$$x / (exp(x/y) - 1)$$
-
-As $x/y -> 0$, the numerator and denominator $-> 0$, which can cause problems.
-This can be avoided by noting that, as $x/y -> 0$,
-
-$$exp(x/y) - 1 = 1 + x/y + ((x/y)^2)/2 + . . . - 1$$
-
-approaches
-
-$$x/y + (x^2)/((y^2)*2)$$
-
-so
-
-$$x / (exp(x/y) - 1)$$
-
-approaches
-
-$$x / (x/y + (x^2)/((y^2)*2)) = y / (1 + x/(2*y))$$
-
-which is closely approximated by
-
-$$y * (1 - x/(2*y))$$
-
-when $x/(2*y) << 1$.
 
 %================================================================ 
 \subsubsection{Stiffness}

@@ -257,7 +257,7 @@ The normal distribution, $\mathrm{N}\qty(\mu, \sigma^2)$, is an example of a sym
 
 
 %================================================================
-\section{Density Estimation}
+\section{Density Estimation}\label{sec:densest}
 %================================================================ 
 
 % \url{http://www.hep.caltech.edu/~fcp/statistics/densityEst/densityEst.pdf}
@@ -301,19 +301,19 @@ where the braces indicate the ceiling function. The amount of smoothing inherent
 In practice, the histogram density estimator can be useful for quickly visualizing data in one or two dimensions, but is unsuited for most density estimation applications. For higher dimensional data, histograms are likely to run into the curse of dimensionality as the number of bins have an exponential scaling with the dimension. Another major issue is that the density has discontinuities that are due to the bin edges. \autoref{fig:kde_figure} in the next section provides an example of the histogram density estimator which illustrates this. However, the two important principles of density estimation are encapsulated in the histogram approach. First, in order to estimate the density at a particular location we should smooth the local neighborhood of that point. Second, the smoothing parameter should be neither too small nor too large to obtain an accurate estimate. The concept of locality requires some form of distance measure, and we have here assumed the Euclidean distance.
 
 %================================================================
-\subsection{Kernel Density Estimation}
+\subsection{Kernel Density Estimation}\label{sec:kde}
 %================================================================
 
 Kernel density estimates (KDEs) are closely related to histograms, but avoid some of the drawbacks. For instance, they have better scaling with dimensionality and can provide continuous density estimates. This is achieved by replacing the indicator function $B$ of the histogram density estimator with a standard \textit{smoothing kernel function}, defined by: 
 
 \begin{equation}\label{eq:kernel_smooth_func}
-    K_h (u) = \frac{1}{h} K \qty(\frac{u}{h}),  
+    K_h \qty(\norm{x - x_i}) = \frac{1}{h} K \qty(\frac{\norm{x - x_i}}{h}),  
 \end{equation}
 
-where $h>0$ is the smoothing parameter, $K(u)$ the kernel of a pdf and $u = \norm{x - \tilde{x}_i}$ with $\norm{\cdot}$ denoting the Euclidean distance. The kernel estimator for the pdf is thus: 
+where $h>0$ is the smoothing parameter, $\norm{\cdot}$ denotes the Euclidean distance  and $K(u)$ the kernel of a pdf. A kernel with subscript $h$ is usually referred to as a scaled kernel. The kernel estimator for the pdf is thus: 
 
 \begin{equation}\label{eq:kde}
-    \hat{p}(x) = \frac{1}{n} \sum_{i=1}^n K_h \qty(\norm{x - \tilde{x}_i})
+    \hat{p}(x) = \frac{1}{n} \sum_{i=1}^n K_h \qty(\norm{x - x_i}) = \frac{1}{nh} \sum_{i=1}^n K \qty(\frac{\norm{x - x_i}}{h}).
 \end{equation}
 
 The smoothing parameter $h$ is often called the \textit{bandwidth} in the context of kernel smoothing, and corresponds to the scale of the kernel. There are also rules-of-thumb for setting the bandwidth, such as Silverman's rule \cite{silverman_rule}. Intuitively, the kernel estimator is a sum of “bumps” placed at the sample points. The kernel determines the shape of the bumps and the bandwidth their width. \autoref{fig:kde_figure} provides an illustration of this, and also compares the histogram and kernel density estimate using the same data. The smoothness of the KDE compared to the discreteness of the histogram illustrates how KDEs converge faster to the underlying pdf.
@@ -331,14 +331,14 @@ The smoothing parameter $h$ is often called the \textit{bandwidth} in the contex
 The kernel of a pdf is the form of the pdf in which any factors that are not functions of any of the variables in the domain are omitted. Kernels are symmetric functions such that $K(u) \geq 0$ for all $u$, $\int K(u) \dd{u}=1$ and $\int u^2 K(u) \dd{u} < \infty$. Some common choices of kernels are the Gaussian kernel:
 
 \begin{equation}\label{eq:gaussian_kernel}
-    K(u) \propto \exp(- \frac{u^2}{2h^2}),
+    K(u) \propto \exp(-\frac{1}{2} u^2),
 \end{equation}
 
 and the Epanechnikov kernel:
 
 \begin{equation}\label{eq:epkov_kernel}
     K (u) \propto \begin{cases} 
-    1 - \frac{u^2}{h^2} \qquad &\text{if } \abs{u} \leq h 
+    1 - u^2 \qquad &\text{if } \abs{u} \leq 1 
     \\
     0 \qquad &\text{otherwise}
     \end{cases}.
@@ -381,7 +381,7 @@ However, it is useful to also derive summary statistics from the posterior, as n
     \begin{equation}\label{eq:posterior_median}
         \hat{\theta}_\mathrm{median} = \mathrm{F}_{\theta \mid y}^{-1} \qty(0.5),
     \end{equation}
-    where the cumulative posterior distribution $F_{\theta \mid y} \qty(\tilde{\theta}_p) = \int_{\infty}^{\tilde{\theta}_p} \posterior \dd{\theta}$. Here, $\tilde{\theta}_p$ is the value of $\theta$ at the $p$-quantile. For example, the median is the 0.5-quantile and the value of the cumulative posterior distribution is thus $F_{\theta \mid y} \qty(\tilde{\theta}_{0.5}) = 0.5$. The median being the $0.5$-quantile entails that it is the value of $\theta$ which divides the posterior in half.
+    where the cumulative posterior distribution $F_{\theta \mid y} \qty(\tilde{\theta}_q) = \int_{\infty}^{\tilde{\theta}_q} \posterior \dd{\theta}$. Here, $\tilde{\theta}_q$ is the value of $\theta$ at the $q$-quantile. For example, the median is the 0.5-quantile and the value of the cumulative posterior distribution is thus $F_{\theta \mid y} \qty(\tilde{\theta}_{0.5}) = 0.5$. The median being the $0.5$-quantile entails that it is the value of $\theta$ which divides the posterior in half.
     \item Posterior mode which is also called the maximum a posteriori probability (MAP) estimate: 
     \begin{equation}\label{eq:posterior_map}
         \hat{\theta}_\mathrm{MAP} = \max_\theta \posterior,

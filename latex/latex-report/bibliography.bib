@@ -274,6 +274,32 @@
   journal = {Journal of Open Source Software}
 }
 
+%---------------------- Uncertainpy ----------------------- 
+@article
+{
+    uncertainpy,
+    AUTHOR      = {Tennøe, Simen and Halnes, Geir and Einevoll, Gaute T}, 
+    TITLE       = {Uncertainpy: A Python Toolbox for Uncertainty Quantification and Sensitivity Analysis in Computational Neuroscience},
+    JOURNAL     = {Frontiers in Neuroinformatics}, 
+    VOLUME      = {12}, 
+    %NUMBER      = {1},
+    YEAR        = {2018}, 
+    PAGES       = {49}, 
+}
+
+%---------------------- Druckmann ----------------------- 
+@article
+{
+    druckmann,
+    AUTHOR      = {Druckmann, Shaul and Banitt, Yoav and Gidon, Albert and Schürmann, Felix and Markram, Henry and Segev, Idan}, 
+    TITLE       = {A novel multiple objective optimization framework for constraining conductance-based neuron models by experimental data},
+    JOURNAL     = {Frontiers in Neuroscience}, 
+    VOLUME      = {1}, 
+    NUMBER      = {1},
+    YEAR        = {2007}, 
+    PAGES       = {7--18}, 
+}
+
 
 %---------------------- SNL thesis ----------------------- 
 
@@ -286,38 +312,17 @@
     primaryClass={stat.ML}
 }
 
-% SNPE B first 
-
-%%%% FIX THESE, might not need all
-
-@misc{papamakarios2016fast,
-    title={Fast $\epsilon$-free Inference of Simulation Models with Bayesian Conditional Density Estimation},
-    author={George Papamakarios and Iain Murray},
-    year={2016},
-    eprint={1605.06376},
-    archivePrefix={arXiv},
-    primaryClass={stat.ML}
+%---------------- normalizing flows densest -------------------- 
+@misc{dinh2015nice,
+      title={NICE: Non-linear Independent Components Estimation}, 
+      author={Laurent Dinh and David Krueger and Yoshua Bengio},
+      year={2015},
+      eprint={1410.8516},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG}
 }
 
 
-
-
-
-
-
-@article {SNPE19,
-	author = {Gon{\c c}alves, Pedro J. and Lueckmann, Jan-Matthis and Deistler, Michael and Nonnenmacher, Marcel and {\"O}cal, Kaan and Bassetto, Giacomo and Chintaluri, Chaitanya and Podlaski, William F. and Haddad, Sara A. and Vogels, Tim P. and Greenberg, David S. and Macke, Jakob H.},
-	title = {Training deep neural density estimators to identify mechanistic models of neural dynamics},
-	elocation-id = {838383},
-	year = {2019},
-	doi = {10.1101/838383},
-	publisher = {Cold Spring Harbor Laboratory},
-	URL = {https://www.biorxiv.org/content/early/2019/11/12/838383},
-	eprint = {https://www.biorxiv.org/content/early/2019/11/12/838383.full.pdf},
-	journal = {bioRxiv}
-}
-
-%%%%
 
 %---------------------- Scott bin width rule ----------------------- 
 @article
@@ -405,7 +410,7 @@
     AUTHOR      = {Martin, Osvaldo},
     TITLE       = {Bayesian Analysis with Python},
     SERIES      = {Texts in statistical science},
-    PUBLISHER   = {Packt Publishing}}, 
+    PUBLISHER   = {Packt Publishing}, 
     YEAR        = {2018},
     EDITION     = {2}, 
     ADDRESS     = {Birmingham, UK},
@@ -424,6 +429,35 @@
     %ISBN        = {978-0-521-87795-4 Hardback},
     ADDRESS     = {Cambridge, UK},
 }
+
+
+%----------------- Neuronal Dynamics -----------------
+@book
+{
+    neuro_dynamics,
+    AUTHOR      = {Gerstner, Wulfram and Kistler, Werner M. and Naud, Richard and Paninski, Liam},
+    TITLE       = {Neuronal dynamics : from single neurons to networks and models of cognition},
+    PUBLISHER   = {Cambridge University Press}, 
+    YEAR        = {2014},
+    EDITION     = {1}, 
+    ADDRESS     = {Cambridge},
+}
+
+
+%----------------- Theoretical neuroscience -----------------
+@book
+{
+    dayan_abbott,
+    AUTHOR      = {Dayan, Peter and Abbott, L.F.},
+    TITLE       = {Theoretical neuroscience : computational and mathematical modeling of neural systems},
+    PUBLISHER   = {MIT Press}, 
+    YEAR        = {2001},
+    EDITION     = {1}, 
+    ADDRESS     = {Cambridge, Mass},
+}
+
+
+
 
 %---- Modern Mathematical Statistics with Applications ----
 @book
@@ -507,6 +541,42 @@
  url     = {https://commons.wikimedia.org/wiki/File:Comparison_of_1D_histogram_and_KDE.png},
 }
 
+%------- neuron figure ------
+@online{neuron_morph,
+ author  = {Molecular Devices},
+ title   = {What is an action potential?},
+ %year    = {2010},
+ urldate = {2021-10-30},
+ url     = {https://cs231n.github.io/neural-networks-1/},
+}
+
+
+%------- action potential figure ------
+@online{action_potential,
+ author  = {Standford University},
+ title   = {CS231n: Convolutional Neural Networks for Visual Recognition},
+ %year    = {2010},
+ urldate = {2021-10-30},
+ url     = {https://www.moleculardevices.com/applications/patch-clamp-electrophysiology/what-action-potential},
+}
+
+
+%------------- Reg adjust figure ------------------ 
+@article
+{
+    reg_adj_figure,
+    AUTHOR      = {Lintusaari, Jarno and Gutmann, Michael U and Dutta, Ritabrata and Kaski, Samuel and Corander, Jukka}, 
+    TITLE       = {Fundamentals and Recent Developments in Approximate Bayesian Computation}, 
+    JOURNAL     = {Systematic biology}, 
+    VOLUME      = {66}, 
+    NUMBER      = {1},
+    YEAR        = {2017}, 
+    PAGES       = {e66--e82}, 
+}  
+
+
+
+
 %--------- Silverman's rule ---------
 @book
 {
@@ -562,9 +632,38 @@
     ADDRESS     = {Amsterdam, The Netherlands},
 }
 
-%-------------------- Handbook of ABC --------------------- 
+%---------- NEURON simulator ------------
+@book
+{
+    neuron_book, 
+    AUTHOR      = {Carnevale, Nicholas T and Hines, Michael L},
+    TITLE       = {The NEURON Book},
+    PUBLISHER   = {Cambridge University Press}, 
+    YEAR        = {2006},
+    %EDITION     = {1}, 
+    %ISBN        = {978-0-12-407948-9},
+    ADDRESS     = {Cambridge},
+}
 
-Sisson, S.A., Fan, Y., & Beaumont, M.A. (Eds.). (2018). Handbook of Approximate Bayesian Computation (1st ed.). Chapman and Hall/CRC.
+
+
+%---------- LFI for cognitive science ------------
+@book
+{
+    lfi_cogsci, 
+    AUTHOR      = {Palestro, James J and Sederberg, Per B and Osth, Adam F and Van Zandt, Trisha and Turner, Brandon M},
+    TITLE       = {Likelihood-Free Methods for Cognitive Science},
+    PUBLISHER   = {Springer International Publishing}, 
+    YEAR        = {2018},
+    EDITION     = {1}, 
+    %ISBN        = {978-0-12-407948-9},
+    ADDRESS     = {Cham},
+}
+
+
+
+
+%-------------------- Handbook of ABC --------------------- 
 
 @book
 {

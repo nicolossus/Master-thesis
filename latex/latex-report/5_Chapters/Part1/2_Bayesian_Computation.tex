@@ -617,3 +617,122 @@ The approximate likelihood $p \qty(\rho \qty(y, y_0 ) \leq \epsilon \mid \theta)
 where $y_n \sim p \qty(y \mid \theta)$ and $I(\cdot)$ is an indicator function. %\cite[p. 59]{papamakarios2019neural}.
 
 Similarly to rejection ABC, the acceptance probability of MCMC ABC decreases as $\epsilon$ becomes small. Moreover, the performance of MCMC ABC strongly depends on the selection of proposal and prior density.
+
+
+\section{Method}
+
+\textbf{Relevant papers:}
+
+* H. Jung and P. Marjoram (2011). "Choice of Summary Statistic Weights in Approximate Bayesian Computation". \url{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3192002/}
+    * Develops a Genetic Algorithm that computes how one should weight the summary statistics 
+    * Fairly advanced, so we won't implement their approach, but should be mentioned in thesis
+* D. Prangle (2015). "Adapting the ABC distance function". \url{https://arxiv.org/pdf/1507.00874.pdf}
+    * Methods for adaptive distances
+    * Won't implement this either, but will use the weighted distance defined in the paper
+* S. Druckmann et al. (2007) "A novel multiple objective optimization framework for constraining conductance-based neuron models by experimental data". 
+    * MOO
+    
+    
+In the ABC algorithms, each simulation is converted to a vector of summary statistics $\mathbf{s} = (s_1, s_2, ..., s_m)$ and a distance between this and the summary statistics of the observed data, $\mathbf{s}_{obs}$, is calculated. Parameters producing distances below some threshold are accepted and form a sample from an approximation to the posterior. 
+
+However, without normalization of the summary statistics, we are comparing oranges with apples. The most variable summaries will dominate the distances because of their larger scales. Handling the scales of the summaries ... blabla ... important.  
+
+Normalizing the summaries so that they vary over roughly the same scale can be achieved by using a weighted Euclidean distance: 
+
+$$ d \left(\mathbf{s}, \mathbf{s}_{obs} \right) = \left[ \sum_{i=1}^m \left( \frac{s_i - s_{obs, i}}{\sigma_i} \right)^2 \right]^{1/2},$$
+
+where $\sigma_i$ is an estimate of the prior predictive standard deviation of the $i$th summary statistic. A convenient estimate is the empirical standard deviation of simulated $s_i$ values. The normalization we acquire from scaling by $\sigma_i$ prevents the distances from being dominated by the most variable summaries.  
+
+\section{vtrap}
+
+$x / (\exp(u) - 1)$, where $u=x/y$. However, these are prone to become indeterminate since $x/y \to 0$
+
+
+however as can be easily seen if x/y is 0, or close to zero, then the denominator of the given equation is really small or zero, leading to and infinite or very large output. To get around this when x/y is really small the output is given as:
+
+
+%Traps for zero in denominator of rate eqns.
+
+%HH-style model rate equations often contain expressions that are equivalent to 
+%.. math::
+%    x / (\exp(u) - 1),
+
+% where :math:`u = x / y`. From Taylor series approximation, one can find that the above expression is approximated by
+
+%.. math::
+%    y (1 - u / 2)
+
+%if :math:`u << 1`.
+
+%This approximation ensures that indeterminate cases are handled properly.
+
+---
+
+HH-style model rate equations often contain expressions that are equivalent to
+
+$$x / (exp(x/y) - 1)$$
+
+As $x/y -> 0$, the numerator and denominator $-> 0$, which can cause problems.
+This can be avoided by noting that, as $x/y -> 0$,
+
+$$exp(x/y) - 1 = 1 + x/y + ((x/y)^2)/2 + . . . - 1$$
+
+approaches
+
+$$x/y + (x^2)/((y^2)*2)$$
+
+so
+
+$$x / (exp(x/y) - 1)$$
+
+approaches
+
+$$x / (x/y + (x^2)/((y^2)*2)) = y / (1 + x/(2*y))$$
+
+which is closely approximated by
+
+$$y * (1 - x/(2*y))$$
+
+when $x/(2*y) << 1$.
+
+---
+
+
+
+---
+
+The general form for this equation is:
+
+vtrap = x/(exp(x/y) - 1)
+
+however as can be easily seen if x/y is 0, or close to zero, then the denominator of the given equation is really small or zero, leading to and infinite or very large output. To get around this when x/y is really small the output is given as:
+
+vtrap = y*(1 - x/y/2) or as I prefer y - x/2
+
+---
+
+The rate equations becomes indeterminate at certain membrane potentials, for instance, $\alpha_n (-55) = 0 / 0$. 
+
+
+A Taylor Series is an expansion of some function into an infinite sum of terms,
+
+The Taylor series of
+
+We can use the first few terms of a Taylor Series to get an approximate value for a function.
+
+
+A Taylor series is a series expansion of a function about a point. A one-dimensional Taylor series is an expansion of a real function f(x) about a point x=a is given by
+
+%%%
+
+Traps for 0 in denominator of rate eqns. 
+
+Alternative func name: SafeExp
+
+
+%The vtrap function was correct in its original form, which approximated x/(exp(x/y) - 1) by a straight line segment with the appropriate slope in the near neighborhood of |x/y|==0. You just replaced that approximation with something that will cause a discontinuity of a voltage-dependent gating parameter when v lands within a narrow band centered on x/y==0. Will that cause problems for you or anyone who reuses your code in the future? Maybe, if adaptive integration is used--the adaptive integrators require voltage-dependent parameters to be continuous functions of membrane potential, but the occasional violation of continuity may not always cause a noticeable problem.
+
+
+%Remember, you're dealing with a computational representation of physical system which is continuous in space and time (when viewed at the scale of microns and microseconds). The continuous system is described by a PDE, but you're using numerical solution of a set of ODEs to approximate the solution to the PDE, and that requires discretizing both space and time. Spatial discretization approximates the PDE by a family of ODEs, where each ODE describes the time course of state variables at a different point in space. Accuracy of the entire solution depends not only on dt, the interval at which you sample time, but also on dx, the interval at which you sample space. Make dt very small, and you will expose spatial errors, which become predominant at short times.
+
+%avoid numerical under flow

@@ -2,153 +2,63 @@
 \chapter{Introduction to Neurobiology}\label{chap:neurobio}
 %================================================================
 
-The primary aim of this chapter is to introduce several elementary notions of neuroscience, in particular the concepts of action potentials, postsynaptic potentials, firing thresholds, refractoriness, and adaptation.
-
-Due to the limitations of space we cannot – and do not want to – give a comprehensive introduction into such a complex field as neurobiology. The presentation of the biological background in this chapter is therefore highly selective and focuses on those aspects needed to appreciate the biological background of the theoretical work presented in this book. For an in-depth discussion of neurobiology we refer the reader to the literature mentioned at the end of this chapter. \url{https://neuronaldynamics.epfl.ch/online/Ch1.html}
-
-In this chapter we go briefly through the physiology and (some function)(constituents) of biological brains.
-
-%================================================================
-\section{Elements of Neuronal Systems}
-%================================================================
-
-%================================================================
-\section{The Brain}
-%================================================================
-
+The aim of this chapter is to give a brief introduction to neurobiology, with focus on the aspects useful for understanding the biological background of the models of neural dynamics presented in the next chapter. The content of this chapter is based on material from \cite{BrainFacts}, \cite{Sterratt} and \cite{dayan_abbott}.  
 
 
 %================================================================
-\section{The Neuron}
-%================================================================ 
+\section{Neural Circuits and Networks}
+%================================================================
 
+The central organ of the human nervous system is the brain, which contains roughly 86 billion nerve cells, or neurons, organized in different brain regions specialized at analyzing different subsets of information encoded in nerve signals. Brain activity is made possible by the interconnections of neurons. A population of neurons interconnected to carry out a specific function is called a \textit{neural circuit}. Neural circuits interconnect to one another to form elaborate \textit{neural networks} that route signals through the different regions of the brain, analyzing and organizing different types of information within fractions of a second. Neurons are either \textit{excitatory} or \textit{inhibitory}. Excitatory neurons are predominant, comprising about 80\% of the neurons in the brain, and send signals to neighboring neurons that increase activity. By contrast, inhibitory neurons, comprising about 20\% of the neurons in the brain, send signals that suppress the activity of neighboring neurons. Every neural circuit contains both excitatory and inhibitory neurons that work together to regulate the actitivy in response to stimuli. 
+
+%================================================================
+\section{Neurons}
+%================================================================
+
+The fundamental unit of neural circuits and networks is the neuron, which is a specialized cell that generates electrical signals in response to stimuli and transmits them to other cells. Although neurons come in a wide variety of shapes and sizes, they have common morphological specializations called \textit{dendrites} and \textit{axon}. Like other cells, a neuron consists of a cell body (soma) that contains the neuron's nucleus and molecular machinery critical to the cell's function, and the soma is confined by a cell membrane that consists of a lipid bilayer. The axon and dendrites are filaments that extrude from the soma, as illustrated by \autoref{fig:neuron_morph}. Dendrites receive incoming signals from other neurons and propagate them to the soma. The branching structure of the dendritic tree allows a neuron to receive signals from many other neurons. The soma processes the collected input signals and generates an output signal if the total input exceeds a certain threshold. The axon carries the output signal and branch out to deliver the signal to other cells through the axon terminals. 
+
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[scale=0.7]{neuron_morph}
+    \caption{Schematic illustration of a neuron. A neuron can be divided into three functionally distinct parts called dendrites, the cell body (soma) and the axon. The dendrites receive signals from other neurons and transmit them to the cell body, which can generate an output signal if the total input exceeds a threshold. The output signal propagates down the axon which branch out and end in axon terminals that deliver the signal to other cells.
+    }
+    \label{fig:neuron_morph}
+    \source{\cite{neuron_morph}.}
+\end{figure}
 
 
 %================================================================
-\subsection{The Neuronal Membrane}
-%================================================================ 
+\section{Ion Channels and Action Potentials}
+%================================================================
 
-The cell body of every neuron is enclosed by a plasma \textit{membrane}. The electrical properties which underlie the membrane potential arise from the separation of intracellular and extracellular space by a cell membrane. The intracellular medium, cytoplasm, and the extracellular medium contain differing concentrations of various ions. Some key inorganic ions in nerve cells are: 
+The bulk of the neuronal membrane is composed of a \textit{lipid bilayer}, that is made up of two layers of lipids, which have their hydrophilic heads pointing outwards and their hydrophobic tails pointing inwards. It is virtually impermeable to water molecules and ions. \textit{Ion channels} are protein pores in the neuronal membrane that allow ions, predominantly sodium (\Na), potassium (\K), calcium (Ca$^{2+}$) and chloride (Cl$^{-}$), to flow into and out of the neuron. Most ion channels are permeable only to specific types of ions, and are either active or passive. Passive channels, also called leakage channels, are always permeable, whereas active channels have gates that can open and close the channel. Some active ion channels are voltage-gated, meaning that whether the channel is in an open or closed state is controlled by voltage, while others are chemically-gated, meaning they open and close by interactions with chemicals. The neuronal membrane also contains membrane-spanning protein structures that actively pump certain types of ions into and out of the neuron, called \textit{ion pumps}. Ions tend to flow from regions of high concentration toward regions of low concentration, thus diminishing the concentration gradient. Ion pumps counteract this by pumping ions against the concentration gradient. For instance, the \Na -- \K pump exchanges three \Na from inside the cell with two \K from outside using energy provided by hydrolysis of ATP into ADP and a phosphate ion. \autoref{fig:neuronal_membrane} illustrates the constituents of the neuronal membrane. 
 
-\begin{itemize}
-    \item Positively charged \textit{cations}:
-    \begin{itemize}
-        \item $\mathrm{K}^+$, potassium
-        \item $\mathrm{Na}^+$, sodium 
-        \item $\mathrm{Ca}^{2+}$, calcium
-        \item $\mathrm{Mg}^{2+}$, magnesium
-    \end{itemize}
-    \item Negatively charged \textit{anions}:
-    \begin{itemize}
-        \item $\mathrm{Cl}^-$, chloride
-    \end{itemize}
-\end{itemize}
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[scale=0.6]{neuronal_membrane}
+    \caption{Constituents of the neuronal membrane. The lipid bilayer forms a virtually impermeable barrier for inorganic ions. Ion channels form pores in the neuronal membrane, allowing certain ions to flow into and out of the neuron. Ion pumps exchange certain ions across the neuronal membrane. 
+    }
+    \label{fig:neuronal_membrane}
+    \source{\cite{Sterratt}.}
+\end{figure}
 
+Due to the ion channel and pump machinery, there is typically a greater concentration of \Na in the extracellular space and \K inside the neuron. Moreover, there are slightly more positive ions on the outside of the neuron and slightly more negative ions on the inside. Hence, there is a small electrical potential difference across the neuronal membrane, called \textit{membrane potential}. The membrane potential of a resting neuron, known as the \textit{resting membrane potential}, typically lies between $-60$ and $-70 \mV$, because the potential is more negative inside the neuron than on its outer surface. The membrane potential is affected by signals received from other neurons in its circuit, which can make the membrane potential less negative (depolarized) or more negative (hyperpolarized). If a neuron is depolarized sufficiently to raise the membrane potential above the membrane's threshold voltage, a positive feedback process is initiated which triggers an electrical impulse called an \textit{action potential} (AP). The temporal evolution of APs can be divided into different phases, as shown by \autoref{fig:action_potential}.
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[scale=0.6]{action_potential}
+    \caption{The temporal evolution of the membrane potential during a typical action potential. The membrane potential is initially in its resting state when (1) a stimulus pushes it over the threshold. (2) This results in a rapid rise (depolarization) in membrane potential caused by opening of voltage-gated sodium (\Na) channels that give in an influx of \Na ions. (3) This is followed by a sharp decrease (repolarization) in membrane potential caused by closing of sodium channels and opening of potassium (\K) channels that give an efflux of \K ions. (4) The membrane potential typically undershoots the resting potential (hyperpolarization) before it gradually recovers to the (5) resting state. 
+    }
+    \label{fig:action_potential}
+    \source{\cite{action_potential}.}
+\end{figure}
+First, stimulus from other neurons connecting to the neuron depolarizes the soma, and increase the membrane potential towards the threshold potential. If the threshold potential is reached, voltage-gated sodium channels open and an influx of sodium ions takes place. This phase is called \textit{depolarization}. During depolarization, the inside of the neuron becomes increasingly electropositive. Once the membrane potential becomes positive, the membrane potential continues to depolarize, commonly referred to as AP \textit{overshoot}, until it reaches the electrochemical equilibrium, known as the \textit{reversal potential}, and peaks. After the overshoot, sodium channels decrease the sodium permeability by closing. The overshoot also opens voltage-gated potassium channels, which cause a potassium efflux that decreases the neuron's electropositivity. This phase is called \textit{repolarization}, and decreases the membrane potential towards the resting state. Repolarization may be followed by \textit{hyperpolarization}, in which the neuron's membrane potential falls below the resting potential before gradually recovering to the resting potential. The hyperpolarizing phase where the membrane falls below the resting potential is commonly referred to as \textit{afterhyperpolarization} (AHP) or AP \textit{undershoot}.  
 
-Within the cell, the charge carried by anions and cations is usually almost balanced, and the same is true of the extracellular space. Typically, there is a greater concentration of extracellular sodium than intracellular sodium, and conversely for potassium. 
-
-The key components of the membrane are: 
-
-\textbf{Lipid bilayers:} The bulk of the membrane is composed of the 5 nm thick lipid bilayer. It is made up of two layers of lipids, which have their hydrophilic ends pointing outwards and their hydrophobic ends pointing inwards. It is virtually impermeable to water molecules and ions. This impermeability can cause a net build-up of positive ions on one side of the membrane and negative ions on the other. This leads to an electrical field across the membrane, similar to that found between the plates of an ideal electrical capacitor. 
-
-\textbf{Ion channels:} are pores in the lipid bilayer, made of proteins, which can allow certain ions to flow through the membrane. Some ion channels are voltage gated, meaning that they can be switched between open and closed states by altering the voltage difference across the membrane. Others are chemically gated, meaning that they can be switched between open and closed states by interactions with chemicals that diffuse through the extracellular fluid. The ion materials include sodium, potassium, chloride, and calcium. The interactions between ion channels and ion pumps produce a voltage difference across the membrane, typically a bit less than 1/10 of a volt at baseline. This voltage has two functions: first, it provides a power source for an assortment of voltage-dependent protein machinery that is embedded in the membrane; second, it provides a basis for electrical signal transmission between different parts of the membrane.
-
---
-WIKI:
-
-Like all animal cells, the cell body of every neuron is enclosed by a plasma membrane, a bilayer of lipid molecules with many types of protein structures embedded in it. A lipid bilayer is a powerful electrical insulator, but in neurons, many of the protein structures embedded in the membrane are electrically active. These include ion channels that permit electrically charged ions to flow across the membrane and ion pumps that chemically transport ions from one side of the membrane to the other. Most ion channels are permeable only to specific types of ions. Some ion channels are voltage gated, meaning that they can be switched between open and closed states by altering the voltage difference across the membrane. Others are chemically gated, meaning that they can be switched between open and closed states by interactions with chemicals that diffuse through the extracellular fluid. The ion materials include sodium, potassium, chloride, and calcium. The interactions between ion channels and ion pumps produce a voltage difference across the membrane, typically a bit less than 1/10 of a volt at baseline. This voltage has two functions: first, it provides a power source for an assortment of voltage-dependent protein machinery that is embedded in the membrane; second, it provides a basis for electrical signal transmission between different parts of the membrane.
-
-\subsubsection{1. What is the neuronal membrane made of?}
-
-\textit{Lipid bilayers:} The bulk of the membrane is composed of the 5 nm thick lipid bilayer. It is made up of two layers of lipids, which have their hydrophilic ends pointing outwards and their hydrophobic ends pointing inwards. It is virtually impermeable to water molecules and ions. This impermeability can cause a net build-up of positive ions on one side of the membrane and negative ions on the other. This leads to an electrical field across the membrane, similar to that found between the plates of an ideal electrical capacitor.
-
-\textit{Ion channels} are pores in the lipid bilayer, made of proteins, which can allow certain ions to flow through the membrane. 
-
-\textit{Ionic pumps} are membrane-spanning protein structures that actively pump specific ions and molecules in and out of the cell. 
-
-\subsubsection{3. What is meant by the resting membrane potential?}
-
-There is an electrical potential difference across the cell membrane (difference between inside-outside of the neuron), called the \textit{membrane potential}. In neurons the membrane potential is used to transmit and integrate signals, sometimes over large distances. A resting (non-signaling) neuron has a voltage across its membrane called the \textit{resting membrane potential}. 
-
-\subsubsection{4. How big is typically the resting membrane potential?}
-
-The resting membrane potential is typically around -65 mV, meaning that the potential inside the cell is more negative than that outside.
-
-\subsubsection{5. What are the key ions setting up the neuronal membrane potential and mediating electrical signals?}
-
-Some key inorganic ions in nerve cells are: 
-
-\begin{itemize}
-    \item Positively charged \textit{cations}:
-    \begin{itemize}
-        \item $\mathrm{K}^+$, potassium
-        \item $\mathrm{Na}^+$, sodium 
-        \item $\mathrm{Ca}^{2+}$, calcium
-        \item $\mathrm{Mg}^{2+}$, magnesium
-    \end{itemize}
-    \item Negatively charged \textit{anions}:
-    \begin{itemize}
-        \item $\mathrm{Cl}^-$, chloride
-    \end{itemize}
-\end{itemize}
-    
-
-Within the cell, the charge carried by anions and cations is usually almost balanced, and the same is true of the extracellular space. Typically, there is a greater concentration of extracellular sodium than intracellular sodium, and conversely for potassium. 
-
-\subsubsection{6. What is an ion channel?}
-
-\textit{Ion channels} are pores in the lipid bilayer, made of proteins, which can allow certain ions to flow through the membrane. Some ion channels are voltage gated, meaning that they can be switched between open and closed states by altering the voltage difference across the membrane. Others are chemically gated, meaning that they can be switched between open and closed states by interactions with chemicals that diffuse through the extracellular fluid. The ion materials include sodium, potassium, chloride, and calcium. The interactions between ion channels and ion pumps produce a voltage difference across the membrane, typically a bit less than 1/10 of a volt at baseline. This voltage has two functions: first, it provides a power source for an assortment of voltage-dependent protein machinery that is embedded in the membrane; second, it provides a basis for electrical signal transmission between different parts of the membrane.
-
-\subsubsection{7. What are the two main categories of ion channels?}
-
-Active and passive
-
-\subsubsection{8. What is meant by an active channel?}
-
-\textit{Active channels:} can exist in open states, where it is possible for ions to pass through the channel, and closed states, in which ions cannot permeate through the channel. Whether an active channel is in an open or closed state may depend on the membrane potential, ionic concentrations or the presence of bound ligands, such as neurotransmitters.
-
-\subsubsection{9. What is meant by a passive channel?}
-
-\textit{Passive channels:} In contrast, passive channels do not change their permeability in response to changes in the membrane potential. Sometimes a channel’s dependence on the membrane potential is so mild as to be virtually passive.
-
-\subsubsection{10. What is an ion pump?}
-
-\textit{Ionic pumps} are membrane-spanning protein structures that actively pump specific ions and molecules in and out of the cell. Particles moving freely in a region of space always move so that their concentration is uniform throughout the space. Thus, on the high concentration side of the membrane, ions tend to flow to the side with low concentration, thus diminishing the concentration gradient. Pumps counteract this by pumping ions against the concentration gradient.
-
-\subsubsection{11. Which ion pump is particularly important for setting up the resting membrane potential?}
-
-The sodium-potassium exchanger. The sodium–potassium exchanger pushes $K^+$ into the cell and Na$^+$ out of the cell. For every 2 K$^+$ ions pumped into the cell, 3 Na$^+$ ions are pumped out, a net outward current that makes the inside of the cell negative.
-
-\subsubsection{12. What is an electrogenic pump?}
-
-
-\textit{Electrogenic pump:} An ion pump that generates net flow of charge. This requires energy, which is provided by the hydrolysis of one molecule of adenosine triphosphate (ATP), a molecule able to store and transport chemical energy within cells.
-
-The sodium–potassium exchanger is an electrogenic pump, as it genereates a net loss of charge in the neuron. 
-
-An example of a pump which is not electrogenic is the sodium–hydrogen exchanger, which pumps one H$^+$ ion out of the cell against its concentration gradient for every Na$^+$ ion it pumps in. In this pump, Na$^+$ flows down its concentration gradient, supplying the energy required to extrude the H$^+$ ion; there is no consumption of ATP.
-
-
-
+The resulting AP will propagate along the axon towards the next neurons in the circuit. APs are also known as \textit{spikes}, and a temporal sequence of APs generated by a neuron is called a \textit{spike train}. A neuron that emits an AP is often said to \textit{fire}, and the frequency a neuron emits APs is therefore called the \textit{firing rate} of the neuron. Generation of APs depends on the recent history of the neuron firing. In the brief \textit{absolute refractory period} after an AP, it is virtually impossible to initiate another AP, regardless of the amplitude of the stimulus. For a longer interval known as the \textit{relative refractory period}, the threshold for firing is higher than when the membrane is at rest, and APs initiated in this period have lower peak voltage. 
 
 
 %================================================================
-\section{Action Potentials}
-%================================================================ 
+\section{Synapses}
+%================================================================
 
-\subsubsection{Action Potentials 1}
-
-Action potentials are nerve signals. Neurons generate and conduct these signals along their processes in order to transmit them to the target tissues. Upon stimulation, they will either be stimulated, inhibited, or modulated in some way
-
-An action potential is caused by either threshold or suprathreshold stimuli upon a neuron. It consists of four phases; \textit{hypopolarization}, \textit{depolarization}, \textit{overshoot}, and \textit{repolarization}. 
-
-An action potential propagates along the cell membrane of an axon until it reaches the terminal button. Once the terminal button is depolarized, it releases a neurotransmitter into the synaptic cleft. The neurotransmitter binds to its receptors on the postsynaptic membrane of the target cell, causing its response either in terms of stimulation or inhibition.
-
-Action potentials are propagated faster through the thicker and myelinated axons, rather than through the thin and unmyelinated axons. After one action potential is generated, a neuron is unable to generate a new one due to its refractoriness to stimuli.
-
-<img src="figures/AP1.png" width = "400">
-
-
-\textit{Hypopolarization} is the initial increase of the membrane potential to the value of the threshold potential. The threshold potential opens voltage-gated sodium channels and causes a large influx of sodium ions. This phase is called the \textit{depolarization}. During depolarization, the inside of the cell becomes more and more electropositive, until the potential gets closer the \textit{electrochemical equilibrium (reversal potential)} for sodium of +61 mV. This phase of extreme positivity is the \textit{overshoot} phase.
-
-After the overshoot, the sodium permeability suddenly decreases due to the closing of its channels. The overshoot value of the cell potential opens voltage-gated potassium channels, which causes a large potassium efflux, decreasing the cell’s electropositivity. This phase is the \textit{repolarization} phase, whose purpose is to restore the resting membrane potential. Repolarization always leads first to \textit{hyperpolarization}, a state in which the membrane potential is more negative than the default membrane potential. But soon after that, the membrane establishes again the values of membrane potential.
+APs are passed from a neuron to next at junctions called \textit{synapses}, which are usually formed between axon terminals on the sending neuron and the dendrites of the receiving neuron, with a space between the two called the \textit{synaptic cleft}. It is common to refer to the sending neuron as the \textit{presynaptic} neuron and the receiving as the \textit{postsynaptic} neuron. The cleft of most synapses is to wide for APs to directly impact the postsynaptic neuron. Instead, chemical signals called \textit{neurotransmitters} cross the synapse. Excitatory neurons release neurotransmitters to increase the activity of the postsynaptic neuron, making it more likely to generate an AP,  while inhibitory neurons release neurotransmitters to suppress the activity, making the postsynaptic neuron less likely to generate an AP.

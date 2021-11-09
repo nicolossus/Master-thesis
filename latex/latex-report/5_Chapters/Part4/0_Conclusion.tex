@@ -5,10 +5,26 @@
 Mechanistic models of neural dynamics are poorly suited for inference and lead to challenging inverse problems. The objective of this thesis is to investigate the ability and utility of simulation-based inference for identifying parameters in mechanistic models of neural dynamics. We have used two simulation-based inference algorithms; (i) \textit{Approximate Bayesian Computation} (ABC) with quantile-based rejection sampling and post-sampling regression adjustment; (ii) the neural density estimator \textit{Sequential Neural Posterior Estimation} (SNPE); to infer model parameters in the Hodgkin-Huxley model \cite{HH1952} and the Brunel network model \cite{Brunel2000}. The primary focus of the study was on ABC, and SNPE results are mostly for comparison. In this chapter, we summarize our findings. 
 
 %================================================================
-\section{Sensitivity Analysis}
+\section{Correlation Analysis}
 %================================================================ 
 
 What we did, and what we found, why pearson might not be the best approach
+
+As with covariance itself, the measure can only reflect a linear correlation of variables, and ignores many other types of relationship or correlation. 
+
+---
+
+correlation analysis results are indicating related results to the sensitivity analysis. Correlation analysis can be used in linear cases for the determination of important inputs on certain outputs. Here stands the condition that a meaningful number of observations are taken into account for the calculation of the empirical covariance and variances.
+
+---
+
+Sensitivity analysis
+
+In a model with uncertain variables, you might want to know how much each uncertain input contributes to the uncertainty in the output. Typically, a few uncertain inputs are responsible for the lion’s share of the uncertainty in the output, while the rest have little impact. You can then concentrate on getting better estimates or building a more detailed model for the one or two most important inputs without spending considerable time investigating issues that turn out not to matter very much.
+
+---
+
+---
 
 pearson correlation coefficient
 
@@ -48,11 +64,30 @@ ABC methods have several disadvantages. Firstly, the methods are highly computat
 
 The tuning necessary is also a challenge
 
+---
 
+ABC methods were borne out of a need to tackle problems that defy conventional statistical methodologies. It has become clear, however, that whenever suitable Bayesian alternatives that do deal with the proper likelihood are available, ABC becomes computationally too expensive. The reason for this is primarily the fact that the representation of the posterior (as a weighted sum over Dirac delta functions) is not very efficient. So when alternatives are available, they ought to be used. In parallel to their role in computationally demanding applications, ABC techniques have, more recently, also attracted attention as an inferential framework in their own right [16,51]. From this, interesting new approaches to deal with real-world problems may well emerge [52].
+
+In conclusion, ABC-based methods are best suited to those problems for which other likelihood-based (or exact) Bayesian inference procedures do not yet exist. This appears to still include a host of challenging and interesting problems. Many stochastic and highly structured spatio-temporal problems in ecology, epidemiology, and evolutionary genetics clearly fall into this category. The recent developments discussed above mean that ABC has become a viable new way of tackling computationally demanding parameter inference problems. Given a model—as long as we can simulate it—ABC gives us a handle to evaluate approximate posterior distributions, which then can be further evaluated. Sensitivity and robustness analyses, but also predictions of future behavior or the likely effects of any interventions or perturbations, can be analyzed by simulating the model with parameters sampled from the posterior. There is enormous scope for basing the exploration of, for example, policy or conservation measures on the available data in this way. ABC has, for example, been used in experimental design [50,53] and in synthetic biology [14,54] to generate designs of molecular pathways that exhibit certain types of behavior. In such cases, we replace the observed data, D, by a representation of the desired behavior (such as the desired abundance of a species). Then the inference procedure is used to identify the scenario for which we are most likely to observe this outcome. Such predictions then reflect the best available evidence in light of the data and the model.
+
+
+%================================================================
+\subsection{Regression adjustment}
+%================================================================
+
+A crucial limitation of the rejection-sampling method is that only a small number of summary statistics can usually be handled. Otherwise, either acceptance rates become prohibitively low or the tolerance $\epsilon$ must be increased, which can distort the approximation., because $\ssim$ are treated equally whenever $\rho \qty(\ssim, \sobs) \leq \epsilon$ irrespective of the precise value of $\rho \qty(\ssim, \sobs)$. Here, we introduce two improvements to existing rejection sampling methods, smooth weighting and regression adjustment. The key benefit is insensitivity of the approximation to $\epsilon$. This insensitivity permits increasing the number of summary statistics, thus potentially increasing the information extracted from the data. 
+
+With summary statistic $T_1$, the adjustment is able to correct for the bias caused by the nonzero tolerance $\epsilon$. With summary statistic $T_2$, the tolerance is too large for accurate adjustment, although the result is still closer to the target distribution than the original.
+
+individual components of $\theta$ are treated separately, thus not accounting for possible correlations between them. Fig. X shows that the posterior samples indeed are correlated.
+
+Also nonlinear models have been proposed, see e.g. Blum (2010)
 
 %================================================================
 \subsection{Choice of ABC Algorithm}
 %================================================================
+
+Although neither rejection nor mcmc abc are not the best methods for sampling accurately and efficiently, and scale poorly to higher dimensional problems, they provide a solid basis for understanding more sophisticated/refined sampling schemes and post-hoc adjustments. They showcase that abc provides a robust framework for parameter identification
 
 
 The efficiency of the method is, however, largely dependent on the efficieny of the simulator model. As an informal side note: all results in this thesis were produced on a personal laptop. Inference on the most time-consuming model, the Brunel network, took about 2 hours with ABC (2000 simulations) and 2.5 hours with SNPE (running 1000 (adaptively proposed) simulations to train the network). 
@@ -61,9 +96,13 @@ rejection abc not efficient if the prior .. posterior. MCMC, as discussed in the
 
 There are more advanced importance sampling ABC methods that builds on the MCMC approach: SMC, PMC, HMC - ABC (link to papers)
 
+Perhaps the most notable difference between the approach of ABC and SNPE, is that SNPE uses \textit{all} model simulations to train the network opposed to ABC that usually ends up rejecting most of the simulations. Another important difference is that once the network is trained, it can be used to predict posterior on any empirical data with just one pass through the network. Whereas ABC would need to be performed again when presented with another set of empirical data. 
+
 %================================================================
 \subsection{Choice of Summary Statistics}
 %================================================================
+
+The choice of summary statistics is vital in determining the outcome of the inverse modelling with ABC. The set of statistics must effectively encode all phenomena of the original data that the experimenter wishes to be modelled. 
 
 For our purposes, requiring that S.Y/ be sufficient is problematic because we
 can’t examine an unknown or intractable likelihood to determine if the Fisher- Neyman Factorization Theorem holds. Although there are a growing number of different strategies for resolving the sufficiency problem [42], the most common approach has been to select a large set of summary statistics and hope that this set of statistics is large enough that it is at least close to being jointly sufficient for the parameters of interest. While adding more summary statistics to this set will
@@ -86,17 +125,27 @@ explanatory power
 
 the success of ABC inference depends on the choice of summary statistics. If the summary statistics are not capturing enough information from the data or the relevant information for the parameters of interest, then the posterior distributions will appear similar to the prior distribution, suggesting that the data are noninformative. 
 
+--- 
+To deal with high dimensional data, ABC algorithms typically reduce them to lower dimensional summary statistics and accept when simulated summaries are close to the observed summaries. 
+
+A crucial limitation of the ABC approach is that only a small number of summary statistics can usually be handled. Otherwise, either acceptance rates or become prohibitively low or the tolerance must be increased, which can distort the approximation. The problem is related to the general issue of the curse of dimensionality: many statistical tasks are substantially more difficult in high dimensional settings. 
+
 
 %================================================================
 \subsection{Choice of Distance Metric}
 %================================================================ 
 
-While the choice of summary statistics is of primary importance, the choice of distance metric can also have a substantial impact on the quality of the posterior approximation. In the present study, we used the Euclidean distance. This amounts to a circular acceptance region, as illustrated by \autoref{fig:abc_illustration}, which implies independence and identical scales of the summary statistics. In order to suppress domination of the summary statistics with largest scale, we used a weighted version of the Euclidean distance that scaled the summary statistics with their respective standard deviation estimated from the prior predictive distribution. Moreover, we also weighted the importance of the summary statistics based on the sensitivity analysis. Despite these efforts, the Euclidean distance might not have the acceptance region that results in the most accurate ABC posterior approximation. If we, reasonably, suppose that the different summary statistics are dependent and on different scales, their true distribution under the model may be better represented by an elliptical acceptance region rather than a circular. However, the different levels of information encoded by the different summary statistics make finding the optimal acceptance region a challenge. Even with different scales and dependences, a circular acceptance region might result in a more accurate ABC posterior approximation than an elliptical region because the circular is better tied up with the most informative statistics. How the best acceptance region is connected with the choice of summary statistics is discussed by Prangle in \cite{prangle_distance}. 
+While the choice of summary statistics is of primary importance, the choice of distance metric can also have a substantial impact on the quality of the posterior approximation. In the present study, we used the Euclidean distance. This amounts to a circular acceptance region, as illustrated by \autoref{fig:abc_illustration}, which implies independence and identical scales of the summary statistics. Technically, because of the dimensionality of the summary statistics vectors we used, the acceptance regions were spherical. However, we stick with the circular analogy as it is easier to conceptualize. In order to suppress domination of the summary statistics with largest scale, we used a weighted version of the Euclidean distance that scaled the summary statistics with their respective standard deviation estimated from the prior predictive distribution. Moreover, we also weighted the importance of the summary statistics based on the correlation analysis. Despite these efforts, the Euclidean distance might not have the acceptance region that results in the most accurate ABC posterior approximation. If we, reasonably, suppose that the different summary statistics are dependent and on different scales, their true distribution under the model may be better represented by an elliptical acceptance region rather than a circular. The Mahalanobis distance is an example of a distance metric with elliptical acceptance region. However, the different levels of information encoded by the different summary statistics make finding the optimal acceptance region a challenge. Even with different scales and dependences, a circular acceptance region might result in a more accurate ABC posterior approximation than an elliptical region if the circular is better tied up with the most informative statistics. How the best acceptance region is connected with the choice of summary statistics is discussed in detail by Prangle in \cite{prangle_distance}. 
+
 
 
 %================================================================
 \section{Identifiability}
 %================================================================  
+
+To assess the goodness of the inferred solution, we have generated an image with known con- figuration and compared the estimated posterior with the input configuration. We find that ABC produced a reliable approximate posterior that was consistent with the input param- eter values and mapped the correlation between simulation parameters. The ABC method with its PMC implementation is thus promising for numerous forward modeling problems in cosmology and astrophysics.
+
+To assess the goodness of the inferred posterior, we have discussed several considerations for good performance, including the MAP estimate, highest density interval and posterior predictive checks. Particularly, since the ground truth parameters are known, we have used an error measure that considers the width of the posterior by averaging over the posterior, RMSPE.
 
 see HH ABC 
 
@@ -116,6 +165,7 @@ The sensitivity analysis reveals that the variance in the membrane potential mai
 
 A similar study of using ABC to constrain the Hodgkin-Huxley model parameters was carried out in .. hh abc .. They primarily focused on constraining the rate parameters, and were also able to successfully identify the parameters.  
 
+Indicating that Abc is a viable method for parameter identification in the many models using the hodgkin-huxley formalism
 
 %================================================================
 \subsection{The Brunel Network Model}
@@ -177,20 +227,55 @@ ABC have been shown to scale poorly to higher dimensions
 
 SNPE have been demonstrated to obtain good results for systems with about X free parameters (ref paper), but has yet to demonstrate scalability to problems like the V1 model. In its current state, one of the principal investigators behind SNPE, J. Macke, stated that SNPE is only able to infer up to a couple of dozen parameters, depending on the problem (ref: in conference).
 
+
+\section{Notes}
+
+In this thesis, we have formulated a framework for the inverse modelling of neural dynamics based upon an algorithm using rejection ABC with post-hoc corrections through regression adjustment. We characterized the properties of this method when applied to models typically used in computational neuroscience; a biophysically detailed neuron model (HH model) and a neural network of point neurons model (Brunel model). Examination of the outcomes of the rejection ABC algorithm indicated that parameter estimates converge to yield best fit approximations to the summary statistics of empirical data and provide constraints upon the parameter estimates associated with a data dependent reduction in the estimated posterior precision. 
+
+To assess the validity of the procedure we tested for predictive validity. These results demonstrated that the model inversion and comparison approach are able to reliably identify the model that generated the data. 
+
 %================================================================
 \chapter{Conclusions}\label{chap:conclusions}
 %================================================================
 
-Armed with these insights .. conclusion
+We investigated how simulation-based inference can be applied to inverse modelling of mechanistic models of neural dynamics, where the likelihood is unavailable or intractable. In particular, we explored the ability of approximate Bayesian computation (ABC) and neural density estimation (NDE) to identify the conductance parameters in the Hodgkin-Huxley model and the synaptic weight parameters in the Brunel network model. 
 
-Concluding remarks.
+We discussed an implementation of the rejection ABC algorithm with quantile-based tolerance and post-sampling local linear regression adjustment. Even though rejection ABC just sample proposal parameters from the prior densities, we were, in general, successful in identifying the model parameters of interest. By applying local linear regression adjustment, we obtained narrow posterior densities with the ground truth values of the parameters in regions of high posterior density. The posterior error decreases in the limit of small tolerances. With regression adjustment, we found that we could accept more simulations without sacrificing substantial accuracy for the model parameters that were the most constrained by the summary statistics. The choice of summary statistics is crucial for the performance of ABC. In practice, the success of ABC relies on expert-crafted low-dimensional summary statistics that constrain the model parameters of interest. Although the rejection ABC approach were able to perform efficiently, in particular on the Hodgkin-Huxley model, and recover the ground truth parameters, more advanced sampling algorithms with better proposal mechanisms should be considered. The accurate results we were able to obtain with the simple rejection sampler implies that even better results can be expected by using more advanced samplers. 
 
-A limiting factor of the ABC methods are that they are simulation intensive and the efficiency of the procedure depends on the the computational demands of the simulator.  
-ABC has been successfully applied to a wide range of problems with an complex or absent associated likelihood. There are, however, several pitfalls to be aware of. The approach is simulation intensive, requires tuning of the tolerance threshold, discrepancy function and weighting function, and suffers from a curse of dimensionality of the summary statistic. 
+We compared the rejection ABC algorithm with the NDE machine learning tool Sequential Neural Posterior Estimation (SNPE), which trains an artificial neural network to map features of observed data to posteriors over parameters by using adaptively proposed model simulations. Inference on the Brunel network model demonstrates the power and flexibility of SNPE; by training on simulations that included the parameter ranges for two of the network states, SNPE was able to accurately predict posteriors that corresponded to the network's state in the observed data. The advantage of the SNPE approach is that once trained, the network can be applied to any observed data and estimate the posterior densities over model parameters with only a single pass through the network. 
+
+
+%Recently, there have been developed simulation-based inference machine learning algorithms using \textit{artificial neural network-based conditional density estimators}. In particular, the  \textit{Sequential Neural Posterior Estimation} (SNPE) algorithm targets parametrically learning the posteriors over model parameters by using adaptively proposed model simulations instead of likelihood calculations. More specifically, the algorithm trains a Bayesian mixture-density network (MDN) to learn the association between data, or summary statistics of the data, and underlying parameters. Instead of filtering out simulations, as ABC algorithms do, SNPE uses \textit{all} simulations to train the MDN to identify admissible parameters. Once trained, the network can then be applied to observed data to derive the posterior densities over the parameters of the simulator model. 
+
+
+A limiting factor of the simulation-based approach to inference is that the algorithms are simulation intensive. Consequently, the efficiency of an algorithm predominantly depends on the computational demands of the simulator. There are also challenges (and opportunities) ahead in scaling and automating simulation-based inference approaches. However, the frontier of simulation-based inference as a methodological research field is rapidly advancing. This activity is promising for the numerous inverse modelling problems in neuroscience. The generality of the simulation-based inference methods allows them to be applied to a wide range of computational investigations in need of improved inference quality. In addition to being able to aid in designing better models of neural dynamics, simulation-based inference may ultimately help to bridge the gap between mechanistic hypotheses and experimental neural data. 
+
+
+%However, simulation-based inference is promising for the numerous inverse modelling problems in neuroscience. The generality of the methods allows them to be applied to a wide range of computational investigations in need of improved inference quality. In addition to being able to aid in designing better models of neural dynamics, simulation-based inference may help to bridge the gap between mechanistic hypotheses and experimental neural data. 
+
+%A limiting factor of the ABC methods are that they are simulation intensive and the efficiency of the procedure depends on the the computational demands of the simulator. ABC has been successfully applied to a wide range of problems with an complex or absent associated likelihood. There are, however, several pitfalls to be aware of. The approach is simulation intensive, requires tuning of the tolerance threshold, discrepancy function and weighting function, and suffers from a curse of dimensionality of the summary statistic. 
+
+% Until recently, scientists confronted with inverse problems and a complex simulator as a forward model had little recourse other than to choose ABC or methods based on classical density estimation techniques. While these approaches have served some domains of science quite well, they have relied heavily on the labor-intensive process of experts providing powerful summary statistics. As a result, there is a frontier beyond which these traditional methods are less useful and new techniques are needed.
+
+% The term likelihood-free inference has served as a point of convergence for what were previously disparate communities, and a new lingua franca has emerged. This has catalyzed significant cross-pollination and led to a renaissance in simulation-based inference. The advent of powerful ML methods is enabling practitioners to work directly with high-dimensional data and to reduce the reliance on expert-crafted summary statistics. New programming paradigms such as probabilistic programming and differentiable programming provide new capabilities that enable entirely new approaches to simulation-based inference. Finally, taking a more systems-level view of simulation-based inference that brings together the statistical and computational considerations has taken root. Here active learning is leading the way, but we expect more advances like this as simulation-based inference matures.
+
+%The rapidly advancing frontier means that several domains of science should expect either a significant improvement in inference quality or the transition from heuristic approaches to those grounded in statistical terms tied to the underlying mechanistic model. It is not unreasonable to expect that this transition may have a profound impact on science.
+
+
 
 %================================================================
 \chapter{Future Research}\label{chap:future}
 %================================================================
+
+%Armed with these insights .. conclusion
+
+We here provide an outline of potential future research building off of the present work.  
+
+In this study, we have only investigated low-dimensional problems, i.e., inferential tasks with few parameters to identify. However, 
+
+Recent studies, see e.g. Skaar et al. 
+
+%Concluding remarks.
 
 Possible future studies. Reference other relevant studies. 
 
@@ -206,3 +291,4 @@ Scalability
 Check if is scalable in the number of parameters;
 Higher dimensional problems (more parameters to estimate)
 
+Try to make contact between real-world experimental data and mechanistic models of neural dynamics. 
