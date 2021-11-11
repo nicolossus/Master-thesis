@@ -94,9 +94,16 @@ The efficiency of the method is, however, largely dependent on the efficieny of 
 
 rejection abc not efficient if the prior .. posterior. MCMC, as discussed in theory section, improves on this by ... 
 
-There are more advanced importance sampling ABC methods that builds on the MCMC approach: SMC, PMC, HMC - ABC (link to papers)
+There are more advanced importance sampling ABC methods that builds on the MCMC approach: SMC, PMC, HMC - ABC (link to papers). must monitor convergence
 
 Perhaps the most notable difference between the approach of ABC and SNPE, is that SNPE uses \textit{all} model simulations to train the network opposed to ABC that usually ends up rejecting most of the simulations. Another important difference is that once the network is trained, it can be used to predict posterior on any empirical data with just one pass through the network. Whereas ABC would need to be performed again when presented with another set of empirical data. 
+
+
+other choices for the method include the prior distributions and settings of the ABC algorithm. We used uninformative priors to demonstrate the accuracy of the method based on data alone. However, including informative priors would speed up the convergence of the algorithm. 
+
+The method can be used for a broad class of models where the likelihood is not known or difficult to compute, This is a great advantage in the model development as models can potentially be calibrated before their derivation is finalized.
+
+The proposed method is computationally lightweight and can be run on standard laptops with reasonable run-time. The computation time is dominated by the particular model evaluation time. Thus the computational cost depends heavily on the specific model and its implementation
 
 %================================================================
 \subsection{Choice of Summary Statistics}
@@ -130,6 +137,10 @@ To deal with high dimensional data, ABC algorithms typically reduce them to lowe
 
 A crucial limitation of the ABC approach is that only a small number of summary statistics can usually be handled. Otherwise, either acceptance rates or become prohibitively low or the tolerance must be increased, which can distort the approximation. The problem is related to the general issue of the curse of dimensionality: many statistical tasks are substantially more difficult in high dimensional settings. 
 
+
+--- 
+
+Summary statistics may be used to increase the acceptance rate of ABC algorithms, and low-dimensional sufficient statistics are optimal for this purpose, as they capture all relevant information present in the data in the simplest possible form. However, low-dimensional sufficient statistics are typically unattainable for models where ABC-based inference is most relevant, and consequently, some heuristic is usually necessary to identify useful low-dimensional summary statistics. [We performed a correlation analysis, blabla, then checked the error as a function of number of sum stats->not good approach as the accuracy and stability of ABC decreases rapidly with an increasing number of summary statistics]. Ref to sensitivity analysis and MOO. (The use of poorly chosen summary statistics will often lead to inflated credible intervals due to the implied loss of information).
 
 %================================================================
 \subsection{Choice of Distance Metric}
@@ -175,7 +186,8 @@ Brunel
 
 Able to accurately predict summary statistics ...
 
-Indicates that $\eta$ is not dominant in determining the dynamics of the SR state. 
+
+Indicates that $\eta$ is not dominant in determining the dynamics of the SR state. There is a biophysical explanation to this observation. In the SR state, the recurrent input from the network is significantly larger than that of the external input. With this positive-feedback network, it is unsurprising that we are not able to constrain $\eta$ as it is a parameter that describes the external input, ... overdominance of recurrent input from the network. 
 
 Supported by the findings of (uncertainpy paper), where a sensitivity analysis of the Brunel model parameters was carried out. In the SR state, (uncertainpy paper) found that the Brunel network is most sensitive to the synaptic delay $D$ (which is kept constant in our results). However, the network was also found to be more sensitive to $g$ than $\eta$ in the SR state. 
 
@@ -213,6 +225,16 @@ H. Jung and P. Marjoram (2011). "Choice of Summary Statistic Weights in Approxim
 %================================================================
 \section{Scalability}
 %================================================================ 
+
+Addressing limitations of ABC
+
+It is known that ABC will not perform well in all cases and faces issues common across all model optimization problems. All optimization algorithms are subject to the so-called curse of dimensionality, by which the exponential increase in the volume of the search space with each new parameter effectively mean that any sampling procedure will in practice be extremely sparse. 
+
+High-dimensional datasets and high-dimensional parameter spaces can require an extremely large number of parameter points to be simulated in ABC-based studies to obtain a reasonable level of accuracy for the posterior inferences. In such situations, the computational cost is severely increased and may in the worst case render the computational analysis/investigation intractable. These are examples of well-known phenomena which are usually referred to with the umbrella-term curse-of-dimensionality \cite{ABCprimer}. 
+
+machine learning based may 
+
+---
 
 We now turn to a discussion of scalability ... not investigated in this thesis. 
 

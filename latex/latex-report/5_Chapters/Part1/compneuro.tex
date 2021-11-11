@@ -1,148 +1,279 @@
-
-
 %================================================================
-%\chapter{Computational Neuroscience}\label{chap:compneuro}
+\chapter{Models of Neural Dynamics}\label{chap:compneuro}
 %================================================================
 
+Understanding the complex mechanisms of the nervous system requires the construction and analysis of models of neural dynamics at different levels. In this chapter, we discuss the seminal Hodgkin-Huxley model \cite{HH1952} that is a biophysically detailed description of the ionic mechanisms underlying the initiation and propagation of action potentials in squid giant axons. We also consider the Brunel network model \cite{Brunel2000} for activity dynamics in local cortical networks. The content of this chapter is mainly based on \cite{Sterratt}, \cite{dayan_abbott} and \cite{neuro_dynamics}.
 
-%================================================================
-\chapter{Neuroscientific Models}\label{chap:compneuro}
-%================================================================
-
-Conductance-based models
-The goal of conductance-based models is to model the biophysical mechanisms that give rise to action potentials in neurons and thereby get accurate predictions of neuron dynamics, such as the action potential shape. The various components related to the generation of action potentials are modeled as electrical circuit elements, and we are typically interested in how the membrane potential evolves with time.
-
-As ions are electrically charged, they exert forces on and experience forces from other ions. The force acting on an ion is proportional to the ion's charge. This impermeability can cause a net build-up of positive ions on one side of the membrane and negative ions on the other. This leads to an electrical field across the membrane, similar to that found between the plates of an ideal electrical capacitor.
 
 %================================================================
 \section{The Hodgkin-Huxley Model}
 %================================================================ 
 
-\subsection{Channel Kinetics}
+The Hodgkin-Huxley (HH) model was the first quantitative model of active membrane properties, and gave a biophysically detailed description of the mechanisms that give rise to action potentials (APs) in neurons. The model was used to compute the shape of action potentials in the squid giant axon. The model, and the experimental work that led up to it, earned its authors a share of the 1963 Nobel Prize in Physiology or Medicine, establishing a new framework for thinking about the electrical activity of neurons. Before we present the model itself, we first briefly discuss the basics of mathematical modeling of neurons. 
 
-In the standard HH model, the primary contribution to the initiation and propagation of single action potentials is made by the fast \Na channel. A single noninactivating voltage-dependent \K current provides spike repolarization. 
 
-The \Na current is calculated using the standard ohmic relation 
+%================================================================
+\subsection{Electrical Properties of Neurons}
+%================================================================ 
+
+The basis of electrical activity in neurons is the flow of ions into and out of the neuron through ion channels in the neuronal membrane. As ions are electrically charged, they exert forces on and experience forces from other ions. The force acting on an ion is proportional to the ion's charge, $q$. As we established in the previous chapter, there is typically an excess negative charge on the inside surface of the neuron and a balancing positive charge on its outer surface. The lipid bilayer forms an insulating barrier between the outside and interior of the neuron. As such, the neuronal membrane behaves as a \textit{capacitor}, described by:
+
+\begin{equation}\label{eq:capacitor}
+    q = C_m V,
+\end{equation}
+
+where $V$ is the membrane potential and the constant of proportionality $C_m$ the membrane capacitance, which indicates how much charge can be stored on a particular capacitor for a given potential difference across it. All current passing through the membrane either charges or discharges the membrane capacitance, so the rate of change of charge, $\dd{q}/\dd{t}$, on the membrane is the same as the net current, $I$, flowing through the membrane: $I=\dd{q}/\dd{t}$. By differentiating \autoref{eq:capacitor}, we can use the membrane capacitance to determine how much current is required to change the membrane potential at a given rate: 
+
+\begin{equation}\label{eq:dVdt_fundamental}
+   C_m \frac{\dd{V}}{\dd{t}} = \frac{\dd{q}}{\dd{t}} = I.
+\end{equation} 
+
+\autoref{eq:dVdt_fundamental} is fundamental in the mathematical modeling of neurons, as it relates how the membrane potential evolves over time with the net flow of current through ion channels. It should be noted that in the context of modeling the entire neuron, $C_m$ is technically the membrane capacitance per unit area. The current $I_\mathrm{X}$ per unit area through an ion channel of type $X$ is modelled by the quasi-ohmic relation: 
+
+\begin{equation}
+    I_\mathrm{X} = g_\mathrm{X} \qty(V - \mathrm{E_X}),
+\end{equation}
+
+where $g_\mathrm{X}$ is the \textit{conductance} of the specific ion channel per unit area and $E_\mathrm{X}$ the reversal potential of ion $\mathrm{X}$. $\qty(V - \mathrm{E_X})$ is called the \textit{driving force}, and when the membrane potential is at the reversal potential for ion $\mathrm{X}$, the driving force is zero. The conductance is a measure of the ease with which an electric current passes, and is the reciprocal of the resistance. The total current per unit area across the neuronal membrane, $I$, is the sum of the contributions from the different types of ion channels:
+
+\begin{equation}
+    I = \sum_\mathrm{X} g_\mathrm{X} \qty(V - \mathrm{E_X}).
+\end{equation}
+
+
+%================================================================ 
+\subsection{Biophysical Model of Ionic Mechanisms}
+%================================================================ 
+
+From a biophysical point of view, APs are the result of ionic currents that pass through the neuronal membrane. In an extensive series of electrophysiology experiments on the squid giant axon, Hodgkin and Huxley succeeded to measure these currents and to describe their dynamics in terms of differential equations. Hodgkin and Huxley treated the squid giant axon as an equivalent electrical circuit, see \autoref{fig:hh_circuit}, with the current across the membrane being carried by either a capacitor current, $I_\mathrm{C}$, current of potassium ions, $I_\mathrm{K}$, current of sodium ions, $I_\mathrm{Na}$ or a catch-all leakage current, $I_\mathrm{L}$. 
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[scale=0.35]{hh_circuit}
+    \caption{The HH equivalent circuit. 
+    }
+    \label{fig:hh_circuit}
+    \source{\cite{Sterratt}.}
+\end{figure}
+
+Thus, the fundamental total current equation is:
+\begin{equation}\label{eq:hh_total_current}
+    \begin{aligned}
+    I &= I_\mathrm{C} + I_\mathrm{K} + I_\mathrm{Na} + I_\mathrm{L} 
+    \\
+    &= C_m \frac{\dd{V}}{\dd{t}} + g_\mathrm{K} \qty(V - E_\mathrm{K}) + g_\mathrm{Na} \qty(V - E_\mathrm{Na}) + g_\mathrm{L} \qty(V - E_\mathrm{L})
+    \end{aligned}
+\end{equation}
+
+In voltage-gated ion channels, the channel conductance $g_\mathrm{X}$ is a function of both voltage and time, $g_\mathrm{X} (V, t)$. We can write the time-dependent conductances like: 
 
 \begin{equation*}
-    I_\mathrm{Na} = \gbarNa m^3 h \qty(V_\mathrm{m} - E_\mathrm{Na}),
+    g_\mathrm{X} (V, t) = \bar{g}_\mathrm{X} p_\mathrm{X} (V, t),
 \end{equation*}
 
-where $I_\mathrm{Na}$ is the \Na current, $V_\mathrm{m}$ is the membrane potential, $E_\mathrm{Na}$ is the equilibrium potential for \Na (assumed to be $+50\mV$, and $m$ and $h$ are the activation and inactivation state variables, respectively. The variable $m$ ranges from $0$ (not activated) to $1$ (fully activated), and $h$ ranges from $0$ (fully inactivated) to $1$ (no inactivation). The maximal conductance is the product $\gbarNa = \gamma_\mathrm{Na} \rho_\mathrm{Na}$, where $\gamma_\mathrm{Na}$ is the single channel conductance and $\rho_\mathrm{Na}$ is the channel density. $I_\mathrm{Na}$ activation is described by the usual first order kinetic reaction, \ch{open <=> closed}, which yields steady-state value $m_\infty$ and time constant $\tau_m$ given by 
+where $\bar{g}_\mathrm{X}$ is the total conductance when all channels of type $\mathrm{X}$ are fully open, i.e., the \textit{maximum conductance}, and $p_\mathrm{X} (V, t)$ is the fraction of channels of type $\mathrm{X}$ that are open, i.e., the \textit{channel density} (a number between 0 and 1). Hodgkin and Huxley suggested that the opening and closing of the voltage-gated ion channels were controlled by one or more \textit{gating particles}. Using a series of voltage clamp experiments, i.e., where the membrane potential is held at a level determined by the experimenter, and clever ionic substitutions, they were able to isolate the voltage-gated conductances of potassium and sodium. They obtained rate constants for the opening, closing and inactivation of the conductances by analyzing the voltage-dependence using first-order kinetics, and reduced these rate constants to a set of four ordinary differential equations:
 
-\begin{align*}
-    m_\infty &= \frac{\alpha}{\alpha + \beta},
+\begin{subequations}\label{eq:hh_model}
+    \begin{align}
+    C_m \frac{\dd{V}}{\dd{t}} &= - \gbarK n^4 \qty(V - E_\mathrm{K}) - \gbarNa m^3h \qty(V - E_\mathrm{Na}) - \bar{g}_\mathrm{L} \qty(V - E_\mathrm{L}) + I
+    \label{eq:hh_model_dVdt}
     \\
-    \tau_m &= \frac{1}{\alpha + \beta},
-\end{align*}
+    \frac{\dd{n}}{\dd{t}} &= \alpha_n (V) (1-n) - \beta_n (V) n 
+    \label{eq:hh_model_dndt}
+    \\
+    \frac{\dd{m}}{\dd{t}} &= \alpha_m (V) (1-m) - \beta_m (V) m
+    \label{eq:hh_model_dmdt}
+    \\
+    \frac{\dd{h}}{\dd{t}} &= \alpha_h (V) (1-h) - \beta_h (V) h
+    \label{eq:hh_model_dhdt}
+    \end{align}
+\end{subequations}
 
-where $\alpha$ and $\beta$, the forward (opening) and backward (closing) reaction rates, respectively, are function of the local membrane potential.
+where the gating variables $n$, $m$ and $h$ are dimensionless quantities that are associated with potassium channel activation, sodium channel activation and sodium channel inactivation, respectively. The gating variables $n$ and $m$ range from $0$ (not activated) to $1$ (fully activated) and $h$ ranges from $0$ (fully inactivated) to $1$ (no inactivation). The voltage-dependent rate constants $\alpha_x (V)$ and $\beta_x(V)$, where $x \in \qty{n,m,h}$, represent the activation and inactivation rates, respectively, for gate $x$. \autoref{eq:hh_model} describes how the membrane potential $V$ across a membrane with capacitance $C_m$ responds to an input current $I$. Note that \autoref{eq:hh_model_dVdt} has been slightly reorganized from the formulation of the total current equation (\autoref{eq:hh_total_current}) to better reflect this. The potassium current, $I_\mathrm{K}$, is controlled by four identical gating particles, whereas the sodium current, $I_\mathrm{Na}$, is controlled by three identical and one distinct gating particle. The leak current, $I_\mathrm{L}$, is not voltage-dependent, and no gating particles are therefore associated with its conductance.
 
-\subsection{HH}
+The forms of the $\alpha_x$ and $\beta_x$ functions were empirically proposed by the authors to fit the experimental recordings, yielding the following equations for the rate constants associated with the potassium activation gating variable;
 
-Unlike in the voltage clamp mode, where the membrane potential is held at a level determined by the experimenter, in "current clamp" mode the membrane potential is free to vary, and the amplifier records whatever voltage the cell generates on its own or as a result of stimulation.
+\begin{subequations}
+    \begin{align}
+        \alpha_n (V) &= 0.01 \frac{V + 55}{1 - \exp \qty(-(V+55)/10)}
+        \\
+        \beta_n (V) &= 0.125 \exp \qty(-(V+55)/10)
+    \end{align}
+\end{subequations}
 
-conductance - the degree to which an object conducts electricity, calculated as the ratio of the current which flows to the potential difference present. This is the reciprocal of the resistance, and is measured in siemens or mhos.
+and for the sodium activation and inactivation gating variables: 
 
-Alan Hodgkin and Andrew Huxley described the model in 1952 to explain the ionic mechanisms underlying the initiation and propagation of action potentials in the squid giant axon.[1] They received the 1963 Nobel Prize in Physiology or Medicine for this work.
+\begin{subequations}
+    \begin{align}
+        \alpha_m (V) &= 0.1 \frac{V + 40}{1 - \exp \qty(-(V+40)/10)}
+        \\
+        \beta_m (V) &= 4 \exp \qty(-(V+65)/18)
+        \\
+        \alpha_h (V) &= 0.07 \exp \qty(-(V+65)/20)
+        \\
+        \beta_h (V) &= \frac{1}{\exp \qty(-(V+35)/10) + 1}
+    \end{align}
+\end{subequations}
 
-\autoref{fig:hh_states} plot states
+
+Here, we use a formulation of the model where the membrane voltage has been reversed in polarity from the original HH convention and shifted to reflect a resting potential of $-65 \mV$. An example of how to arrive at the alternative formulation is provided in \autoref{sec:Appendix B}. The original model parameter values are summarized in \autoref{tab:hh_model_parameters}.
+
+\begin{table}[!htb]
+  \caption{The original parametrization of the HH model.}
+  %\footnotesize%
+  \begin{center}
+    \rowcolors{2}{gray!15}{white}
+    \begin{tabular}{lll}
+      \toprule
+      \textbf{Parameter} & \textbf{Value} & \textbf{Description} \\
+      \midrule
+      $C_m$ & $1.0 \, \mathrm{\mu F \, cm}^{-2}$ & Membrane capacitance
+      \\
+      $\gbarK$ & $36.0 \gunit$ & Maximum potassium channel conductance 
+      \\
+      $\gbarNa$ & $120.0 \gunit$ & Maximum sodium channel conductance 
+      \\
+      $\bar{g}_\mathrm{L}$ & $0.3 \gunit$ & Maximum leakage channel conductance
+      \\
+      $E_\mathrm{K}$ & $-77.0 \mV$ & Potassium reversal potential
+      \\
+      $E_\mathrm{Na}$ & $50.0 \mV$ & Sodium reversal potential
+      \\
+      $E_\mathrm{L}$ & $-54.4 \mV$ & Leak reversal potential
+      \\
+      \bottomrule
+    \end{tabular}
+  \end{center}
+  \label{tab:hh_model_parameters}
+\end{table}
+
+%================================================================ 
+\subsection{Simulation of Action Potentials}
+%================================================================ 
+
+\autoref{fig:hh_states} shows the numerical solutions of a simulation of the HH model. As seen in the top panel, the shape of the simulated action potentials match the description of an action potential (see \cref{sec:ion_ch_and_ap}) well. Besides reproducing action potentials, the HH model offers insights into the mechanisms underlying them. The middle panel shows how the gating variables change during the temporal evolution of the action potentials. At stimulus onset (starting at $t=10 \ms$), the initial depolarization of the membrane potential is due to the input current. When the depolarization is above the threshold (at about $-55 \mV$), the sodium current activates, as reflected in the increase in $m$. As the sodium reversal potential is far higher than the resting membrane potential, the driving force of the sodium current pushes the membrane potential to sharply increase. The slower potassium conductance, reflected by the gating variable $n$, activates after the sharp rise in membrane potential and allows potassium ions to flow out of the neuron because of the low potassium reversal potential. In addition, the repolarization of the membrane potential is also assisted by the inactivating sodium gating variable, $h$, which shuts off the sodium current. This drives the membrane potential quickly back down towards its resting state, but undershoots somewhat, due to the slow de-inactivation of the sodium current, to hyperpolarize the neuron. The final recovery involves a rapid deactivation of the sodium current and a slower deactivation of the potassium current. Eventually all the state variables and the membrane potential return to their resting states. The HH model also explains the refractory period. Relative to the duration of an action potential, the gating variables recover to their resting states slowly. During this period, it is harder to generate an action potential. In the initial recovery phase, an increasing voltage will not increase the sodium conductance, and hence the membrane potential, considerably due to the ongoing inactivation of the sodium current and the prolonged activation of the potassium current. As the state variables advances in their recovery toward the resting states, an action potential can be initiated but will have a lower peak voltage. 
 
 \begin{figure}[H]
     \centering
     \includegraphics[scale=1.0]{hh_states}
-    \caption{gbarK=36, gbarNa=120
+    \caption{Simulated dynamics of $V$, $n$, $m$ and $h$ in the HH model during the firing of action potentials in the squid giant axon. The top panel shows the numerical solution of \autoref{eq:hh_model_dVdt} and the middle panel the numerical solutions of \Crefrange{eq:hh_model_dndt}{eq:hh_model_dhdt}. The system is simulated for $T = 60 \ms$ with time resolution $\Delta t=0.025 \ms$. The input stimulus received by the neuron (bottom panel) is a step current with amplitude $I = 10 \, \mathrm{\mu A/cm}^2$, and onset and offset at $10 \ms$ and $50 \ms$, respectively. The parametrization of the model is given by \autoref{tab:hh_model_parameters}. 
     }
     \label{fig:hh_states}
 \end{figure}
 
-\autoref{fig:hh_different_gs} different gs
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=1.0]{hh_different_gs}
-    \caption{caption
-    }
-    \label{fig:hh_different_gs}
-\end{figure}
 
 
-%================================================================
-\subsection{Spike Statistics}\label{sec:spike_statistics}
+
+
+%================================================================ 
+%================================================================ 
+%================================================================ 
+%================================================================ 
 %================================================================ 
 
 
-\begin{equation}\label{eq:accomm_index}
-    A = \frac{1}{N -k - 1} \sum_{i=k}^N \frac{\mathrm{ISI}_i - \mathrm{ISI}_{i-1}}{\mathrm{ISI}_i + \mathrm{ISI}_{i-1}}
-\end{equation}
 
 %================================================================
 \section{The Brunel Network Model}
 %================================================================
 
-The network may be in several different states of spiking activity, largely dependent on the values of the synaptic weight parameters.
+Many neural networks of interest have thousands or millions of neurons, and, generally, it is infeasible to include all in the model. Neural network models are usually scaled down according to the ratio of different neuron populations in the network that the model tries to mimic. Furthermore, they often use simplified neuron models to reduce computational cost. Still, neural network models may exhibit a high diversity of spiking dynamics. In this section, we present one such model that is thoroughly analyzed in the literature; the Brunel network model \cite{Brunel2000}. Before we present the network model itself, we first discuss the central building block of the network: the leaky integrate-and-fire (LIF) neuron model. 
 
-In neuroscience and computer science, synaptic weight refers to the strength or amplitude of a connection between two nodes, corresponding in biology to the amount of influence the firing of one neuron has on another.
 
-\subsection{Leaky integrate and fire neurons}
+%================================================================
+\subsection{Integrate-And-Fire Neurons}
+%================================================================
 
-\subsection{Spike Train Statistics}
+While the ionic mechanisms behind APs are quite complicated, the conditions for AP generation are often quite straightforward: When the membrane potential reaches a specific threshold, a spike is generated and the membrane potential returns to the background state. Simulations of APs can be accelerated significantly by not explicitly modeling the responsible biophysical mechanisms. \textit{Integrate-and-fire} (IF) models are simplified neuron models with a spike generation and reset mechanism. In these models, whenever the membrane potential of a neuron reaches a threshold value $\theta$, a spike is generated and the membrane potential is reset to a value $V_\mathrm{reset}$ below the threshold potential, $V_\mathrm{reset} < \theta$. In the simplest IF model, all active membrane conductances are ignored and the entire membrane conductance is modeled as a single passive leakage conductance: 
 
-Spikes are events characterized by their firing time $t^{(f)}$, where $f=1, 2, ...$ labels a spike by the spike count. We define the spike train of a neuron $i$ as the sequence of firing times: 
+\begin{equation*}
+    I_\mathrm{L} = \bar{g}_\mathrm{L} \qty(V - E_m),
+\end{equation*}
 
-\begin{equation}
-    S_i(t) = \sum_f \delta \left(t - t_i^{(f)} \right),
+where $E_m$ is the resting membrane potential. Since the conductance is the reciprocal of the resistance, the above equation can be equivalently formulated as: 
+
+\begin{equation*}
+    I_\mathrm{L} = \frac{V - E_m}{R_m},
+\end{equation*}
+
+where $R_m$ is the membrane resistance. Furthermore, we assume that the model neuron behaves like an electric circuit consisting of a resistor and a capacitor in parallel, i.e., an RC circuit, driven by a current $I$. In addition, the circuit needs a switch, representing the reset mechanism, which is open until the membrane potential reaches $\theta$ and then closes to short-circuit the membrane resistance, bringing the membrane potential back to rest. The switch opens again after a refractory period $\tau_\mathrm{rp}$, allowing the membrane to charge. This neuron model is often called the \textit{leaky integrate-and-fire} (LIF) model. The circuit diagram and the RC circuit response to input stimulus is shown in \autoref{fig:lif_circuit}. When the membrane potential is below the threshold, its value is determined by the equation for an RC circuit: 
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[scale=0.45]{lif_circuit}
+    \caption{The LIF neuron model as an RC circuit diagram (left) with a switch (in blue on the diagram) and the response of the LIF neuron to input stimulus (right). When the switch is open, the membrane can charge. When the membrane potential reaches the threshold $\theta$ (indicated by the dashed line in the voltage trace), the neuron fires a spike (indicated by the vertical blue line in the voltage trace) and the switch closes. This short-circuits the membrane resistance, bringing the membrane potential back to its resting state. After a refractory period, the switch opens, allowing the membrane to charge again.
+    }
+    \label{fig:lif_circuit}
+    \source{\cite{Sterratt}.}
+\end{figure}
+
+\begin{equation*}
+    C_m \frac{\dd{V}}{\dd{t}} = - \frac{V-E_m}{R_m} + I.
+\end{equation*}
+
+The above equation is usually written in terms of the membrane time constant, $\tau_m = C_m R_m$: 
+
+\begin{equation*}
+    \tau_m \frac{\dd{V}}{\dd{t}} = - V + E_m + R_m + I.
+\end{equation*}
+
+Furthermore, the leak battery is often omitted from the circuit, with the only effect of making the resting membrane potential $0\mV$ instead of $E_m$: 
+
+\begin{equation}\label{eq:lif_model}
+    \tau_m \frac{\dd{V}}{\dd{t}} = - V + R_m + I.
 \end{equation}
 
-where $\delta(x)$ is the Dirac $\delta$ function with $\delta(x)=0$ for $x \neq 0$ and $\int_{-\infty}^\infty \delta (x) \dd{x} = 1$. Thus, spikes are reduced to points in time. 
-
-In a population of $N$ neurons, we calculate the proportion of active neurons by counting the number of spikes in a small time interval $\Delta t$ and dividing by $N$. Further division by $\Delta t$ yields the population activity:
-
-\begin{equation}
-    \nu (t) = \lim_{\Delta t \to 0} \frac{1}{\Delta t} \frac{\int_{t}^{t + \Delta t} \sum_i \sum_f \delta \left(t - t_i^{(f)} \right) \dd{t}}{N}
-\end{equation} 
-
-In practice, we usually have to bin the spike trains in bins of $\Delta t$ to obtain the time resolved firing rate. 
-
-The mean firing rate of the population  
+The simple LIF neuron model only captures the timing of each spike, but is fast to simulate compared to biophysically detailed neuron models. This makes it especially useful for simulating large networks, as these often contain thousands of neurons. 
 
 
-Note that the size of the neuron population in the equations above is the number of recorded neurons, i.e., $N = N_\mathrm{rec}$.
 
-\textbf{Mean firing rate in thesis}
+%================================================================
+\subsection{A Sparsely Connected Recurrent Network}
+%================================================================
 
-We use a time and population averaged firing rate. 
+The local cortical network consists of a population of excitatory neurons and a population of inhibitory neurons, with a ratio of about $80\%$ excitation and $20\%$ inhibition. The Brunel model characterizes the local cortical network as a network of $N$ identical LIF neurons, from which $N_E$ are excitatory and $N_I = N_E / 4$ inhibitory. Each neuron, be it excitatory or inhibitory, receives $C$ randomly connections from other neurons in the network, from which $C_E = \epsilon N_E$ are from the excitatory population and $C_I = \epsilon N_I$ from the inhibitory population. Here, $\epsilon$ denotes the fraction of incoming connections, and we consider a sparsely connected network with $\epsilon = C_E / N_E = C_I / N_I << 1$. In addition to the sparse recurrent inputs from within the local network, each neuron receives excitatory synaptic input from a population of $C_E$ randomly firing neurons outside the network with activation governed by identical, independent Poisson processes (PGs) with fixed-rate $\nu_\mathrm{ext}$. The randomly firing population mimics input from the rest of cortex. An illustration of the network is shown in \autoref{fig:brunel_diagram}.
 
-The time averaged firing rate of a single spike train is calculated as the number of spikes in the spike train in the time interval $T = [t_\mathrm{start}, t_\mathrm{stop}]$ divided by the time interval $T$. 
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[scale=0.5]{brunel_diagram}
+    \caption{Illustration of the Brunel network model. The network consists of two local populations, one with $N_E$ excitatory neurons (circle labeled E) and one with $N_I$ inhibitory neurons (circle labeled I), and one external of identical, independent Poisson processes (PGs). The connections between network nodes are indicated by arrows, where triangular arrow-heads represent excitatory and round arrow-heads inhibitory connections. The numbers at the start and end of each arrow indicate the multiplicity of the connection.
+    }
+    \label{fig:brunel_diagram}
+    \source{\cite{nest_by_example}.}
+\end{figure}
 
-The population average is subsequently calculated by averaging over all the $N_\mathrm{rec}$ recorded neurons, resulting in the mean firing rate.  
-
-Formally, the above procedure can be denoted by: 
+The subthreshold dynamics of LIF neuron $i$ in the network ($i=1, ..., N$) evolves in time according to:
 
 \begin{equation}
-    \bar{\nu} = \frac{1}{N_\mathrm{rec} \left(T_\mathrm{sim} - T_\mathrm{transient}\right)} \int_{T_\mathrm{transient}}^{T_\mathrm{sim}} \sum_i \sum_f \delta \left(t - t_i^{(f)} \right) \dd{t}
+    \tau_m \frac{\dd{V_i (t)}}{\dd{t}} = - V_i(t) + R_m I_i(t),
 \end{equation}
 
-Time resolved firing rate: 
-
-In a population of $N$ neurons, we calculate the proportion of active neurons by counting the number of spikes in a small time interval $\Delta t$ and dividing by $N$. Further division by $\Delta t$ yields the population activity:
+where $I_i$ are the synaptic inputs arriving at the soma. These synaptic inputs are the sum of spike contributions from both local and external synapses, and are modeled as $\delta$-current inputs, i.e., discontinuous voltage jumps: 
 
 \begin{equation}
-    \nu (t) = \lim_{\Delta t \to 0} \frac{1}{N_\mathrm{rec} \Delta t} \int_{t}^{t + \Delta t} \sum_i \sum_f \delta \left(t - t_i^{(f)} \right) \dd{t}
-\end{equation} 
+    R_m I_i (t) = \tau_m \sum_j J_{ij} \sum_k \delta \qty(t - t_j^k - D),
+\end{equation}
 
-In practice, we usually have to bin the spike trains in bins of $\Delta t$ to obtain the time resolved firing rate. 
+where the first sum is over all the presynaptic neurons $j$ with postsynaptic potential amplitude (voltage jump) $J_{ij}$, while the second sum is over the spike times of those neurons. Here, $D$ the synaptic delay, $\delta(x)$ the Dirac $\delta$ function, with $\delta(x)=0$ for $x \neq 0$ and $\int_{-\infty}^\infty \delta (x) \dd{x} = 1$, and $t_j^k$ represents the emission time of the $k$th spike of presynaptic neuron $j$. For simplicity, we assume the synaptic connection strengths are constant for each population. We let $J_{ij}=J>0$, and for excitatory neurons and external input $J_E = J$, while for inhibitory neurons $J_I = -g J_E$, where $g$ determines the relative strength of the inhibitory synapses compared to the excitatory synapses. The amount of input the local neurons receive from the external population is determined by the parameter $\eta = \nu_\mathrm{ext}/\nu_\mathrm{thr}$, where $\nu_\mathrm{thr} = \theta / \qty(J_E C_E \tau_m)$ is the minimum constant rate input needed for a neuron to reach threshold in absence of feedback. Thus, the external input is given by $\nu_\mathrm{ext} = \qty(\eta \theta) / \qty(J_E C_E \tau_m)$.  
 
-In practice, have to use histogram: Bin the spike trains in bins of $\Delta t$
-
-
-The population activity is defined as the number of spikes fired in a short instant of time, averaged across the population. Since each neuron in a population receives input from many others (either from the same and/or from other populations) its total input at each moment in time depends on the activity of the presynaptic population(s). Hence the population activity A(t) controls the mean drive of a postsynaptic neuron.
-
-\subsection{Recurrent network of LIF}
+When the membrane potential $V_i (t)$ of LIF neuron $i$ reaches the firing threshold $\theta$, the neuron fires a spike, the synapses onto all its postsynaptic neurons are activated after a time delay $D$ and the neuron's membrane potential is clamped to the reset potential $V_\mathrm{reset}$ for a refractory period $\tau_\mathrm{rp}$.
 
 
-\autoref{fig:brunel_states} illustrates an example of each of the states of the Brunel network. For each state, the figure shows the firing times (rasters) of 20 randomly chosen neurons, the temporal evolution of the activity of the system (time resolved firing rate computed in bins of 10 ms) together with the mean firing rate (horizontal axis line), and the correlation coefficient matrix of the recorded neurons.
+%================================================================
+\subsection{States of Spiking Activity}
+%================================================================
 
+The Brunel network may be in several different states of spiking activity, largely dependent on the values of the synaptic weight parameters. In the context of a biological neural network, synaptic weight parameters refer to parameters that determines the influence the firing of one neuron has on another. With particular fixed values for $J$ and $D$ and varying values for $\eta$ and $g$, Brunel \cite{Brunel2000} characterized the spiking activity of the network by the phase diagrams. An example of these is shown in \autoref{fig:brunel_phase}. The spiking activity can be in a state of synchronous regular (SR), asynchronous irregular (AI) or synchronous irregular (SI), with either fast or slow oscillations, activity. It can be seen from the phase diagram that $g=4$ corresponds to balance between excitation and inhibition, while $eta=1$ corresponds to external input, in the absence of recurrent input from the network, just sufficient to reach the firing threshold. Stability of the AI state breaks down at the dashed or solid lines and can lead to SR or SI (either fast or slow) activity.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[scale=0.45]{brunel_phase}
+    \caption{Phase diagram of different network states which arise depending on the parameters $\eta = \nu_\mathrm{ext}/\nu_\mathrm{thr}$ and $g$. In the present example, a fixed synaptic delay $D=1.5\ms$ and voltage jump (amplitude of excitatory synaptic input currents)  $J_E = 0.1 \mV$ is used. The simulation is of a network consisting of $N_\mathrm{E}=10,000$ excitatory and $N_\mathrm{I} = 2,500$ inhibitory neurons with connection probability $\epsilon = 0.1$, which corresponds to a network where each neuron has $C_\mathrm{E}=1,000$ and $C_\mathrm{I}=250$ randomly selected connections to excitatory and inhibitory neurons, respectively. The phase diagram shows four states of spiking activity: synchronous regular (SR), asynchronous irregular (AI) and of synchronous irregular (SI), fast and slow. The four points (shown by diamonds) indicate the example activities shown in \autoref{fig:brunel_states}.
+    }
+    \label{fig:brunel_phase}
+    \source{\cite{Brunel2000}.}
+\end{figure}
+
+\autoref{fig:brunel_states} illustrates an example of each of the states of the Brunel network. For each state, the figure shows the firing times (rasters) of 20 randomly chosen excitatory neurons, the temporal evolution of the activity in the network (time resolved firing rate computed in bins of 10 ms) together with the mean firing rate (horizontal axis line), and the pairwise Pearson's correlation coefficient matrix (described in the next chapter) of the recorded neurons. The particular values for $\eta$ and $g$ are stated in the subplot titles and correspond to the points (diamonds) in \autoref{fig:brunel_phase}. In the SR state, the network is almost fully synchronized and the neurons fire at high rates. It is characterized by fast periodic oscillations of the spiking activity. In the AI state, neurons fire mostly independently at low rates. It is characterized by that neurons in the population fire at different times (\textit{asynchronous firing}) and at irregular intervals. In the SI states, the spiking activity of the network is characterized by either fast or slow synchrony, but individual neurons fire irregularly. It can be traced back to an instability of the AI firing regime towards oscillatory activity. The pairwise Pearson's correlation coefficient measures the correlation between spike trains of two neurons in the network, and can be used to examine how synchronous the spiking of a network is. We see that in the SR state, the correlation coefficients are much higher than in the AI state. The SI state with fast oscillations, however, is only scarcely more synchronous than the AI state. The SI state with slow oscillations, on the other hand, has increased synchrony compared to the AI state. 
 
 \begin{figure}[H]
     \centering
@@ -153,329 +284,21 @@ The population activity is defined as the number of spikes fired in a short inst
 \end{figure}
 
 
-SR: Almost fully synchronized network, neurons firing regularly at high rates.
 
-AI: Stationary global activity (see text), irregularly firing neurons
-
-SI fast: Fast oscillation of the global activity, neurons firing irregularly at a rate that is lower than the global frequency
-
-SI slow: Slow oscillation of the global activity, neurons firing irregularly at very low rates
-
-
-
-%================================================================
-\section{Notes}
-%================================================================
-
-Neuronal modeling, as well as many other subdisciplines within computational neuroscience, grew directly out of Hodg- kin and Huxley’s seminal investigation of the action potential in the squid giant axon (Hodgkin and Huxley 1952d). One could even make a case that this study culminated with the first compartmental model. Using the newly invented voltage- clamp technique, Hodgkin and Huxley recorded ionic currents from the squid giant axon and, using clever ionic substitution and novel voltage-clamp experiments, isolated two voltage- gated conductances (Hodgkin and Huxley 1952a, 1952b, 1952c; Hodgkin et al. 1952). They then performed two stages of data reduction. First, they used standard chemical kinetics to analyze the voltage-dependence of the sodium and potassium conductances, thereby obtaining the rate constants for opening, closing, and inactivation of the conductances. Second, they reduced these rate constants to a small set of algebraic and differential equations describing the time and voltage depen- dence of the channels. This model explained and predicted the basis of the action potential in the squid giant axon (Hodgkin and Huxley 1952d). The entire model was derived from ex- perimental results and contains almost no parameters of unknown value (the values for the maximal conductances and number of gates being manually adjusted by Hodgkin and Huxley).
-
-%Computational neuroscience is an approach to understanding the information content of neural signals by modeling the nervous system at many different structural scales, including the biophysical, the circuit, and the systems levels. Computer simulations of neurons and neural networks are complementary to traditional techniques in neuroscience. This book series welcomes contributions that link theoretical studies with experimental approaches to understanding information processing in the nervous system. Areas and topics of particular interest include biophysical mechanisms for computation in neurons, computer simulations of neural circuits, models of learning, representation of sensory information in neural networks, systems models of sensory-motor integration, and computational analysis of problems in biological sensing, motor control, and perception.
-
-%Theoretical analysis and computational modeling are important tools for characterizing what nervous systems do, determining how they function, and understanding why they operate in particular ways. Neuroscience encompasses approaches ranging from molecular and cellular studies to human psychophysics and psychology. Theoretical neuroscience encourages crosstalk among these subdisciplines by constructing compact representations of what has been learned, building bridges between different levels of description, and identifying unifying concepts and principles. In this book, we present the basic methods used for these purposes and discuss examples in which theoretical approaches have yielded insight into nervous system function.
-
-%The questions what, how, and why are addressed by descriptive, mechanistic, and interpretive models, each of which we discuss in the following chapters. Descriptive models summarize large amounts of experimental data compactly yet accurately, thereby characterizing what neurons and neural circuits do. These models may be based loosely on biophysical, anatomical, and physiological findings, but their primary purpose is to describe phenomena, not to explain them. Mechanistic models, on the other hand, address the question of how nervous systems operate on the basis of known anatomy, physiology, and circuitry. Such models often form a bridge between descriptive models couched at different levels. Interpretive models use computational and information-theoretic principles to explore the behavioral and cognitive significance of various aspects of nervous system function, addressing the question of why nervous systems operate as they do.
-
-%It is often difficult to identify the appropriate level of modeling for a particular problem. A frequent mistake is to assume that a more detailed model is necessarily superior. Because models act as bridges between levels of understanding, they must be detailed enough to make contact with the lower level yet simple enough to provide clear results at the higher level.
-
-
-\subsubsection{Threshold effects}
-Many introductory textbooks of neuroscience state that neurons fire an action potential if the membrane potential reaches a threshold. Since the onset of an action potential is characterized by a rapid rise of the voltage trace, the onset points can be detected in experiment recordings (Fig. 4.1A). Intuitively, the onset of an action potential occurs when the membrane potential crosses the firing threshold.
-
-The firing threshold is not only a useful concept for experimental neuroscience, it is also at the heart of most integrate-and-fire models and therefore central for Parts II and III of this book. But does a firing threshold really exist?
-
-Experimentalists inject currents into a single neuron to probe its firing characteristics. There is a large choice of potential current wave forms, but only few of these are routinely used in many labs. In this section we use current pulses and steps in order to explore the threshold behavior of the Hodgkin-Huxley model.
-
-\url{https://neuronaldynamics.epfl.ch/online/Ch4.S1.html}
-
-\section{Modeling Electrical Activity in Neurons}
-
-\subsubsection{The electric force on ions}
-
-As ions are electrically charged they exert forces on and experience forces from other ions. The force acting on an ion is proportional to the ion’s charge, $q$. The \textit{electric field} at any point in space is defined as the force experienced by an object with a unit of positive charge. A positively charged ion in an electric field experiences a force acting in the direction of the electric field; a negatively charged ion experiences a force acting in exactly the opposite direction to the electric field. At any point in an electric field a charge has an \textit{electrical potential energy}. The difference in the potential energy per unit charge between any two points in the field is called the \textit{potential difference}, denoted $V$ and measured in volts.
-
-\subsubsection{Cell membrane is a capacitor} 
-
-That the cell membrane is a capacitor means there is a voltage difference $V$ across it, accompanied by equal positive ($Q+$) and negative ($Q-$) charges on each side of the neuron. 
-
-A capacitor consists of two conductors separated by a non-conductive region. The non-conductive region can either be a vacuum or an electrical insulator material known as a dielectric. From Coulomb's law a charge on one conductor will exert a force on the charge carriers within the other conductor, attracting opposite polarity charge and repelling like polarity charges, thus an opposite polarity charge will be induced on the surface of the other conductor. The conductors thus hold equal and opposite charges on their facing surfaces, and the dielectric develops an electric field.
-
-The strength of the electric field set up through the separation of ions between the plates of the capacitor is proportional to the magnitude of the excess charge $q$ on the plates. As the potential difference is proportional to the electric field, this means that the charge is proportional to the potential difference. The constant of proportionality is called the **capacitance** and is measured in **farads**. It is usually denoted by $C$ and indicates how much charge can be stored on a particular capacitor for a given potential difference across it:
-
-$$ q = C V $$
-
-
-%================================================================
-\subsection{The Hodgkin-Huxley Model}\label{sec:hh}
-%================================================================ 
-
-\url{http://www.sci.utah.edu/~macleod/bioen/be6003/notes/W09-encyc_human_brain_00.pdf}
-
-\url{http://www.inf.ed.ac.uk/teaching/courses/nc/NClab2.pdf}
-
-In their Nobel prize winning work [cite], Hodgkin and Huxley developed a model for the initiation and propagation of action potentials in the squid giant axon. 
-
-\url{https://hodgkin-huxley-tutorial.readthedocs.io/en/latest/}
-
-Reference to equations in original paper: 
-
-\url{https://github.com/swharden/HHSharp/blob/master/src/HHSharp/HHModel.cs}
-
-Describes how the membrane potential $V_m$, that is, the voltage across a membrane with capacitance $C$, responds to an input current $I$.
-
-
-\url{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3219615/}
-There are several sources to noise in cellular dynamics. [article] provides an excellent review of stochastic versions of the HH equations. [To model channel noise within a differential equation framework of the general form above, we seek ways of introducing fluctuations into this deterministic system.] Current noise, subunit noise, conductance noise. We only look at current noise in this thesis
-
-Gaussian white noise (GWN) is a stationary and ergodic random process with zero mean that is defined by the following fundamental property: any two values of GWN are statistically independent now matter how close they are in time. 
-
-Although the mathematical properties of GWN have been studied extensively and utilized in many fields, the ideal GWN signal is not physically realizable because it has infinite variance by definition (recall that the variance of a stationary zero-mean random signal is equal to the value of its autocorrelation function at zero lag).
-
-
-%================================================================ 
-\subsubsection{Channel Kinetics}
-%================================================================ 
-
-\url{https://pubmed.ncbi.nlm.nih.gov/8845165/}
-
-In the standard Hodgkin-Huxley model. the primary contribution to the initiation and propagation of single action potentials is made by the fast \Na channel. A single noninactivating, voltage-dependent \K current provides spike repolarization. 
-
-The \Na current is calculated using the standard ohmic relation
-
-\begin{equation*}
-    I_{Na} = \bar{g}_{Na} m^3 h \qty(V_m - E_{Na}),
-\end{equation*}
-
-where $I_{Na}$ is the \Na current, $V_m$ is the membrane potential, $E_{Na}$ is the equilibrium potential for \Na (assumed to be $+50 mV$), and $m$ and $h$ are the activation and inactivation state variables, respectively. The variable $m$ ranges from $0$ (not activated) to $1$ (fully activated), and $h$ ranges from $0$ (fully inactivated) to $1$ (no inactivation). The maximal conductance is the product $\bar{g}_{Na} = \gamma_{Na} \rho_{Na}$ where $\gamma_{Na}$ is the single channel conductance and $\rho_{Na}$ is the channel density. 
-
-$I_{Na}$ activation is described by the usual first order kinetic reaction, $\text{open} \xrightleftharpoons[]{} \text{closed}$, which yields steady-state value $m_\infty$ and time constant $\tau_m$ given by 
-
-\begin{align*}
-    m_\infty &= \frac{\alpha}{\alpha + \beta}, 
-    \\ 
-    \tau_m &= \frac{1}{\alpha + \beta},
-\end{align*}
-
-where $\alpha$ and $\beta$, the forward (opening) and backward (closing) reaction rates, respectively, are functions of the local membrane potential. Specifically, 
-
-\begin{align*}
-    \alpha \qty(V_m) &= \frac{A \qty(V_m - V_{1/2})}{1 - \mathrm{e}^{- \qty(V_m - V_{1/2})/k}},
-    \\
-    \beta \qty(V_m) &= \frac{-A \qty(V_m - V_{1/2})}{1 - \mathrm{e}^{- \qty(V_m - V_{1/2})/k}},
-\end{align*}
-
-where $A$ is a rate constant, $V_{1/2}$ is the half-activation voltage, and $k$ determines the slope of the activation curve. 
-
-(See Table 1 and 2 in article)
-
-
-
-
-
-
-
-%================================================================ 
-\subsubsection{Stiffness}
-%================================================================ 
-
-Lambert (1992) defines stiffness as follows:
-If a numerical method [. . . ] applied to a system
-with any initial conditions, is forced to use in a
-certain interval of integration a steplength which is
-excessively small in relation to the smoothness of the
-exact solution in that interval, then the system is said
-to be stiff in that interval.
-A typical case of stiffness is for example, when different parts of
-the solution of a system of equations decays on different time
-scales.
-This usually comes from very different scales inherent to the
-ODE. These scales will reflect in the parameters of the equations,
-i.e., the range of constants occurring in the equations of the
-systems. Therefore the stiffness of a system always depends not
-only on the mathematical form of the equations but heavily on
-the magnitude of the constants occurring in them.
-In principle it is possible to solve stiff equations with explicit
-methods, but this comes at the expense of a very small step size
-when using an adaptive step size algorithm and trying to achieve
-a certain accuracy. This in turn leads to high computational
-costs. For non-adaptive step size algorithms it leads to plain
-wrong results without the user knowing, since the algorithm
-still terminates, but with large error. Moreover, as the limited
-machine precision on a digital computer constitutes a lower
-bound for the step size, explicit methods usually become unstable
-when applied to stiff problems.
-Implicit methods, on the other hand, do not use previous
-values to calculate the solution at the next grid point, but only
-employ them implicitly in the form of the solution of a system of
-equations. This makes implicit methods computationally much
-more costly, but usually allows a larger step size to be chosen,
-thus avoiding stability problems (Strehmel and Weiner, 1995).
-In order to detect whether an explicit or implicit method is
-better suited for a given ODE we devise the following testing
-strategy.
-
-Moreover, as the limited
-machine precision on a digital computer constitutes a lower
-bound for the step size, explicit methods usually become unstable
-when applied to stiff problems.
-
-
-%================================================================ 
-\subsubsection{Models of Active Ion Channels}
-%================================================================
-
-Sterratt 
-
-5.3.2 
-
-HH succeeded in isolating three currents with distinct kinetics (the sodium, potassium delayed rectifier and leak currents).
-
-
-Thermodynamical equations 
-
-Excerpt from Action Potentials - HH Eq, FN eq:
-
-The Hodgkin-Huxley model proved to be very accurate and useful in further research into action potentials. However, the formula was rather complicated and \textbf{relied heavily on empirical equations to fit the data}. 
-
-Thermodynamic models - principled way to model rate equations, i.e. is based on the biophysical theory of channels. 
-
-sec 5.4.2 Thermodynamic models
-
-In Box 5.2 there are effectively five different forms of function to fit the dependence on voltage of the rate coefficients $\alpha_m (V)$, $\beta_m (V)$ and so on: three for the HH sodium and potassium channels and two for the A-type potassium channel. All these forms satisfy the critical requirement of fitting the data well. However, it is desirable to base the form of these functions as much as possible on the biophysical theory of channels, \textbf{since fitting to the most principled function is likely to minimise errors due to fitting}.
-
-\section{The Integrate- and Fire Neuron Model}
-
-Providing an answer to the question whether IF models provide an adequate simplification of biophysically based models is therefore important in the quest for a better un- derstanding of the nature of the neural code.
-
-%================================================================ 
-\section{Network Models}
-%================================================================
-
-\url{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6193674/pdf/bhw237.pdf}
-
-Modeling large-scale neural-network dynamics with individual spiking neurons is challenging due to the memory required to represent the large number of synapses. With current technology and using the largest supercomputers available today, simulations of neural networks comprising up to 109 neurons and 1013 synapses (roughly corresponding to the size of a cat brain) are feasible for simplified model neurons (Diesmann 2013; Kunkel et al. 2014). Typically, these simplified models
-neglect the spatial aspects of neuronal morphologies and describe neurons as points in space (point-neuron models).
-Despite their simplicity, point-neuron-network models explain
-a variety of salient features of neural activity observed in vivo,
-such as spike-train irregularity (Softky and Koch 1993; van
-Vreeswijk and Sompolinsky 1996; Amit and Brunel 1997;
-Shadlen and Newsome 1998), membrane-potential fluctuations
-(Destexhe and Paré 1999), asynchronous firing (Ecker et al. 2010;
-Renart et al. 2010; Ostojic 2014), correlations in neural activity
-(Gentet et al. 2010; Okun and Lampl 2008; Helias et al. 2013),
-self-sustained activity (Ohbayashi et al. 2003; Kriener et al.
-2014), and realistic firing rates across laminar cortical populations (Potjans and Diesmann 2014). Point-neuron networks are
-amenable to mathematical analysis (see, e.g., Brunel 2000; Deco
-et al. 2008; Tetzlaff et al. 2012; Helias et al. 2013; de Kamps
-2013; Schuecker et al. 2015; Bos et al. 2016) and can be efficiently evaluated numerically (Brette et al. 2007; Plesser et al.
-2007; Helias et al. 2012; Kunkel et al. 2014). The mechanisms
-governing networks of biophysically detailed multicompartment model neurons, in contrast, are less accessible to analysis
-and these models are more prone to overfitting. Existing multicompartment neuron network models accounting for realistic
-cell morphologies are restricted to sizes of $\sim104
-–105$ neurons
-(Hines et al. 2008; Reimann et al. 2013; Migliore et al. 2014;
-Markram et al. 2015). Large-scale models are, however, necessary to include contributions to the LFP from distant populations in situations where the spatial reach of the LFP is known
-to be large (Lindén et al. 2011; Łe¸ski et al. 2013). 
-
-Although point-neuron networks capture many features of
-in vivo spiking activity, they fail to predict extracellular potentials that result from transmembrane currents distributed
-across the cell surface. According to Kirchhoff’s law of current conservation, the sum of all transmembrane currents, including all ionic and capacitive currents, must be zero for each neuron. In a point-neuron model, all transmembrane currents are
-collapsed in a single point in space. The net transmembrane
-current, and hence the extracellular potential, therefore
-vanishes. Only the spatial separation between current sinks
-and sources leads to a nonzero extracellular potential
-(Pettersen et al. 2012; Einevoll et al. 2013). A priori, the prediction of extracellular potentials, therefore, requires spatially
-extended neuron models accounting for the spatial distribution
-of transmembrane currents, commonly handled using multicompartment neuron models (De Schutter and Van Geit 2009).
-Note that the principle of current conservation implies a current sum rule for multicompartment neuron models as well:
-the sum of all single-cell transmembrane currents remains
-zero, also across neuron populations and the whole column. In
-several previous studies (Bazhenov et al. 2001; Hill and Tononi
-2005; Ursino and La Cara 2006; Mazzoni et al. 2008; 2010; 2011),
-the activity of point-neuron networks (e.g., population firing
-rates, synaptic currents and membrane potentials) has nevertheless been used as a proxy for the LFP when comparing with
-experiments. In a recent study comparing different candidate
-proxies, it was found that a suitably chosen sum of synaptic
-currents could provide a good LFP proxy, but only for the case
-when the LFP is generated from transmembrane currents of a
-single population of pyramidal neurons (Mazzoni et al. 2015). In
-cortex, however, several populations in general contribute to
-the LFP, and there are spatial cancellation effects when positive
-LFP contributions from one population overlap in space with
-negative LFP contributions from other populations. This effect
-cannot be accounted for by a simple LFP proxy.
-
-In this article, we present a hybrid modeling scheme that
-combines the simplicity and efficiency of point-neuron network
-models and the biophysical principles underlying LFP generation captured by multicompartment neuron models with anatomically reconstructed morphologies. The scheme allows for
-arbitrary numbers of LFP-contributing populations, and directly
-incorporates spatial cancellation effects. Furthermore, the spatially extended LFP-generating neurons assure that effects from
-intrinsic dendritic filtering of synaptic inputs are included in
-the predicted LFP (Lindén et al. 2010). The scheme assumes
-that the spiking activity of the neural network (Fig. 1B) generating the synaptic input reflected in the LFP is well described by a
-point-neuron network model (Fig. 1A). The network spiking
-activity serves as synaptic input to a population of mutually
-unconnected multicompartment model neurons with realistic
-morphologies positioned in 3-dimensional (3D) space (Fig. 1C)
-and is thereby translated into a distribution of transmembrane
-currents and, hence, an LFP (Fig. 1D). Thus each multicompartment model neuron has its equivalent in the point-neuron network and receives input spikes from the same presynaptic
-neurons as this point-neuron equivalent.
-
-In the proposed hybrid modeling scheme, the LFP stems from
-the presynaptic spiking activity, but does not affect the spikegeneration dynamics. Thus, the modeling of the spike trains and
-the LFP generation are separated so that the effects of the spatial
-and electrophysiological properties of the postsynaptic (multicompartment) neurons on the LFP can be investigated independently of the spike-generation dynamics. Due to the linearity of
-Maxwell’s equations and volume conduction theory linking
-transmembrane currents to extracellular potentials (Pettersen
-et al. 2012; Einevoll et al. 2013), the compound LFP results from
-the linear superposition of all single-cell LFPs generated by the
-collection of neurons in the multicompartment model neuron population (Einevoll et al. 2013). Note that this linear superposition principle applies even for nonlinear cell dynamics (e.g.,
-nonlinear synaptic integration, action-potential generation and
-active conductances) as in Reimann et al. 2013. As ephaptic
-interactions (Anastassiou et al. 2011) are neglected, the LFP contribution from each multicompartment model neuron can be
-treated independently from the others. The computational
-hybrid LFP scheme proposed here exploits the methodological
-and conceptual advantages due to the independence of the contributions to the LFP from each multicompartment model neuron: the evaluation of the LFPs becomes “embarrassingly
-parallel” (see Foster 1995) and simulations of the multicompartment model neuron dynamics can be easily distributed in parallel across many compute units (i.e., CPUs). Although tailored
-toward use on high-performance computing facilities, the hybrid
-simulation can in principle be run on a single laptop.
-
-The hybrid scheme predicts spatially and temporally
-resolved neural activity at various scales: spikes, synaptic currents, membrane potentials, current-source densities (CSD, see
-e.g., Nicholson and Freeman 1975; Pettersen et al. 2006; 2008),
-and LFPs. It therefore allows for investigation of relationships
-between different measures of neural activity. Thus, although
-point-neuron networks until now only have connected to
-in vivo experiments via measurement of spikes, single-neuron
-membrane potentials and currents, the present hybrid scheme
-allows for comparison of model predictions also with measured
-LFPs (and associated CSDs).
-
-\section{Spike Train Statistics}
-In the next few sections, we introduce some important concepts commonly used for the statistical description of neuronal spike trains. Central notions will be the interspike interval distribution, (Section 7.3), the noise spectrum (Section 7.4), but most importantly the concept of ‘firing rate’ which we discuss first.
-
-A spike train is the sequence of neuronal firing timings, where a spike refers to the firing of an action potential. The temporal pattern of a spike train encodes information in various ways. Besides firing rates, the temporal pattern of spike timings also carries important information about brain functions. 
-
-See: Dayan and Abbott, Ch. 1
-
-\url{https://www.frontiersin.org/articles/10.3389/fncom.2019.00082/full}
-
-\url{https://neuronaldynamics.epfl.ch/online/Ch7.S1.html}
-
-The toolbox Elephant (RRID:SCR\_003833) provides the foundation to extract well-defined and comparable features of the network dynamics. 
-
-The frequency by which neurons generate spikes (action potentials) is commonly considered as a basic form of information transfer within the neuronal system (Adrian and Zotterman, 1926; Perkel and Bullock, 1968). This “frequency code” is often quantified by the number of spikes within an appropriately set time window. The length of the window is limited by the requirement of stable conditions on one side, and by aiming at reproducible results on the other side. The natural conditions typically vary rapidly, but even if kept constant by an experimenter, there are other reasons, like spiking adaptation (Benda and Herz, 2003), which restrict the duration of the observation time window. All these constrains create difficulties for the statistical inference based on the firing rate, and many sophisticated methods to overcome them have been developed (Nawrot et al., 1999; Dayan and Abbott, 2001; Cunningham et al., 2009; Benedetto et al., 2015; Kostal et al., 2018; Tomar, 2019).
-
-\url{https://www.frontiersin.org/articles/10.3389/fncom.2020.569049/full}
-
-\subsection{Brunel}
-
-Uncertainpy paper:
-\url{https://www.frontiersin.org/articles/10.3389/fninf.2018.00049/full}
-
-Brunel paper: 
-\url{https://link.springer.com/content/pdf/10.1023/A:1008925309027.pdf} 
-
-Neurodynamics: 
-\url{https://neuronaldynamics.epfl.ch/online/Ch13.S4.html}
-\url{https://neuronaldynamics.epfl.ch/online/Ch7.S2.html}
-\url{https://neuronaldynamics.epfl.ch/online/Ch1.S3.html}
+\autoref{tab:bnet_model_parameters} summarizes the parametrization of the Brunel model used in this particular simulation.
+
+\begin{table}[!htb]
+  \caption{The parametrization of the Brunel model.}
+  %\footnotesize%
+  \begin{center}
+    \rowcolors{2}{gray!15}{white}
+    \begin{tabular}{lll}
+      \toprule
+      \textbf{Parameter} & \textbf{Value} & \textbf{Description} \\
+      \midrule
+      $V_\mathrm{rest}$ &  $-65 \mV$ & Resting membrane potential \\
+      \bottomrule
+    \end{tabular}
+  \end{center}
+  \label{tab:bnet_model_parameters}
+\end{table}
