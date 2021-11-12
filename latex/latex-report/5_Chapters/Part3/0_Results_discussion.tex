@@ -42,7 +42,7 @@ By visual inspection of the trace in \autoref{fig:hh_obs_data}, the expected sha
     \label{fig:hh_obs_data}
 \end{figure} 
 
-From the voltage trace, we extract spike statistics by the computational algorithms outlined in \cref{sec:hh_feature_extract}. \autoref{fig:hh_stat_extraction} shows the locations in the voltage trace that form the basis of the spike statistic calculations. In fact, the annotations on the voltage trace are set automatically according to the positions found by the extraction algorithms. By the definitions of the different summary statistics provided in \cref{sec:spike_statistics}, we see that the extraction locations are placed correctly on the voltage trace. Consequently, the extraction algorithms seem to function as intended. 
+From the voltage trace, we extract spike statistics by the computational algorithms outlined in \cref{sec:software}. \autoref{fig:hh_stat_extraction} shows the locations in the voltage trace that form the basis of the spike statistic calculations. In fact, the annotations on the voltage trace are set automatically according to the positions found by the extraction algorithms. By the definitions of the different summary statistics provided in \cref{sec:spike_statistics}, we see that the extraction locations are placed correctly on the voltage trace. Consequently, the extraction algorithms seem to function as intended. 
 
 \begin{figure}[!htb]
     \centering
@@ -156,6 +156,11 @@ Chapter Inference on the Brunel model
 %================================================================
 
 lat to first spike, accomm index -> unsurprising, little variation, could perhaps be more useful to characterize spike trains generated under more complex current protocols. 
+
+
+
+
+\textit{accommodation index}, which measures the local variance in ISIs and is calculated by
 
 % chapter: Inference on the Hodgkin-Huxley Model 
 % chapter: Inference on the Brunel Model

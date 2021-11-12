@@ -160,6 +160,7 @@
 
 
 %------------------ code  ----------------------
+%%
 \usepackage{minted}     %Source Code Highlighting
 \usepackage{listings}   
 \definecolor{codegreen}{rgb}{0,0.6,0}
@@ -172,10 +173,10 @@
     keywordstyle=\color{blue},
     numberstyle=\tiny\color{codegray},
     stringstyle=\color{codepurple},
-    basicstyle=\small,
+    basicstyle=\scriptsize\ttfamily,  %\small
     breakatwhitespace=false,
     breaklines=true,
-    captionpos=b,
+    %captionpos=b,
     keepspaces=true,
     numbers=none,
     numbersep=5pt,
@@ -185,6 +186,7 @@
     tabsize=2
 }
 \lstset{style=mystyle}
+
 
 
 %------------ TODO --------------

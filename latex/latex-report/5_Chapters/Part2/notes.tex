@@ -1,0 +1,260 @@
+\section{Spike Train Statistics}
+In the next few sections, we introduce some important concepts commonly used for the statistical description of neuronal spike trains. Central notions will be the interspike interval distribution, (Section 7.3), the noise spectrum (Section 7.4), but most importantly the concept of ‘firing rate’ which we discuss first.
+
+A spike train is the sequence of neuronal firing timings, where a spike refers to the firing of an action potential. The temporal pattern of a spike train encodes information in various ways. Besides firing rates, the temporal pattern of spike timings also carries important information about brain functions. 
+
+See: Dayan and Abbott, Ch. 1
+
+\url{https://www.frontiersin.org/articles/10.3389/fncom.2019.00082/full}
+
+\url{https://neuronaldynamics.epfl.ch/online/Ch7.S1.html}
+
+The toolbox Elephant (RRID:SCR\_003833) provides the foundation to extract well-defined and comparable features of the network dynamics. 
+
+The frequency by which neurons generate spikes (action potentials) is commonly considered as a basic form of information transfer within the neuronal system (Adrian and Zotterman, 1926; Perkel and Bullock, 1968). This “frequency code” is often quantified by the number of spikes within an appropriately set time window. The length of the window is limited by the requirement of stable conditions on one side, and by aiming at reproducible results on the other side. The natural conditions typically vary rapidly, but even if kept constant by an experimenter, there are other reasons, like spiking adaptation (Benda and Herz, 2003), which restrict the duration of the observation time window. All these constrains create difficulties for the statistical inference based on the firing rate, and many sophisticated methods to overcome them have been developed (Nawrot et al., 1999; Dayan and Abbott, 2001; Cunningham et al., 2009; Benedetto et al., 2015; Kostal et al., 2018; Tomar, 2019).
+
+\url{https://www.frontiersin.org/articles/10.3389/fncom.2020.569049/full}
+
+--
+
+
+The interspike interval is the time between subsequent action potentials (also known as spikes) of a neuron,
+
+---
+FYS388: 
+
+In many systems, the \textit{firing rate}, that is, 
+
+1. the \textit{mean firing rate} of a single neuron determined by counting spikes in a time window 
+
+2. the \textit{population firing rate} (averaged over many neurons at one instance in time) 
+
+---
+
+Spikes are events characterized by their firing time $t^{(f)}$, where $f=1, 2, ...$ labels a spike by the spike count. We define the spike train of a neuron $i$ as the sequence of firing times: 
+
+\begin{equation}
+    S_i(t) = \sum_f \delta \left(t - t_i^{(f)} \right),
+\end{equation}
+
+where $\delta(x)$ is the Dirac $\delta$ function with $\delta(x)=0$ for $x \neq 0$ and $\int_{-\infty}^\infty \delta (x) \dd{x} = 1$. Thus, spikes are reduced to points in time. 
+
+In a population of $N$ neurons, we calculate the proportion of active neurons by counting the number of spikes in a small time interval $\Delta t$ and dividing by $N$. Further division by $\Delta t$ yields the population activity:
+
+\begin{equation}
+    \nu (t) = \lim_{\Delta t \to 0} \frac{1}{\Delta t} \frac{\int_{t}^{t + \Delta t} \sum_i \sum_f \delta \left(t - t_i^{(f)} \right) \dd{t}}{N}
+\end{equation} 
+
+In practice, we usually have to bin the spike trains in bins of $\Delta t$ to obtain the time resolved firing rate. 
+
+The mean firing rate of the population  
+
+
+Note that the size of the neuron population in the equations above is the number of recorded neurons, i.e., $N = N_\mathrm{rec}$.
+
+\textbf{Mean firing rate in thesis}
+
+We use a time and population averaged firing rate. 
+
+The time averaged firing rate of a single spike train is calculated as the number of spikes in the spike train in the time interval $T = [t_\mathrm{start}, t_\mathrm{stop}]$ divided by the time interval $T$. 
+
+The population average is subsequently calculated by averaging over all the $N_\mathrm{rec}$ recorded neurons, resulting in the mean firing rate.  
+
+Formally, the above procedure can be denoted by: 
+
+\begin{equation}
+    \bar{\nu} = \frac{1}{N_\mathrm{rec} \left(T_\mathrm{sim} - T_\mathrm{transient}\right)} \int_{T_\mathrm{transient}}^{T_\mathrm{sim}} \sum_i \sum_f \delta \left(t - t_i^{(f)} \right) \dd{t}
+\end{equation}
+
+Time resolved firing rate: 
+
+In a population of $N$ neurons, we calculate the proportion of active neurons by counting the number of spikes in a small time interval $\Delta t$ and dividing by $N$. Further division by $\Delta t$ yields the population activity:
+
+\begin{equation}
+    \nu (t) = \lim_{\Delta t \to 0} \frac{1}{N_\mathrm{rec} \Delta t} \int_{t}^{t + \Delta t} \sum_i \sum_f \delta \left(t - t_i^{(f)} \right) \dd{t}
+\end{equation} 
+
+In practice, we usually have to bin the spike trains in bins of $\Delta t$ to obtain the time resolved firing rate. 
+
+In practice, have to use histogram: Bin the spike trains in bins of $\Delta t$
+
+
+The population activity is defined as the number of spikes fired in a short instant of time, averaged across the population. Since each neuron in a population receives input from many others (either from the same and/or from other populations) its total input at each moment in time depends on the activity of the presynaptic population(s). Hence the population activity A(t) controls the mean drive of a postsynaptic neuron.
+
+
+
+
+
+----
+
+The regularity of spike trains can be summarized in \textit{interspike interval} (ISI) histograms. (not relevant perhaps) 
+
+The ISI histograms can be summarized still further, by extracting the \textit{coefficient of variation} (CV), defined as the standard deviation if the ISIs divided by their mean. A regularly spiking neuron would have Cv of 0, since there is no variance in the ISIs, whereas a Poisson process has a CV of 1
+
+----
+
+
+
+
+
+%================================================================
+\subsection{Uncertainpy}
+%================================================================
+
+Two more parameters are needed to specify the Brunel Model: 
+
+(i) the external input rate ($\nu_\mathrm{ext}$) relative to the threshold rate ($\nu_\mathrm{thr}$) given as $\eta = \nu_\mathrm{ext} / \nu_\mathrm{thr}$. 
+
+(ii) The relative strength of the inhibitory synapses compared to the excitatory synapses, $g$ 
+
+
+Depending on these parameters, the Brunel network may be in several different activity states. For the current case study we limit our analysis to two of these states:
+
+(i) the synchronous regular (SR) state, where the neurons are almost completely synchronized, 
+
+(ii) the asynchronous irregular (AI) state, where the neurons fire mostly independently at low rates. 
+
+We create two sets of model parameters, one for the SR state and one for the AI state. For each set we assume that the parameters $\eta$ an $g$ are characterized by uniform probability distributions within the ranges shown in \autoref{tab:bnet_param_ranges}
+
+\begin{table}[!htb]
+  \caption{Ranges of the synaptic weight parameters.}
+  %\footnotesize%
+  \begin{center}
+    \rowcolors{2}{gray!15}{white}
+    \begin{tabular}{llll}
+      \toprule
+      \textbf{Parameter} & \textbf{Range SR} & \textbf{Range AI} & \textbf{Description} 
+      \\
+      \midrule
+      $\eta$ & $\qty[a, b]$ & $\qty[a, b]$ & External rate relative to threshold rate
+      \\
+      $g$ & $\qty[a, b]$ & $\qty[a, b]$ & Relative strength of inhibitory synapses
+      \\
+      \bottomrule
+    \end{tabular}
+  \end{center}
+  \label{tab:bnet_param_ranges}
+\end{table}
+
+We implement the Brunel network using NEST inside a Python class, and create $10,000$ excitatory and $2,500$ inhibitory neurons, with properties as specified by Brunel (2000). Each neuron has 1000 randomly chosen connections to excitatory neurons and 250 randomly chosen connections to inhibitory neurons (a connection probability of $\epsilon=0.1$). The weight of the excitatory synapses (amplitude of excitatory synaptic currents) is $J=0.1 \mV$. We simulate the network for $1,000 \ms$ and record the output from $20$ excitatory neurons. We start recording after $100 \ms$ to avoid transient effects. 
+
+%================================================================
+\subsection{Inference on Hodgkin-Huxley}
+%================================================================ 
+
+
+
+
+--
+
+The network may be in several different states of spiking activity, largely dependent on the values of the synaptic weight parameters. For the current investigation, we limit our analysis to two of these states; the synchronous regular (SR) state, where the neurons fire almost fully synchronized at high rates; and the asynchronous irregular (AI) state, where the neurons fire mostly independently at low rates. We will assess and compare the identifiability of the synaptic weight parameters with the network both in the SR and AI state. 
+--
+
+
+% - state that we will (try to) identify gbarK & gbarNa, hh model
+% - create observed data and extract sumstats, verify the implementations
+% - sensitivity analysis
+% - focus on hh with abc under different settings (equal n samples)
+% - inspect posteriors + ppc
+% - test with noisy data -> include eq with current noise
+% - SBI on hh 
+
+
+
+---
+
+
+
+
+
+---
+
+\url{https://neuronaldynamics.epfl.ch/online/Ch2.S2.html}
+
+
+In order to not skew the metrics, we will generate the same number of posteriors samples for each variation of a tuning parameter
+
+---
+
+\url{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3219615/}
+There are several sources to noise in cellular dynamics. [article] provides an excellent review of stochastic versions of the HH equations. [To model channel noise within a differential equation framework of the general form above, we seek ways of introducing fluctuations into this deterministic system.] Current noise, subunit noise, conductance noise. We only look at current noise in this thesis
+
+Gaussian white noise (GWN) is a stationary and ergodic random process with zero mean that is defined by the following fundamental property: any two values of GWN are statistically independent now matter how close they are in time. 
+
+Although the mathematical properties of GWN have been studied extensively and utilized in many fields, the ideal GWN signal is not physically realizable because it has infinite variance by definition (recall that the variance of a stationary zero-mean random signal is equal to the value of its autocorrelation function at zero lag).
+
+
+
+
+%================================================================
+\subsection{Inference on Brunel Network}
+%================================================================
+
+In neuroscience and computer science, synaptic weight refers to the strength or amplitude of a connection between two nodes, corresponding in biology to the amount of influence the firing of one neuron has on another.
+
+\url{https://link.springer.com/content/pdf/10.1023/A:1008925309027.pdf}
+
+\url{https://www.frontiersin.org/articles/10.3389/fninf.2018.00049/full}
+
+. However, the analysis does predict the transition
+toward such synchronized states as soon as the excitation starts to dominate over inhibition
+
+simulation budget
+
+primarily focus on AI state, and actually only try to infer AI state parameters with ABC. However, we will try to utilize the flexibility of SNPE by training on sets of simulations from both the SR and AI state.
+
+\section{performance metrics}
+
+
+---
+
+A performance metric in isolation does not necessarily tell the full story, but by using several measures we should be able to assess the goodness of fit. For each posterior over a model parameter we will therefore find the posterior RMSPE, the 95\%-HDI, the MAP estimate and do a PPC.
+
+For, many of these we will generate several posteriors 
+
+
+
+by definition, there will be more posterior samples in the regions of high density in the KDE representation of the posterior. Thus, by averaging over all the posterior samples, we obtain an implicitly weighted error estimate that takes the width of the posterior into account. 
+
+---
+
+One metric/measure in and of itself might not tell the whole story, but by assessing and comparing the above mentioned measures the hope is that we will learn something about both the application of the method and the model itself
+
+---
+
+comparing the point estimate with the ground truth does not account for the width in the posterior, bad idea/measure. 
+
+The standard error of the mean (SEM) is the expected value of the standard deviation of means of several samples, this is estimated from a single sample as: 
+
+
+
+RMSE, true value, SEM 
+
+In practice, we generally do not have the value of the true parameter $\theta$ at hand. Instead, we have an estimation in the form of a posterior distribution. Thus, what we can do is find out the value of $\hat{\theta}$ that minimizes the expected loss function. By expected loss function, we mean the loss function averaged over the whole posterior distribution. 
+
+
+by definition, there will be more posterior samples in the regions of high density in the KDE representation of the posterior. Thus, by averaging over all the posterior samples, we obtain an implicitly weighted error estimate that takes the width of the posterior into account. 
+
+
+
+The model performance when using a chosen active sensing scheme is defined as the Root Mean Squared Error (RMSE) over the predicted measurements, the lower the RMSE, the better the model performance, and hence the more accurate the map.
+
+The model accuracy can be evaluated by comparing the predicted measurements with respect to the ground truth values and evaluating the RMSE to associate a scalar value as a uniform performance measure for the model being considered.
+
+
+Since a single estimate amount to only a single stochastic trial, we perform 10 trials to see the spread. prior predictive distribution 
+
+---
+
+sbi benchmark 
+
+
+Choice of a suitable performance metric is central to any benchmark. As the goal of SBI algorithms is to perform full inference, the ‘gold standard’ would be to quantify the similarity between the true posterior and the inferred one with a suitable distance (or di- vergence) measure on probability distributions. This would require both access to the ground-truth posterior, and a reliable means of estimating similarity between (potentially) richly structured distributions. Several performance metrics have been used in past research, depending on the constraints imposed by knowledge about ground-truth and the inference algorithm (see Table 1). In real-world applications, typically only the observation x0 is known. However, in a benchmarking setting, it is reasonable to assume that one has at least access to the ground-truth parameters theta0. There are two commonly used metrics which only require theta0 and
+x0, but suffer severe drawbacks for our purposes:
+
+
+Bayesian inference is a principled approach for determining parameters consistent with empirical observations: Given a prior over parameters, a stochastic simulator, and observations, it returns a posterior distribution. In cases where the simulator likelihood can be evaluated, many methods for approximate Bayesian
+inference exist (e.g., [1, 2, 3, 4, 5]). For more general simulators, however, evaluating the likelihood of data
+given parameters might be computationally intractable. Traditional algorithms for this ‘likelihood-free’
+setting [6] are based on Monte-Carlo rejection [7, 8], an approach known as Approximate Bayesian Computation (ABC). More recently, algorithms based on neural networks have been developed [9, 10, 11, 12, 13].
+These algorithms are not based on rejecting simulations, but rather train deep neural conditional density estimators or classifiers on simulated data. 

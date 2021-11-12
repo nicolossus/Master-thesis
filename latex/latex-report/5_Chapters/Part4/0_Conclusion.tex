@@ -47,6 +47,24 @@ Use Pearson's Coefficient of Correlation to weight importance of summary statist
 * vekte utifra sensitivitet
 
 %================================================================
+\section{About MCMC ABC in this Study}
+%================================================================ 
+
+because MCMC methods have been instrumental in advancing Bayesian statistics
+
+MCMC-ABC was also implemented in pyLFI, however, in order to focus the study on the objective, it is not included in the following analyses as it would not give any significant insights into the questions we seek than the more naive rejection sampler would. 
+
+MCMC methods require a great deal of tuning and diagnosis in order to ensure that the chains actually have converged towards the stationary distribution and sample efficiently (has good mixing).
+
+The use of MCMC ABC would add an unnecessary layer of complexity to the study.
+
+Since the focus of this study is not the tuning of the ABC samplers to that extent, we will use the basic rejection sampler for the following analyses. MCMC ABC will not give any other insights that rejection ABC cannot answer for the study at hand 
+
+However, we decided to include it in such detail because of the revolution MCMC methods brought to Bayesian statistics and that many of the advanced ABC samplers actually build on the MCMC approach. 
+
+Although neither rejection nor mcmc abc are not the best methods for sampling accurately and efficiently, and scale poorly to higher dimensional problems, they provide a solid basis for understanding more sophisticated/refined sampling schemes and post-hoc adjustments. They showcase that abc provides a robust framework for parameter identification
+
+%================================================================
 \section{Approximate Bayesian Computation}
 %================================================================ 
 
@@ -87,7 +105,11 @@ Also nonlinear models have been proposed, see e.g. Blum (2010)
 \subsection{Choice of ABC Algorithm}
 %================================================================
 
+MCMC-ABC was also implemented in pyLFI, however, in order to focus the study on the objective, it is not included in the following analyses as it would not give any significant insights into the questions we seek than the more naive rejection sampler would. 
+
 Although neither rejection nor mcmc abc are not the best methods for sampling accurately and efficiently, and scale poorly to higher dimensional problems, they provide a solid basis for understanding more sophisticated/refined sampling schemes and post-hoc adjustments. They showcase that abc provides a robust framework for parameter identification
+
+other choices for the method include the prior distributions and settings of the ABC algorithm. We used uninformative priors to demonstrate the accuracy of the method based on data alone. However, including informative priors would speed up the convergence of the algorithm. 
 
 
 The efficiency of the method is, however, largely dependent on the efficieny of the simulator model. As an informal side note: all results in this thesis were produced on a personal laptop. Inference on the most time-consuming model, the Brunel network, took about 2 hours with ABC (2000 simulations) and 2.5 hours with SNPE (running 1000 (adaptively proposed) simulations to train the network). 
@@ -141,6 +163,12 @@ A crucial limitation of the ABC approach is that only a small number of summary 
 --- 
 
 Summary statistics may be used to increase the acceptance rate of ABC algorithms, and low-dimensional sufficient statistics are optimal for this purpose, as they capture all relevant information present in the data in the simplest possible form. However, low-dimensional sufficient statistics are typically unattainable for models where ABC-based inference is most relevant, and consequently, some heuristic is usually necessary to identify useful low-dimensional summary statistics. [We performed a correlation analysis, blabla, then checked the error as a function of number of sum stats->not good approach as the accuracy and stability of ABC decreases rapidly with an increasing number of summary statistics]. Ref to sensitivity analysis and MOO. (The use of poorly chosen summary statistics will often lead to inflated credible intervals due to the implied loss of information).
+
+---
+
+When fitting mechanistic models to data, it is common to target summary statistics to isolate specific behaviors, rather than the full data. For example, the spike shape is known to constrain potassium and sodium conductances. When modeling population dynamics, it is often desirable to achieve realistic firing rates or rate-correlations. Choice of summary statistics might also be guided by known limitations of either the model or the measurement approach, or necessitated by the fact that published data are only available in summarized form. 
+
+Many features of interest in neural models, e.g., the latency to first spike after stimulus onset, are only well defined in the presence of other features, e.g. the presence of spikes. 
 
 %================================================================
 \subsection{Choice of Distance Metric}
