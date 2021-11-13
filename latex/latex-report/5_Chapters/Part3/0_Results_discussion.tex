@@ -51,7 +51,7 @@ From the voltage trace, we extract spike statistics by the computational algorit
     \label{fig:hh_stat_extraction}
 \end{figure} 
 
-\autoref{tab:hh_obs_sumstats} summarizes the calculated summary statistics from the observed voltage trace; (i) \textit{spike rate}, calculated as the number of spikes divided by the duration of the stimulus; (ii) \textit{average AP overshoot}, calculated by averaging the absolute peak voltage of all APs; (iii) \textit{average AP width}, calculated by averaging the width of every AP at the midpoint between its onset and its peak; (iv) \textit{average AHP depth}, calculated by averaging all minima voltage throughs between two consecutive APs; (v) \textit{latency to first spike}, calculated as the time between stimulus onset and first AP peak; (vi) \textit{accommodation index}, which measures the local variance in ISIs and is calculated by \autoref{eq:accomm_index}. Comparing the values of the tabulated summary statistics with the information in \autoref{fig:hh_stat_extraction}, we find agreement. There are 7 spikes over the course of the stimulus duration of $100 \ms$, so the spike rate must be $0.07 \, \mathrm{mHz}$. Furthermore, the value of the average AP overshoot and width, as well as the average AHP depth, seems reasonable when compared with the voltage values at the extracted locations. A latency to first spike of about $2 \ms$ also matches what is seen in the voltage trace. There is practically no difference in length between two consecutive ISIs in the voltage trace, and the accommodation index should therefore reflect, as it does, the lack of variability. All in all, this indicates that also the summary statistic calculations are implemented correctly. 
+\autoref{tab:hh_obs_sumstats} summarizes the calculated summary statistics from the observed voltage trace; (i) \textit{spike rate}, calculated as the number of spikes divided by the duration of the stimulus; (ii) \textit{average AP overshoot}, calculated by averaging the absolute peak voltage of all APs; (iii) \textit{average AP width}, calculated by averaging the width of every AP at the midpoint between its onset and its peak; (iv) \textit{average AHP depth}, calculated by averaging all minima voltage throughs between two consecutive APs; (v) \textit{latency to first spike}, calculated as the time between stimulus onset and first AP peak; (vi) \textit{accommodation index}, which measures the local variance in ISIs and is calculated by \cref{eq:accomm_index}. Comparing the values of the tabulated summary statistics with the information in \autoref{fig:hh_stat_extraction}, we find agreement. There are 7 spikes over the course of the stimulus duration of $100 \ms$, so the spike rate must be $0.07 \, \mathrm{mHz}$. Furthermore, the value of the average AP overshoot and width, as well as the average AHP depth, seems reasonable when compared with the voltage values at the extracted locations. A latency to first spike of about $2 \ms$ also matches what is seen in the voltage trace. There is practically no difference in length between two consecutive ISIs in the voltage trace, and the accommodation index should therefore reflect, as it does, the lack of variability. All in all, this indicates that also the summary statistic calculations are implemented correctly. 
 
 \begin{table}[!htb]
   \caption{Observed voltage trace reduced to a set of summary statistics. See text for details on the statistics.  }
@@ -76,53 +76,56 @@ From the voltage trace, we extract spike statistics by the computational algorit
 \end{table}
 
 %================================================================
-\subsection{Sensitivity Analysis}
+\subsection{Correlation Analysis \& Importance Weights}
 %================================================================
 
-Next, we carry out a sensitivity analysis of 
-
-let us characterize the effects of parameter uncertainty on the output of the model in terms of the summary statistics.  
-
-a sensitivity quantifies how much the uncertainty in the model output each model parameter is responsible for. 
-
-While technically the informative priors could be classified as weakly-informative (as per the definition given in \cref{sec:coin_flipping}), we will refer to them as informative. 
-
-\autoref{fig:hh_priors} Priors for HH
-
-\begin{figure}[H]
+Next, we carry out the correlation analysis outlined in \cref{sec:corr_analysis}. The objective of the analysis is to characterize the effects of parameter variability on the output of the model in terms of the summary statistics. The analysis is done by sampling from the prior predictive distribution, and the priors for $\gbarK$ and $\gbarNa$ are shown in \autoref{fig:hh_priors}. 
+\begin{figure}[!htb]
     \centering
     \includegraphics[scale=0.8]{hh_priors}
-    \caption{caption}
+    \caption{Priors over $\gbarK$ (top) and $\gbarNa$ (bottom). We use both an informative (blue) and noninformative (orange) centered about the ground truth parameter value (red line) for each parameter.}
     \label{fig:hh_priors}
-\end{figure} 
+\end{figure}
+For each parameter, we use a noninformative prior (orange density) with about $\pm 10\%$ range around the ground truth parameter and a slightly more informative prior (blue density). While technically the informative priors could be classified as weakly-informative (as per the definition given in \cref{sec:coin_flipping}), we will refer to them as informative. 
 
+For each category of priors, we sampled 2000 parameter pairs, fed them to the HH simulator model and calculated the summary statistics from the simulated data for each pair. The spike statistics are only well-defined in the presence of spikes, and accommodation index and average AHP depth need at least two and three spikes, respectively, to be defined. As such, we need to remove samples if they contain ill-defined statistics.
 
-\autoref{fig:hh_priorpred_sstats_normal} Summary statistics under the (informative) prior predictive distribution (draw 2000 samples, dropna -> left with 1881 samples, but here we only plot a subset of 470 samples)
+%================================================================
+\subsubsection*{With Informative Priors}
+%================================================================
 
+Of the 2000 summary statistics samples simulated under the informative priors gave, 1881 were well-defined. Scatter plots for a subset of these are shown in \autoref{fig:hh_priorpred_sstats_normal}, where the summary statistics are shown as functions of the pairs of parameter values. Thus, the scatter plots enable us to see the variability the different summary statistics exhibit relative to change in model parameter values. Each point indicates the relative magnitude of the statistic by its size and color, with a reference table stated in the legend along with the name of the particular statistic.
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.8]{hh_priorpred_sstats_normal}
-    \caption{caption}
+    \includegraphics[scale=0.7]{hh_priorpred_sstats_normal}
+    \caption{Scatter plots of summary statistics simulated with different pairs of model parameter values. The summary statistics were simulated under the joint informative prior predictive distribution. Of 2000 generated samples, 1881 were well-defined. Here, a subset of 470 samples are shown. Each summary statistic is assigned to its own panel, with the particular statistic stated in the legend. Each point represents the value of a summary statistic for a pair of parameter values, $\qty(\gbarK, \gbarNa)$. The color of a point indicates the relative magnitude of the statistic, for which bright colors represent small and dark colors large values, also indicated in each subplot legend. The scatter plots thus indicate the variability of summary statistics relative to movement of the pairs of model parameter values.
+    }
     \label{fig:hh_priorpred_sstats_normal}
 \end{figure} 
+In addition to displaying the variability, the scatter plots also indicate if there is a systematic relationship between a parameter and summary statistic. By fixing the value of one of the parameters and following its line-of-sight, we can assess whether the other parameter systematically increments or decrements a summary statistic. Average AP overshoot exhibits a steady variability and seems to follow an approximately linear trend. This also applies to the average AP width, though to a lesser extent. The approximate linear relationship is most apparent for $\gbarK$ in both cases. In terms of the underlying biophysical mechanisms, we would expect average AP overshoot to be most sensitive to $\gbarNa$ and average AP width to $\gbarK$. The role of the \Na channel in AP generation is well-established, and AP overshoot is tied to the fast \Na channel dynamics. Likewise, given the role of the \K channel in repolarizing the neuron after an AP, the average AP width is tied to the duration of the recovery period. While these expectations are not clearly present in the scatter plots, we should keep in mind that we only explore a fairly limited region of the parameter space. We should therefore be cautious in our interpretation of how well the scatter plots indicate sensitivity. Accommodation index has almost no variation, which might be unsurprising since it measures the local variance in ISIs. The constant current protocol does not facilitate much variation in spike trains. Thus, for the observed voltage trace at hand, accommodation index is not an informative summary statistic. However, it could be useful in characterizing spike trains generated under more complex current protocols. Average AHP depth also exhibits little variation, whereas latency to first spike an ample amount. Though, for latency to first spike there is no apparent systematic relationship, as it increments and decrements right and left. This might not be optimal for constraining the model parameters. Finally, the spike rate, though it does not vary much, seem to have a more systematic and stable relationship with the model parameters, predominantly $\gbarK$. It behaves more like a step function, where it retains a particular value for a prolonged range of $\gbarK$ values. In conclusion, how well this set of summary statistics will constrain the model parameters needs to be investigated further down the line.  
 
-
-\autoref{fig:hh_weights_normal} sum stats correlation (pearson) and weights
-
+In order to not rely solely on visual inspection of the sensitivity, \autoref{fig:hh_weights_normal} provides the pairwise Pearson's correlation coefficients of each model parameter and summary statistics, as well as the importance weights derived from the correlation coefficients.
 % subfigure
-\begin{figure}[H]
+\begin{figure}[!htb]
 \centering
-\subfloat[]{{\includegraphics[scale=0.7]{hh_priorpred_corr_normal}}}
+\subfloat[]{{\includegraphics[scale=0.65]{hh_priorpred_corr_normal}}}
 \qquad
-\subfloat[]{{\includegraphics[scale=0.7]{hh_priorpred_weights_normal}}}
+\subfloat[]{{\includegraphics[scale=0.65]{hh_priorpred_weights_normal}}}
 \caption{\textbf{(a)} sum stats correlation. \textbf{(b)} sum stats weights from corr coef
 }
 \label{fig:hh_weights_normal}
 \end{figure}
+As was indicated by the scatter plots, $\gbarK$ has a stronger (approximately) linear relationship with the summary statistics than $\gbarNa$. The interpretation of these results are that the summary statistics related to the shape of an AP encode the most information, with average AP overshoot being the most dominant. Moreover, the results indicate that $\gbarK$ will be constrained better than $\gbarNa$ by these summaries. Since the relationship between $\gbarK$ and the summary statistics is much stronger than for $\gbarNa$, the weighting scheme also becomes biased towards $\gbarK$. The weighting is therefore a bit unfair for $\gbarNa$. For instance, even though the spike rate is weakly correlated with $\gbarNa$, it receives a heavy weight because it is strongly correlated with $\gbarK$. The weight of the spike rate even surpasses that of average AP width, which shows a decent amount of correlation with both $\gbarNa$ and $\gbarK$. The pairwise Pearson's correlation coefficients strong assumption about linearity again necessitates the need to be wary of the interpretation of which summary statistics are the most informative. As the weighting scheme also prefers $\gbarK$, we should investigate the effects importance weights have on the inference furher down the line.
 
+%================================================================
+\subsubsection*{With Noninformative Priors}
+%================================================================
 
 Perhaps unsurprisingly, since the prior distribution does not alter the inherent relationship between the quantities, we obtain the same weights from the summary statistics generated under the noninformative prior predictive distribution. The same results as above for the noninformative prior can be found in ... ref appendix A section ...
 
+the corresponding figures with the noninformative prior can be found in appendix A
+
+does not change the intrinsic relationship between a parameter and summary statistic, only how the samples are distributed in the parameter space. 
 
 
 

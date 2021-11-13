@@ -258,6 +258,11 @@ In this section, we present an assortment of computational strategies we will us
 
 Whenever possible, we compute with logarithmic densities in order to avoid computational overflows and underflows. Exponentiation is performed only when necessary. The Metropolis algorithm (\cref{alg:metropolis}) is an example of where log densities should be used, as it requires evaluation of two densities in the calculation of the ratio. With log densities, the ratio is actually computed as the exponential of the difference of the log densities.   
 
+%================================================================
+\subsection{Parameter Transformations}
+%================================================================
+Before regression adjustment, positive parameters should be log transformed. This will both stabilize the variance of the regression model and make it more homoscedastic. In addition, the log transform guarantees that the adjusted parameter values lie in the range of the prior distribution \cite{ABC_ch3}. The final adjusted values are obtained by exponentiation of the r.h.s. of \autoref{eq:linreg_adj}.
+
 
 %================================================================
 \subsection{Sample from the Prior and Posterior Predictive} 
@@ -618,7 +623,7 @@ sum_stats = sts(spiketrains)
 \subsection{pyLFI}\label{sec:pylfi}
 %================================================================
 
-\cw{pyLFI} is a Python toolbox using likelihood-free inference (LFI) (also known as simulation-based inference) for estimating the posterior distributions over model parameters. We have implemented both rejection ABC (\cref{alg:rej_abc}) and MCMC ABC (\cref{alg:mcmcabc_efficient}), as well post-sampling regression adjustment. We made the software general and flexible, so that it can accommodate other algorithms as well. The price to pay for the generality and flexibility, however, is that the simulation of data and calculation of summary statistics are left entirely to the user. To perform parameter identification with \cw{pyLFI}, there are generally four inputs that need to be specified:
+\cw{pyLFI} is a Python toolbox using likelihood-free inference (LFI) (also known as simulation-based inference) for estimating the posterior distributions over model parameters. We have implemented both rejection ABC (\cref{alg:rej_abc}) and MCMC ABC (\cref{alg:mcmcabc_efficient}), as well as post-sampling regression adjustment. We made the software general and flexible, so that it can accommodate other algorithms as well. The price to pay for the generality and flexibility is that the simulation of data and calculation of summary statistics are left entirely to the user. To perform parameter identification with \cw{pyLFI}, there are generally four inputs that need to be specified:
 \begin{enumerate}
     \item A simulator model. The mechanistic model needs to be specified through a simulator model that can generate simulated data $\ysim$ for any parameters $\theta$. 
     \item A summary statistics calculator. The ABC algorithms require the use of low-dimensional summary statistics $s = S(y)$ calculated from the raw data $y$. 
@@ -629,19 +634,349 @@ For each problem, the objective is to estimate the posterior distribution $\pi \
 \begin{enumerate}
     \item A distance metric.
     \item Tuning parameters. The number of tuning parameters depend on which ABC algorithm is being used. The central tuning parameter for all algorithms is the threshold $\epsilon$, for which we introduced the alternative quantile-based approach. For MCMC algorithms, there are additional tuning parameters like proposal density scale, burn-in iterations etc. 
-    \item Either a simulation budget, i.e. a prescribed number of simulations to run, or a prescribed number of posterior samples the algorithm must obtain. Running the simulator is generally the costliest step of the procedure, and many simulator runs might be needed to accurately produce the posterior.
+    \item Either a simulation budget, i.e. a prescribed number of simulations to run, or a prescribed number of posterior samples the ABC sampler must obtain. Running the simulator is generally the costliest step of the procedure, and many simulator runs might be needed to accurately produce the posterior.
 \end{enumerate}
 
+\subsubsection*{Example Usage}
 
+In the following, we demonstrate \cw{pyLFI} on a toy example. We will infer the mean $\mu$ and standard deviation $\sigma$ of a Gaussian distribution with likelihood $p \qty(\yobs \mid \mu, \sigma) = \mathrm{N} \qty(\mu=163, \sigma=15)$, The observed data are sampled from the likelihood: 
 
-
-Showcase pylfi; there are two approaches to implementing rej abc; set n samples or sim budget n sim. We here demonstrate the former, as this will be used on hh to have the same number of posterior samples for each variation of hyperparameters. For bnet however we will use the approach of setting sim budget because of the costly sims
-
-
-\cref{lst:module} shows an example of usage.
 % ---------------------------------------------------------------------
-\begin{lstlisting}[language=python, label={lst:module}, caption={Example usage of the .}]
-print("Hello, World!)
+\begin{lstlisting}[language=python]
+mu_true = 163
+sigma_true = 15
+likelihood = scipy.stats.norm(loc=mu_true, scale=sigma_true)
+obs_data = likelihood.rvs(size=1000) 
+\end{lstlisting}
+% ---------------------------------------------------------------------
+
+We assume that the likelihood is unknown, and formulate a model to describe the observed data. The model needs to be implemented as a Python callable, i.e., a function or a call method in a class, that is parametrized by the unknown model parameters we aim to infer, here $\mu$ and $\sigma$: 
+
+% ---------------------------------------------------------------------
+\begin{lstlisting}[language=python]
+def simulator(mu, sigma, size=1000):
+    y_sim = stats.norm(loc=mu, scale=sigma).rvs(size=size)
+    return y_sim
+\end{lstlisting}
+% ---------------------------------------------------------------------
+
+Next, we need to reduce the raw data into low-dimensional summary statistics. The summary statistics calculator also needs to be implemented as a Python callable. The function must return the summary statistics as a Python \cw{list} or \cw{numpy.ndarray}. Here, we take the mean and standard deviation to be summary statistics of the data (these are actually \textit{sufficient} summary statistics): 
+
+% ---------------------------------------------------------------------
+\begin{lstlisting}[language=python]
+def stat_calc(y):
+    sum_stats = [numpy.mean(y), numpy.std(y)]
+    return sum_stats
+\end{lstlisting}
+% ---------------------------------------------------------------------
+
+We then place priors over the unknown model parameters using the \cw{pylfi.Prior} class. The signature of the class constructor is: 
+
+% ---------------------------------------------------------------------
+\begin{lstlisting}[language=python]
+pylfi.Prior(distr_name, *params, name=None, tex=None, **kwargs)
+\end{lstlisting}
+% ---------------------------------------------------------------------
+
+Here, \cw{distr_name} is passed as a string that correspond to any distribution from \cw{scipy.stats}. \cw{params} are the parameters of the distribution, typically these would be \cw{shape} parameters or \cw{loc} and \cw{scale} passed as positional arguments. \cw{kwargs} are keyword arguments passed to the \cw{SciPy} distribution methods. The \cw{name} keyword argument is required, and is used by \cw{pyLFI} to keep track of the parameter. The \cw{tex} keyword argument is optional, and can be used to provide the \LaTeX \, typesetting for the parameter name. \cw{pyLFI} includes procedures for automatically plotting priors and posteriors, and will use the \cw{tex} name of the parameter as axis labels if provided. The \cw{name} string is used to access the parameters further down the pipeline and is also used as axis labels if \cw{tex} is not provided. 
+
+In the present example, we define the priors: 
+
+% ---------------------------------------------------------------------
+\begin{lstlisting}[language=python]
+mu_prior = pylfi.Prior('norm',
+                       loc=165,
+                       scale=2,
+                       name='mu',
+                       tex='$\mu$'
+                       )
+
+sigma_prior = pylfi.Prior('uniform',
+                          loc=12,
+                          scale=7,
+                          name='sigma',
+                          tex='$\sigma$'
+                          )
+
+priors = [mu_prior, sigma_prior]
+\end{lstlisting}
+% ---------------------------------------------------------------------
+
+Note that the priors must be collected in a Python \cw{list}. By providing points $x$ to evaluate the prior pdf at, the \cw{pylfi.Prior} class also lets us visualize the priors: 
+
+% ---------------------------------------------------------------------
+\begin{lstlisting}[language=python]
+import matplotlib.pyplot as plt
+fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(5, 2), tight_layout=True)
+
+x = np.linspace(159, 171, 1000)
+mu_prior.plot_prior(x, ax=axes[0])
+
+x = np.linspace(11, 20, 1000)
+sigma_prior.plot_prior(x, ax=axes[1])
+
+plt.show()
+\end{lstlisting}
+% ---------------------------------------------------------------------
+
+\begin{figure}[H]
+\begin{center}\includegraphics[scale=0.7]{pylfi_prior}
+\end{center}
+\caption{Priors over $\mu$ and $\sigma$ in the toy example with a Gaussian model.}
+%\label{fig:fig1}
+\end{figure}
+
+Now, all components needed for inference with \cw{pyLFI} are in place, and we can initialize the ABC sampler: 
+
+% ---------------------------------------------------------------------
+\begin{lstlisting}[language=python]
+sampler = pylfi.RejABC(obs_data,   # observed data
+                       simulator,  # simulator model
+                       stat_calc,  # sum stat calculator
+                       priors,     # priors over params
+                       log=True.   # display logger or not
+                       )
+\end{lstlisting}
+% ---------------------------------------------------------------------
+
+The constructors of the ABC samplers are identical, as each sampler inherit most methods from a general parent class (\cw{pylfi.ABCBase}). 
+
+As mentioned above, there are two approaches for configuring the ABC sampler; we either set a simulation budget or the number of posterior samples to obtain. The latter approach requires a pilot study if we want to estimate $\epsilon$ and the summary statistic scales from the prior predictive distribution. The signature of the pilot study method is: 
+
+% ---------------------------------------------------------------------
+\begin{lstlisting}[language=python]
+pylfi.ABCBase.pilot_study(nsims,
+                          quantile=None, 
+                          stat_scale=None,
+                          stat_weight=1.,
+                          n_jobs=-1,
+                          seed=None,
+                          )
+\end{lstlisting}
+% ---------------------------------------------------------------------
+
+The pilot study runs the simulator \cw{nsims} times with parameters sampled from the prior predictive distributions, and sets the tolerance $\epsilon$ automatically as the quantile, specified by the \cw{quantile} keyword, of the simulated distances. If the \cw{stat_scale} keyword is passed as one of the strings \cw{sd} or \cw{mad}, the pilot study also provides an estimate of each summary statistic scales, which are used in the weighted Euclidean distance. \cw{stat_scale='sd'} scales the summary statistics according to their standard deviation (SD) estimated from the prior predictive samples, and \cw{stat_scale='mad'} according to their median absolute deviation (MAD). The \cw{stat_weight} keyword can be used to provide importance weights to the summary statistics. The computational demanding ABC sampler methods are parallelized, and the $\cw{n_jobs}$ keyword can be used to set the number of workers. The default, \cw{n_jobs=-1}, sets the number of workers automatically as the number of found CPUs in the system. Furthermore, the ABC sampler can be seeded via the \cw{seed} keyword. The seed is just provided as an integer. \cw{pyLFI} has procedures for parallel random number generation (PRNG) based on the provided seed, and ensures correct advancement of the underlying PRNG states. This means that the ABC sampler themselves are reproducible, but a caveat of PRNG is that exact reproducibility only is possible when using the same seed and same number of workers. 
+
+For our toy example, performing a pilot study is done as follows: 
+
+% ---------------------------------------------------------------------
+\begin{lstlisting}[language=python]
+nsims = 1000
+sampler.pilot_study(nsims,
+                    quantile=0.2,
+                    stat_scale="sd",
+                    stat_weight=1,
+                    n_jobs=4,
+                    seed=4
+                    )
+\end{lstlisting}
+% ---------------------------------------------------------------------
+
+To sample from the posterior, we must call the \cw{sample} method, which is specific for each algorithm. For the rejection ABC sampler when a pilot study is performed, the call becomes: 
+
+% ---------------------------------------------------------------------
+\begin{lstlisting}[language=python]
+nsamples = 3000
+journal = sampler.sample(nsamples,
+                         use_pilot=True,
+                         n_jobs=4,
+                         seed=42,
+                         return_journal=True
+                         )
+\end{lstlisting}
+% ---------------------------------------------------------------------
+
+Here, the first positional argument is the number of posterior samples we want. By setting \cw{use_pilot=True}, the sampler will use the tolerance and summary statistic scales found in the pilot study automatically. 
+The results of an inference are stored as a \cw{pylfi.Journal} object, which can be returned by setting the \cw{return_journal=True}. The journal can also be accessed through the method:  
+
+% ---------------------------------------------------------------------
+\begin{lstlisting}[language=python]
+nsamples = 3000
+sampler.sample(nsamples,
+               use_pilot=True,
+               n_jobs=4,
+               seed=42
+               )
+journal = sampler.journal()
+\end{lstlisting}
+% ---------------------------------------------------------------------
+
+\cw{pylfi.Journal} objects can be both saved to and loaded from disk: 
+
+% ---------------------------------------------------------------------
+\begin{lstlisting}[language=python]
+# Save journal
+filename = 'my_journal.jnl'
+journal.save(filename)
+
+# Load journal
+journal = pylfi.Journal.load(filename)
+\end{lstlisting}
+% ---------------------------------------------------------------------
+
+Post-sampling regression adjustment can be performed via a base ABC class method with signature:
+
+% ---------------------------------------------------------------------
+\begin{lstlisting}[language=python]
+pylfi.ABCBase.reg_adjust(method="loclinear",
+                         transform=True,
+                         kernel='epkov',
+                         return_journal=False
+                         )
+\end{lstlisting}
+% ---------------------------------------------------------------------
+
+The \cw{method} keyword selects the regression method, either linear (\cw{'linear'}) or local linear (\cw{'loclinear'}), the \cw{transform} keyword determines whether or not to take the log transform of the target (the log transform usually gives better regression results) and the \cw{kernel} keyword selects the smoothing kernel, either the Gaussian kernel (\cw{'gaussian'}) or the Epanechnikov kernel (\cw{'epkov'}). 
+
+Thus, performing a local linear regression for our toy example with Epanechnikov kernel and log transform of the the target is coded as: 
+
+% ---------------------------------------------------------------------
+\begin{lstlisting}[language=python]
+journal = sampler.reg_adjust(method="loclinear",
+                             transform=True,
+                             kernel="epkov",
+                             return_journal=True
+                             )
+\end{lstlisting}
+% ---------------------------------------------------------------------
+
+The obtained posterior samples can be retrieved as a \cw{pandas.DataFrame} from the \cw{pylfi.Journal} class:
+
+% ---------------------------------------------------------------------
+\begin{lstlisting}[language=python]
+df = journal.df  # pandas DataFrame with posterior samples
+\end{lstlisting}
+% ---------------------------------------------------------------------
+
+Furthermore, posteriors can be plotted with the \cw{pylfi.Journal.plot_posterior} method. The first positional argument is required and expects a string with the name of a parameter, corresponding to the \cw{name} keyword argument passed to the \cw{pylfi.Prior} constructor. Other options are \cw{hdi_prob} which can be used to set the probability $(1-\alpha)$ of the HDI, \cw{point_estimate} which point estimate to use, either \cw{'map'}, \cw{'mean'} or \cw{'median'}, and \cw{theta_true} to set the ground truth (if available). If \cw{theta_true} is set, then the RMSPE will also be included in the plot. For our present example: 
+
+% ---------------------------------------------------------------------
+\begin{lstlisting}[language=python]
+fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(8, 3), tight_layout=True)
+journal.plot_posterior('mu',
+                       hdi_prob=0.95,
+                       point_estimate='map',
+                       theta_true=mu_true,
+                       ax=axes[0]
+                       )
+
+journal.plot_posterior('sigma',
+                       hdi_prob=0.95,
+                       point_estimate='map',
+                       theta_true=sigma_true,
+                       ax=axes[1]
+                       )
+
+plt.show()
+\end{lstlisting}
+% ---------------------------------------------------------------------
+
+
+\begin{figure}[H]
+\begin{center}\includegraphics[scale=0.7]{pylfi_posterior}
+\end{center}
+\caption{Posteriors over $\mu$ and $\sigma$ in the toy example with a Gaussian model.}
+%\label{fig:fig1}
+\end{figure}
+
+
+\cref{lst:pylfi} lists a complete script for the usage of \cw{pyLFI} with rejection ABC on the Gaussian toy example: 
+
+% ---------------------------------------------------------------------
+\begin{lstlisting}[language=python, label={lst:pylfi}, caption={Example usage of the pyLFI on a Gaussian toy model.}]
+import matplotlib.pyplot as plt
+import numpy as np
+import pylfi
+import scipy.stats as stats
+
+# Observed data
+mu_true = 163
+sigma_true = 15
+likelihood = stats.norm(loc=mu_true, scale=sigma_true)
+obs_data = likelihood.rvs(size=1000)
+
+
+# Simulator model
+def simulator(mu, sigma, size=1000):
+    y_sim = stats.norm(loc=mu, scale=sigma).rvs(size=size)
+    return y_sim
+
+
+# Summary statistics calculator
+def stat_calc(y):
+    sum_stat = [np.mean(y), np.std(y)]
+    return sum_stat
+
+
+# Priors
+mu_prior = pylfi.Prior('norm',
+                       loc=165,
+                       scale=2,
+                       name='mu',
+                       tex='$\mu$'
+                       )
+
+sigma_prior = pylfi.Prior('uniform',
+                          loc=12,
+                          scale=7,
+                          name='sigma',
+                          tex='$\sigma$'
+                          )
+
+
+priors = [mu_prior, sigma_prior]
+
+# Initialize sampler
+sampler = pylfi.RejABC(obs_data,
+                       simulator,
+                       stat_calc,
+                       priors,
+                       log=True
+                       )
+
+# Pilot study
+nsims = 1000
+sampler.pilot_study(nsims,
+                    quantile=0.2,
+                    stat_scale="sd",
+                    stat_weight=1,
+                    n_jobs=4,
+                    seed=4
+                    )
+
+# Sample posterior
+nsamples = 3000
+sampler.sample(nsamples,
+               use_pilot=True,
+               n_jobs=4,
+               seed=42
+               )
+
+# Local linear regression adjustment
+journal = sampler.reg_adjust(method="loclinear",
+                             kernel="epkov",
+                             transform=True,
+                             return_journal=True
+                             )
+
+
+# Plot posteriors
+fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(8, 3), tight_layout=True)
+journal.plot_posterior('mu',
+                       hdi_prob=0.95,
+                       point_estimate='map',
+                       theta_true=mu_true,
+                       ax=axes[0]
+                       )
+
+journal.plot_posterior('sigma',
+                       hdi_prob=0.95,
+                       point_estimate='map',
+                       theta_true=sigma_true,
+                       ax=axes[1]
+                       )
+
+plt.show()
 \end{lstlisting}
 % ---------------------------------------------------------------------
 

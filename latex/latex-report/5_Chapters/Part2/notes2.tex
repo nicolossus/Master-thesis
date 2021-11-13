@@ -254,3 +254,6 @@ MCMC-ABC was also implemented in pyLFI, however, in order to focus the study on 
 
 
 ---
+
+
+-- the sampler will then just run \cw{nsims} simulations and the number of posterior samples we retain depend on which $q$-quantile of the distances we set the tolerance $\epsilon$ as -- or we set the number of samples to obtain -- the sampler will then return \cw{nsamples} posterior samples regardless of the $q$-quantile, i.e., tolerance $\epsilon$. For inference on the Brunel model, we used the former approach as the Brunel simulator has costly simulations. We used the latter approach for inference on the HH model, as this ensures the same number of posterior samples for each variation of hyperparameters. This approach does, however, require a pilot study if we want to determine $\epsilon$ as the $q$-quantile of the distances and estimate the scale of the summary statistics (used in the distance metric). The signature of the pilot study method is: 
