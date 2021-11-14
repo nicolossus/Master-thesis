@@ -162,7 +162,7 @@ Informed by the preceding findings, going forward we will use the set of summary
 \subsection{Posteriors from Informative Priors}
 %================================================================
 
-\autoref{fig:hh_posterior_org_normal} shows the original posteriors over $\gbarK$ and $\gbarNa$, with summarizing metrics stated in the legends. Compared to the informative priors over the model parameters (see \autoref{fig:hh_priors}), the updated state of knowledge represented by the posteriors is more constrained. The MAP estimates are centered close on the ground truth parameters, which, by the definition of MAP, means that the ground truth parameters are in regions of high posterior density. Compared to the $\gbarNa$ posterior, the RMSPE of the $\gbarK$ posterior is slightly larger, even though the 95\% HDI of $\gbarK$ is narrower than that of $\gbarNa$. This might be a bit surprising, but can be explained by noticing the sharpness of the posterior peaks. The peak of the $\gbarK$ posterior is more flat compared to the peak of the $\gbarNa$ posterior, which is quite sharp about the ground truth, and this is reflected in the RMSPE measure.
+\autoref{fig:hh_posterior_org_normal} shows the original posteriors over $\gbarK$ and $\gbarNa$, with summarizing metrics stated in the legends. Compared with the informative priors over the model parameters (see \autoref{fig:hh_priors}), the updated state of knowledge represented by the posteriors is more constrained. The MAP estimates are centered close on the ground truth parameters, which, by the definition of MAP, means that the ground truth parameters are in regions of high posterior density. Compared to the $\gbarNa$ posterior, the RMSPE of the $\gbarK$ posterior is slightly larger, even though the 95\% HDI of $\gbarK$ is narrower than that of $\gbarNa$. This might be a bit surprising, but can be explained by noticing the sharpness of the posterior peaks. The peak of the $\gbarK$ posterior is more flat compared to the peak of the $\gbarNa$ posterior, which is quite sharp about the ground truth, and this is reflected in the RMSPE measure.
 \begin{figure}[H]
     \centering
     \includegraphics[scale=1.0]{hh_posterior_org_normal}
@@ -225,7 +225,7 @@ Rejection ABC is one of simplest simulation-based inference algorithms. We have 
     \caption{SNPE posteriors over the Hodgkin-Huxley model parameters $\gbarK$ (top) and $\gbarNa$ (bottom). The dark shaded region indicates the 95\% HDI and the dotted line the MAP estimate. The ground truth is indicated by the red line. The legend states the numerical values for each of these, in addition to the RMSPE in the posterior.}
     \label{fig:hh_post_sbi}
 \end{figure}
-Both posteriors we obtain are narrow and sharply peaked about the ground truth parameters, meaning that SNPE is able to identify admissible parameters as well. The summaries of the estimated posteriors are similar to the ones for the regression adjusted ABC posteriors. Though it is a close competition, the ABC posteriors are actually slightly more narrow than the SNPE posteriors. Moreover, the outliers observed in the tails of the SNPE posterior are not present in the ABC posteriors. This comparison might not be entirely fair to SNPE, as it is difficult to pin-point exactly how many training simulations that measure up to be “under similar settings”. By training the network on even more simulations, the posteriors could perhaps be made even more narrow. Furthermore, it is likely that the parameter ranges in the SNPE posteriors all are compatible with the observed data, which will be illuminated in more detail in the next section
+Both posteriors we obtain are narrow and sharply peaked about the ground truth parameters, meaning that SNPE is able to identify admissible parameters as well. The summaries of the estimated posteriors are similar to the ones for the regression adjusted ABC posteriors. Though it is a close competition, the ABC posteriors are actually slightly more narrow than the SNPE posteriors. Moreover, the outliers observed in the tails of the SNPE posterior are not present in the ABC posteriors. This comparison might not be entirely fair to SNPE, as it is difficult to pin-point exactly how many training simulations that measure up to be “under similar settings”. By training the network on even more simulations, the SNPE posteriors could perhaps be made even more narrow. Furthermore, it is likely that the parameter ranges in the SNPE posteriors all are compatible with the observed data, which will be illuminated in more detail in the next section.
 
 
 %PPC
@@ -243,7 +243,7 @@ Both posteriors we obtain are narrow and sharply peaked about the ground truth p
 \section{Noisy Observation}
 %================================================================
 
-So far we have only used an idealized voltage trace, free of any noise, as the observed data. However, real-world neural data are quite noisy. Here, we will examine the impact a noisy observed recording has on the inference with the rejection ABC sampler. There are several sources to noise in cellular dynamics, and, in extension, ways to introduce noise to the Hodgkin-Huxley equations, see e.g. \cite{hh_noise} for a review. We will introduce noise to the observed voltage trace by using a stochastic version of the HH model that incorporates current noise as a Gaussian white noise process. Besides the inclusion of current noise, we use the same same settings for the HH simulator as earlier and record the voltage trace seen in \autoref{fig:hh_noisy_data}.
+So far we have only used an idealized voltage trace, free of any noise, as the observed data. However, real-world neural data are quite noisy. Here, we will examine the impact a noisy observed recording has on the inference with the rejection ABC sampler. There are several sources to noise in cellular dynamics, and, in extension, ways to introduce noise to the Hodgkin-Huxley equations, see e.g. \cite{hh_noise} for a review. We will introduce noise to the observed voltage trace by using a stochastic version of the HH model that incorporates current noise as a Gaussian white noise process. Besides the inclusion of current noise, we use the same settings for the HH simulator as earlier and record the voltage trace seen in \autoref{fig:hh_noisy_data}.
 \begin{figure}[!htb]
     \centering
     \includegraphics[scale=0.9]{hh_noisy_data}
@@ -280,7 +280,7 @@ We then use the rejection ABC sampler in \cw{pyLFI} and a HH simulator that gene
     \caption{Regression adjusted rejection ABC posteriors over the Hodgkin-Huxley model parameters $\gbarK$ (top) and $\gbarNa$ (bottom) with noisy observed voltage trace. Here, the parameter proposals were sampled from the joint informative prior distribution. The dark shaded region indicates the 95\% HDI and the dotted line the MAP estimate. The ground truth is indicated by the red line. The legend states the numerical values for each of these, in addition to the RMSPE in the posterior.}
     \label{fig:hh_posterior_reg_noisy}
 \end{figure} 
-As can be seen, the ground truth parameters are no longer in regions of high posterior density -- they are not actually included in the posteriors at all. Though both the $\gbarK$ and $\gbarNa$ posteriors are narrow and sharp, their locations in parameter space are shifted toward a completely different set of parameter values, especially $\gbarNa$, than we found with the noise-free observation. However, if do a graphical PPC, as seen in \autoref{fig:hh_postpred_reg_noisy}, we find that the simulations predicted by the joint posterior match the observed voltage trace surprisingly well. 
+As can be seen, the ground truth parameters are no longer in regions of high posterior density -- they are not actually included in the posteriors at all. Though both the $\gbarK$ and $\gbarNa$ posteriors are narrow and sharp, their locations in parameter space are shifted toward a completely different set of parameter values, especially $\gbarNa$, than we found with the noise-free observation. However, if we do a graphical PPC, as seen in \autoref{fig:hh_postpred_reg_noisy}, we find that the simulations predicted by the joint posterior match the observed voltage trace surprisingly well. 
 \begin{figure}[!htb]
     \centering
     \includegraphics[scale=1.0]{hh_postpred_reg_noisy}
@@ -302,101 +302,31 @@ This example bolster the motivation for why the Bayesian approach to inference s
 \chapter{Inference on the Brunel Model}\label{chap:res_brunel}
 %================================================================ 
 
-In this chapter, we present the results from simulation-based inference on the Hodgkin-Huxley (HH) model's conductance parameters $\gbarK$ and $\gbarNa$. 
+In this chapter, we present the results from simulation-based inference on the Brunel network model's synaptic weight parameters $\eta$ and $g$. 
 
+We will first try to identify the synaptic weight parameters with the quantile-based rejection ABC sampler in \cw{pyLFI} and post-sampling local linear regression adjustment with the Epanechnikov kernel. The observed data will be from the network's AI state, synthetically generated from the Brunel simulator in \cw{NeuroModels}. The parametrization of the Brunel network will be as given in \autoref{tab:bnet_model_parameters}.  
 
-Chapter Inference on the Brunel model
-- observed data 
-- priors
-- prior predictive sum stats 
-- rej-abc (original) posteriors 
-- reg adj posteriors
-- ppc 
-- sbi
-
-
-%%
-%%
-%%
-%%
-%%
+We will then try to identify the parameters with SNPE. Here, we will try to utilize the flexibility of SNPE by training on simulations from both the AI and SR states, and see what posteriors it will predict when presented with observed data from one of these states. 
 
 %================================================================
-%\chapter{Analysis of the Hodgkin-Huxley Model}
-\chapter{Analysis of the Neuroscientific Models}
-%================================================================
-
-lat to first spike, accomm index -> unsurprising, little variation, could perhaps be more useful to characterize spike trains generated under more complex current protocols. 
-
-
-
-
-\textit{accommodation index}, which measures the local variance in ISIs and is calculated by
-
-% chapter: Inference on the Hodgkin-Huxley Model 
-% chapter: Inference on the Brunel Model
-
-
-
-
-
-%================================================================
-\section{The Brunel Network Model}
-%================================================================
-
-create the observed data
-
-summary statistics of observation 
-
-summary statistics from prior predictive
-
-weights
-
-
-%================================================================
-\chapter{Parameter Identification with REJ-ABC}
+\section{Inference with ABC}
 %================================================================
 
 %================================================================
-\section{Rejection ABC Posteriors on Conductance Parameters}
+\subsection{Observation from AI State}
 %================================================================
 
-show how Hodgkin–Huxley model is more tightly constrained by increasing numbers of data features
-
-We also inferred HH parameters for 8 in vitro recordings from the Allen Cell Types database using the same current-clamp stimulation protocol as in our model [60, 70] (Fig. 4F, Supplementary Fig. 8). In each case, simulations based on the SNPE-inferred posterior closely resembled the original data (Fig. 4F). We note that while inferred parameters differed across recordings, some parameters (the spike threshold, the density of sodium channels, the membrane reversal potential and the density of potassium channels) were consistently more strongly constrained than others (the intrinsic neural noise, the adaptation time constant, the density of slow voltage-dependent channels and the leak conductance) (Supplementary Fig. 8). Overall, these results suggest that the electrophysiological responses measured by this current-clamp protocol can be approximated by a single-compartment HH model, and that SNPE can identify the admissible parameters.
-
-
-
-%================================================================
-%\section{ABC Settings for Identification of Brunel Network Parameters}
-%================================================================
-
-%================================================================
-%\section{Rejection ABC Posteriors on Synaptic Weight Parameters}
-%================================================================
-
-%================================================================
-\chapter{Brunel ABC Results}
-%================================================================
-
-Brunel 
-
-\section{Observation}
-
-observed spiketrain 
-
-\begin{figure}[H]
+We create a Brunel network with $10,000$ excitatory and $2,500$ inhibitory neurons. Each neuron is randomly connected with $1000$ excitatory and $250$ inhibitory neurons. The synaptic weight parameters are set as $\eta=2$ and $g=5$, which according to the phase diagram of the network (\autoref{fig:brunel_phase}) corresponds to the AI state. We simulate the network for $1,000 \ms$ and record the output spike trains from $20$ excitatory neurons. We start recording after $100 \ms$ to avoid transient effects. The observed network activity is shown in \autoref{fig:brunel_ai_observation}.
+\begin{figure}[!htb]
     \centering
     \includegraphics[scale=1.0]{brunel_ai_observation}
-    \caption{caption}
-    \label{fig:fig1}
+    \caption{Observed network activity recorded from $20$ excitatory neurons in the Brunel network's AI state. The synaptic weight parameters are set as $\eta=2$ and $g=5$, and the remaining parameters according to \autoref{tab:bnet_model_parameters}. The network is simulated for  $1,000 \ms$ and recording start after $100 \ms$. The top left panel shows the firing times (raster) of the recorded neurons, and the bottom left panel the network activity as a time resolved firing rate computed in bins of $10 \ms$. The mean firing rate is indicated by the horizontal (red) axis line. The right panel shows the pairwise Pearson's correlation coefficient matrix of the recorded neurons, which is a measure of how synchronous the spiking of the network is. 
+    }
+    \label{fig:brunel_ai_observation}
 \end{figure}
-
-sum stats
-
-% Alternating row colors
-\begin{table}[H]
-  \caption{AI state observed sum stats}
+As seen in the figure, neurons in the AI state are weakly correlated and fire irregularly at low rates. The observed activity is reduced to the set of low-dimensional summary statistics outlined in \cref{sec:spiketrain_statistics}; (i) mean firing rate; (ii) mean CV; (iii) Fano factor. \autoref{tab:brunel_ai_sumstats} tabulates the calculated summary statistics from the observed activity.
+\begin{table}[!htb]
+  \caption{Observed summary statistics calculated from a network in the AI state.}
   %\footnotesize%
   \begin{center}
     \rowcolors{2}{gray!15}{white}
@@ -410,186 +340,205 @@ sum stats
       \bottomrule
     \end{tabular}
   \end{center}
-  \label{tab:hh_noisy_sumstats}
+  \label{tab:brunel_ai_sumstats}
 \end{table}
+Each statistic captures different aspects of the activity. The mean firing rate is a direct measure of the population's spiking activity, mean CV measures the regularity of spike trains and Fano factor the variability across spike trains. 
 
-correlation (pearson) coefficient matrix
+%correlation (pearson) coefficient matrix
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=1.0]{brunel_obs_corr}
-    \caption{caption}
-    \label{fig:fig1}
-\end{figure}
+%\begin{figure}[H]
+%    \centering
+%    \includegraphics[scale=1.0]{brunel_obs_corr}
+%    \caption{caption}
+%    \label{fig:fig1}
+%\end{figure}
 
-\section{prior pred}
+%================================================================
+\subsection{Correlation Analysis \& Importance Weights}
+%================================================================
 
-priors
-
-\begin{figure}[H]
+As we did for the inference on the HH model, we first assess how sensitive the summary statistics are to movement in parameter values, and then measure the relationship between them with a correlation analysis. This analysis is done by sampling from the prior predictive distribution, and the priors for $\eta$ and $g$ are shown in \autoref{fig:brunel_priors}. 
+\begin{figure}[!htb]
     \centering
     \includegraphics[scale=0.8]{brunel_priors}
-    \caption{caption}
-    \label{fig:fig1}
+    \caption{Priors over $\eta$ (top) and $g$ (bottom). We use noninformative priors with ranges corresponding to the AI state. The ground truth parameters are indicated by the red lines. 
+    }
+    \label{fig:brunel_priors}
 \end{figure}
-
-sum stats scatter (500 samples)
-
-\begin{figure}[H]
+We have here chosen noninformative priors, with parameter ranges that correspond to the AI state, as seen in the phase diagram over the Brunel network's states (\autoref{fig:brunel_phase}). We then draw 2000 samples from the joint prior predictive distribution, feed each parameter pair to the Brunel simulator and calculate the resulting summary statistics from each simulation. \autoref{fig:brunel_sum_stats} shows a subset of the generated samples as scatter plots, where each point is the simulated statistic for a given pair of parameter values. 
+\begin{figure}[!htb]
     \centering
-    \includegraphics[scale=1.0]{brunel_sum_stats}
-    \caption{caption}
-    \label{fig:fig1}
+    \includegraphics[scale=0.75]{brunel_sum_stats}
+    \caption{Scatter plots of summary statistics simulated with different pairs of model parameter values. The summary statistics were simulated under the joint prior predictive distribution. Here a subset of 500 samples out of 2000 is shown. Each summary statistic is assigned to its own panel, with the particular statistic stated in the legend. Each point represents the value of a summary statistic for a pair of parameter values, $\qty(g, \eta)$. The color of a point indicates the relative magnitude of the statistic, for which bright colors represent small and dark colors large values, also indicated in each subplot legend. The scatter plots thus indicate the variability of summary statistics relative to movement of the pairs of model parameter values.
+    }
+    \label{fig:brunel_sum_stats}
 \end{figure}
+The relative magnitude of a statistic is indicated by its size and color, with a reference table stated in the legend along with the name of the particular statistic. The scatter plots show that all the summary statistics exhibit a steady variability. In particular, for the model parameter $g$, which controls the amount of inhibition in the network, the relationship with each of the statistics seems to follow an approximately linear trend. However, for $\eta$, which determines the strength of the external drive, a distinct systematic relationship with the statistics is less pronounced. From a biophysical point of view, this is not entirely surprising. AI activity is a hallmark of recurrent networks, and arise from that excitation is balanced by inhibition. It can persist even in the absence of external input. As such, the dynamics of the network tend to be more dependent on $g$ than $\eta$, and we can expect, at least with this set of summary statistics, that $g$ will be constrained better than $\eta$.
 
-
-sum stats correlation and weights
-
-% subfigure
-\begin{figure}[H]
+The pairwise Pearson's correlation coefficients in the left panel of \autoref{fig:brunel_sum_stats_weights} confirm the observation of a stronger linear relationship between the summary statistics and $g$ than with $\eta$.
+\begin{figure}[!htb]
 \centering
-\subfloat[]{{\includegraphics[scale=0.7]{brunel_sum_stats_corr}}}
+\subfloat[]{{\includegraphics[scale=0.5]{brunel_sum_stats_corr}}}
 \qquad
-\subfloat[]{{\includegraphics[scale=0.7]{brunel_sum_stats_weights}}}
-\caption{\textbf{(a)} sum stats correlation. \textbf{(b)} sum stats weights
+\subfloat[]{{\includegraphics[scale=0.5]{brunel_sum_stats_weights}}}
+\caption{\textbf{(a)} The pairwise Pearson's correlation coefficients for the model parameters and summary statistics. \textbf{(b)} The importance weights calculated from the correlation coefficients, see \cref{sec:corr_analysis} for details. Note that the weights sum to one.
 }
-\label{fig:fig1}
+\label{fig:brunel_sum_stats_weights}
 \end{figure}
+Furthermore, as seen in the right panel, the importance weights for the summary statistics calculated from the correlation coefficients have roughly the same magnitude. This implies that all the summary statistics encode useful information about the activity for constraining the model parameters, and that the information they encode is nearly equally important. 
 
-corr coefs of these particular summary statistics indicate that the AI state is most sensitive to the relative strength of inhibitory synapses $g$. Thus, we expect the summary statistics to constrain the $g$ parameter better.
 
+%================================================================
+\subsection{ABC Settings}
+%================================================================
 
-\section{Posteriors} 
+The Brunel simulator has costly simulations. We will therefore use the approach where we set a \textit{simulation budget}, discussed in \cref{sec:software}. This means that the simulator only will run the specified amount of times and the number of posterior samples we retain depend on which quantile is set. This is in contrast to the approach we used for the HH model, where a pilot study was used to estimate the tolerance based on the provided quantile and the ABC sampler used this tolerance for obtaining the specified amount of posterior samples. To examine the impact the choice of quantile has on the accuracy of the posteriors, we use a simulation budget of $2,000$ model simulations and compute the RMSPE for different choices of quantile. The result is shown in \autoref{fig:brunel_quantile_rmspe}. As expected, increasing the $p_\epsilon$-quantile gives an increase in the RMSPE, since simulations further away from the observed data are accepted. Moreover, we see once more that regression adjustment of the posteriors is necessary to obtain accurate estimates. We also see that $g$ is more constrained by the summary statistics than $\eta$, which falls in line with our expectations from the previous analysis. However, regression adjustment significantly helps to constrain $\eta$ as well.  
 
-Ran 2000 simulations of the model with different parameters drawn from the priors. RMSPE vs quantile: 
+In the subsequent analyses, we keep the simulation budget of $2,000$ simulations. As a compromise between accuracy and the number of samples in the posterior, we will use the $0.3$-quantile as a measure of tolerance.
 
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.8]{brunel_quantile_rmspe}
-    \caption{caption}
-    \label{fig:fig1}
+    \caption{The RMSPE in posteriors over $\eta$ (top) and $g$ (bottom) against the $p_\epsilon$-quantile as a measure of tolerance. A simulation budget of $2,000$ was used, and the number of posterior samples that are retained for a particular $p_\epsilon$-quantile is indicated by the marker inside the point. The corresponding label in the legend states the number of posterior samples retained for that particular quantile. The posteriors were generated by the rejection ABC algorithm and then adjusted with local linear regression adjustment. Whether an estimate of error is from the original/adjusted posterior is color coded (see legend).
+    }
+    \label{fig:brunel_quantile_rmspe}
 \end{figure}
 
-Use 0.3-quantile, compromise between accuracy and number of samples in the posterior
 
-original posterior
+%================================================================
+\subsection{Summarizing Posteriors}
+%================================================================
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=1.0]{brunel_posterior_org}
-    \caption{caption}
-    \label{fig:fig1}
-\end{figure}
 
-reg adjusted posterior
-
-\begin{figure}[H]
+The regression adjusted posteriors over $\eta$ and $g$ are shown in \autoref{fig:brunel_posterior_reg}. 
+\begin{figure}[!htb]
     \centering
     \includegraphics[scale=1.0]{brunel_posterior_reg}
-    \caption{caption}
-    \label{fig:fig1}
+    \caption{Regression adjusted rejection ABC posteriors over the Brunel network model parameters $\eta$ (top) and $g$ (bottom) with observed data from the AI state. The dark shaded region indicates the 95\% HDI and the dotted line the MAP estimate. The ground truth is indicated by the red line. The legend states the numerical values for each of these, in addition to the RMSPE in the posterior.
+    }
+    \label{fig:brunel_posterior_reg}
 \end{figure}
+In the updated state of knowledge, the prior range of $\eta \in \qty[1.5, 4.0]$ has been constrained to $\sim \eta \in \qty[1.6, 2.1]$ with $95\%$ probability, whereas the prior range of $g \in \qty[4.0, 8.0]$ has been constrained to $\sim g \in \qty[4.7, 5.3]$ with $95\%$ probability. Even though both ground truth parameters lie in regions of high posterior density, it is only $g$ that is identified moderately accurate. The posterior over $g$ is sharply peaked, though it is not particularly narrow. The posterior over $\eta$, on the other hand, has a relatively flat peak compared to $g$, and the identification of $\eta$ is therefore less successful as a wide and flat posterior indicates a large number of equally optimal values. Although this aligns with our biophysical expectations, these results illustrate the limitation of the rejection ABC approach where proposal parameters are only sampled from the prior. By using a sampler which updates the proposals recursively, like the MCMC ABC algorithm discussed extensively in this thesis (see e.g. \cref{sec:abc}), more efficient sampling of parameters from high density regions can be achieved. 
 
-
-joint posterior (reg adjusted)
-
+\autoref{fig:brunel_joint_posterior_reg} illustrates the joint posterior over $\eta$ and $g$. It can be seen that the joint ground truth (red marker) lies in a region of high posterior density. 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=1.0]{brunel_joint_posterior_reg}
-    \caption{caption}
-    \label{fig:fig1}
+    \includegraphics[scale=0.9]{brunel_joint_posterior_reg}
+    \caption{The regression adjusted joint posterior distribution over $\eta$ and $g$ in the AI state. Darker regions correspond to higher density, and the ground truth is indicated by the red marker and axis lines. Since the marginal posteriors over model parameters (shown on the marginal axes) are highly correlated, predictive posterior samples need to be sampled from the joint posterior. 
+    }
+    \label{fig:brunel_joint_posterior_reg}
 \end{figure}
 
-posterior predictive checks with reg adjusted samples, 50 samples from posterior pred
 
-\begin{figure}[H]
+%================================================================
+\subsection{Posterior Predictive Checks}
+%================================================================
+
+To see whether particular summaries of the network activity are mapped accurately by the posterior predictions, we perform a graphical PPC. We draw 50 samples from the regression adjusted joint posterior predictive distribution and feed the parameters to the Brunel simulator. We then calculate the summary statistics, i.e., (i) mean firing rate; (ii) mean CV; (iii) Fano factor, for each of the output spike trains. The simulated summary statistics and their average together with the corresponding observed summary statistic are then plotted in summary statistic space. The result can be seen in \autoref{fig:brunel_post_pred}.
+\begin{figure}[!htb]
     \centering
     \includegraphics[scale=0.8]{brunel_post_pred}
-    \caption{caption}
-    \label{fig:fig1}
+    \caption{Graphical posterior predictive check comparing the observed summary statistics with simulated summary statistics predicted by the Brunel model under the regression adjusted joint posterior predictive distribution. The posterior predictive mean is the average of 50 predicted simulations.
+    }
+    \label{fig:brunel_post_pred}
 \end{figure}
+From the figure it can be seen that most of the predicted summary statistics are in the neighborhood of the observation, but they can also be relatively far away. This is not unexpected though. Due to the stochastic nature of spike generation in networks, activity simulated under the exact same settings will differ among themselves to a significant degree. This intrinsic variability may have an important functional role in biological neural networks, but pose a challenge for fitting models to data. Since the target observations themselves are variable, the approach used here, where we fit to just a single observation, might not be the best method. Even though we are able to constrain the model parameters to some extent, the intrinsic variability of the observation, and hence the underlying data generating process, should be taken into account before any general insights can be proclaimed. 
 
-The pairwise Pearson's correlation coefficient is a measure of how synchronous the spiking of a network is. This correlation coefficient measures the correlation between the spike trains of two neurons in the network. In Figure X we examine how this correlation depends on parameter uncertainties by plotting the mean and standard deviation for the pairwise Pearson's correlation coefficient in the AI state.
 
+
+
+%The pairwise Pearson's correlation coefficient is a measure of how synchronous the spiking of a network is. This correlation coefficient measures the correlation between the spike trains of two neurons in the network. In Figure X we examine how this correlation depends on parameter uncertainties by plotting the mean and standard deviation for the pairwise Pearson's correlation coefficient in the AI state. 
+
+%\autoref{fig:brunel_pred_corr}
 % subfigure
-\begin{figure}[H]
-\centering
-\subfloat[]{{\includegraphics[scale=0.6]{brunel_pred_corr}}}
-\qquad
-\subfloat[]{{\includegraphics[scale=0.6]{brunel_pred_corr_std}}}
-\caption{\textbf{(a)} mean correlation coefficient matrix. \textbf{(b)} standard deviation
-}
-\label{fig:fig1}
-\end{figure}
-
-
+%\begin{figure}[!htb]
+%\centering
+%\subfloat[]{{\includegraphics[scale=0.6]{brunel_pred_corr}}}
+%\qquad
+%\subfloat[]{{\includegraphics[scale=0.6]{brunel_pred_corr_std}}}
+%\caption{\textbf{(a)} mean correlation coefficient matrix. \textbf{(b)} standard deviation
+%}
+%\label{fig:brunel_pred_corr}
+%\end{figure}
 
 
 
 %================================================================
-\section{Brunel SBI Results}
+\section{Inference with SNPE}
 %================================================================
 
 %================================================================
-\subsection{AI state} 
+\subsection{Training the Neural Density Estimator}
 %================================================================
 
+how we trained 
 
+use the same configuration as for HH
 
-0.037222	0.401465	0.145315
+%================================================================
+\subsection{Inference in the AI State}
+%================================================================
 
-Posterior:
+Same observed AI data
 
-\begin{figure}[H]
+\autoref{fig:brunel_post_ai_sbi} Posterior:
+
+\begin{figure}[!htb]
     \centering
-    \includegraphics[scale=0.8]{brunel_post_ai_sbi}
+    \includegraphics[scale=1.0]{brunel_post_ai_sbi}
     \caption{caption}
-    \label{fig:fig1}
+    \label{fig:brunel_post_ai_sbi}
 \end{figure}
 
-ppc 
+\autoref{fig:brunel_post_pred_ai_sbi} ppc 
 
-\begin{figure}[H]
+\begin{figure}[!htb]
     \centering
     \includegraphics[scale=0.8]{brunel_post_pred_ai_sbi}
     \caption{caption}
-    \label{fig:fig1}
+    \label{fig:brunel_post_pred_ai_sbi}
 \end{figure}
 
-corr 
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.8]{brunel_pred_corr_sbi_ai}
-    \caption{caption}
-    \label{fig:fig1}
-\end{figure}
-
-corr std
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.8]{brunel_pred_corr_std_ai_sbi}
-    \caption{caption}
-    \label{fig:fig1}
-\end{figure}
+%corr + corr std \autoref{fig:brunel_pred_corr_sbi_ai}
+% subfigure
+%\begin{figure}[!htb]
+%\centering
+%\subfloat[]{{\includegraphics[scale=0.6]{brunel_pred_corr_sbi_ai}}}
+%\qquad
+%\subfloat[]{{\includegraphics[scale=0.6]{brunel_pred_corr_std_ai_sbi}}}
+%\caption{\textbf{(a)} mean correlation coefficient matrix. \textbf{(b)} standard deviation
+%}
+%\label{fig:brunel_pred_corr_sbi_ai}
+%\end{figure}
 
 %================================================================
-\subsection{SR state}
+\subsection{Inference in the SR State}
 %================================================================
 
-SR observation
-
-\begin{figure}[H]
+We create another Brunel network with the same number of neurons and connections as earlier, but this time we set the synaptic weight parameters as $\eta=2$ and $g=3$, which according to the phase diagram of the network (\autoref{fig:brunel_phase}) corresponds to the SR state. We again simulate the network for $1,000 \ms$ and start to record the output spike trains from $20$ excitatory neurons after $100 \ms$. The observed network activity is shown in \autoref{fig:brunel_sr_observation}.
+\begin{figure}[!htb]
     \centering
     \includegraphics[scale=1.0]{brunel_sr_observation}
-    \caption{caption}
-    \label{fig:fig1}
+    \caption{Observed network activity recorded from $20$ excitatory neurons in the Brunel network's SR state. The synaptic weight parameters are set as $\eta=2$ and $g=3$, and the remaining parameters according to \autoref{tab:bnet_model_parameters}. The network is simulated for  $1,000 \ms$ and recording start after $100 \ms$. The top left panel shows the firing times (raster) of the recorded neurons, and the bottom left panel the network activity as a time resolved firing rate computed in bins of $10 \ms$. The mean firing rate is indicated by the horizontal (red) axis line. The right panel shows the pairwise Pearson's correlation coefficient matrix of the recorded neurons, which is a measure of how synchronous the spiking of the network is. 
+    }
+    \label{fig:brunel_sr_observation}
 \end{figure}
 
-Recorded spike trains from the Brunel network and observed the following summary statistics:
+high spiking activity due to the lowered inhibition allows for stronger recurrent input, that becomes a positive feedback loop
 
-\begin{table}[H]
+---
+In the AI state, neurons fire mostly independently at low rates. It is characterized by that neurons in the population fire at different times (\textit{asynchronous firing}) and at irregular intervals. 
+
+Depending on the strength of this external drive and the synaptic coupling parameters g and J, spiking activity can be asynchronous and irregular
+
+the sustained asynchronous activation of groups of neurons in the absence of external drive together with the highly irregular spiking of individual ce
+
+Further, it is unclear whether waves are consistent with the low rate and weakly correlated “asynchronous-irregular” dynamics observed in cortical recordings. 
+---
+
+Recorded spike trains from the Brunel network and observed the following summary statistics: \autoref{tab:brunel_sr_sumstats}
+
+\begin{table}[!htb]
   \caption{SR state observation.}
   %\footnotesize%
   \begin{center}
@@ -604,41 +553,47 @@ Recorded spike trains from the Brunel network and observed the following summary
       \bottomrule
     \end{tabular}
   \end{center}
-  \label{tab:hh_noisy_sumstats}
+  \label{tab:brunel_sr_sumstats}
 \end{table}
 
-Posterior:
+prior: However, we will try to utilize the flexibility of SNPE by training on simulations from both the AI and synchronous regular (SR) state, to investigate whether the predicted posteriors, when using observed data from one of these states, match the expected parameter ranges from the phase diagram (\autoref{fig:brunel_phase}).
 
-\begin{figure}[H]
+\autoref{fig:brunel_post_sr_sbi} Posterior:
+
+\begin{figure}[!htb]
     \centering
     \includegraphics[scale=0.8]{brunel_post_sr_sbi}
     \caption{caption}
-    \label{fig:fig1}
+    \label{fig:brunel_post_sr_sbi}
 \end{figure}
 
-ppc 
+width of posterior not that important, cool thing is that the range that corresponds to the state is constrained (check if true)
+
+\autoref{fig:brunel_post_pred_sr_sbi} ppc 
 
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.8]{brunel_post_pred_sr_sbi}
     \caption{caption}
-    \label{fig:fig1}
+    \label{fig:brunel_post_pred_sr_sbi}
 \end{figure}
 
-corr 
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.8]{brunel_pred_corr_sbi_sr}
-    \caption{caption}
-    \label{fig:fig1}
-\end{figure}
+%corr + corr std \autoref{fig:brunel_pred_corr_sbi_sr}
 
-corr std
+% subfigure
+%\begin{figure}[!htb]
+%\centering
+%\subfloat[]{{\includegraphics[scale=0.6]{brunel_pred_corr_sbi_sr}}}
+%\qquad
+%\subfloat[]{{\includegraphics[scale=0.6]{brunel_pred_corr_std_sr_sbi}}}
+%\caption{\textbf{(a)} mean correlation coefficient matrix. \textbf{(b)} standard deviation
+%}
+%\label{fig:brunel_pred_corr_sbi_sr}
+%\end{figure}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.8]{brunel_pred_corr_std_sr_sbi}
-    \caption{caption}
-    \label{fig:fig1}
-\end{figure}
+
+
+
+
+
