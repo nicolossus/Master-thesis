@@ -307,7 +307,7 @@ The correction is then done according to \autoref{eq:linreg_adj}, but with the w
 
 
 %===============================================================
-\section{Neural Density Estimation}
+\section{Neural Density Estimation}\label{sec:nde}
 %===============================================================
 
 We reviewed some standard methods for \textit{nonparametric} density estimation in \cref{sec:densest}. Here, we introduce \textit{neural density estimation} (NDE), a \textit{parametric} density estimation method where the density estimator is an \textit{artificial neural network} (ANN). Since the posterior is a conditional density, we are in particular interested in \textit{conditional neural density estimators}. One class of conditional NDEs is \textit{normalizing flows} (NF), which is a transformation of a simple base distribution, e.g., the normal distribution, into a more complex distribution by a sequence of invertible transformations that are differentiable. NFs were popularized for density estimation by Dinh et al. in \cite{dinh2015nice}. Another general framework for modelling arbitrary conditional densities is mixture density networks (MDNs), see e.g. Bishop \cite{Bishop}, which combines a conventional feedforward ANN with a mixture density model of the target (the posterior in our case). 

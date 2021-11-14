@@ -62,6 +62,29 @@
 %    \label{fig:fig1}
 %\end{figure} 
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1.0]{hh_posterior_org_uniform}
+    \caption{Original rejection ABC posteriors over the Hodgkin-Huxley model parameters $\gbarK$ (top) and $\gbarNa$ (bottom) with noise-free observed voltage trace. Here, the parameter proposals were sampled from the joint noninformative prior distribution. The dark shaded region indicates the 95\% HDI and the dotted line the MAP estimate. The ground truth is indicated by the red line. The legend states the numerical values for each of these, in addition to the RMSPE in the posterior.}
+    %\label{fig:fig1}
+\end{figure}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1.0]{hh_postpred_reg_uniform}
+    \caption{Graphical posterior predictive check comparing the observed voltage trace to simulated data predicted by the Hodgkin-Huxley model under the regression adjusted joint posterior predictive distribution that is shown as marginal posteriors in \autoref{fig:hh_posterior_reg_uniform}.}
+    %\label{fig:fig1}
+\end{figure}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1.0]{hh_posterior_org_noisy}
+    \caption{Original rejection ABC posteriors over the Hodgkin-Huxley model parameters $\gbarK$ (top) and $\gbarNa$ (bottom) with noisy observed voltage trace. Here, the parameter proposals were sampled from the joint informative prior distribution. The dark shaded region indicates the 95\% HDI and the dotted line the MAP estimate. The ground truth is indicated by the red line. The legend states the numerical values for each of these, in addition to the RMSPE in the posterior.}
+    \label{fig:hh_posterior_org_noisy}
+\end{figure} 
+
 
 %Brunel joint posterior (original) (REMOVE?)
 

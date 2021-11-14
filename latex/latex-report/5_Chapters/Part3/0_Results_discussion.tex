@@ -1,5 +1,5 @@
 %================================================================
-\chapter{Inference on Hodgkin-Huxley}\label{chap:res_hh}
+\chapter{Inference on the HH Model}\label{chap:res_hh}
 %================================================================  
 
 In this chapter, we present the results from simulation-based inference on the Hodgkin-Huxley (HH) model's conductance parameters $\gbarK$ and $\gbarNa$. 
@@ -149,50 +149,28 @@ Next, we investigate error in the estimates against the number of summary statis
 \end{figure} 
 The figure shows that the HH model is more tightly constrained by increasing the number of summary statistics, particularly $\gbarK$ as we have already discussed. Though, if we use summary statistics that do not capture relevant information for the parameters, it might lead to worse inference. The set of summary statistics that gives the most accurate posteriors consists of: (i) average AP overshoot, (ii) spike rate, (iii) average AP width and (iv) average AHP depth. For $\gbarK$, inclusion of the remaining two statistics, (v) latency to first spike and (vi) accommodation index, does not lead to a noticeable difference in accuracy. Neither does using equally or importance weighted summary statistics. For $\gbarNa$, on the other hand, the error becomes moderately worse by including (v) latency to first spike and (vi) accommodation index. Here, using importance weights actually helps to constrain $\gbarNa$ and improves the error in the posterior. 
 
-Informed by the preceding findings, going forward we will use the set of summary statistics labelled (i)-(iv) above and also keep the inclusion of importance weights.
-
 
 %================================================================
 \section{Summarizing Posteriors}
 %================================================================
 
-We can assess the identifiability of the HH model's active conductance parameters by examining the locations and widths of the resulting posterior estimates. A wide, flat posterior on a parameter indicates a large number of equally optimal values, which suggests that the parameter may be unidentifiable. As outlined in \cref{sec:performance_metrics}, the goodness of fit of the inferred posteriors will be considered through the MAP estimate, $95\%$ highest density interval (HDI) and, since we have access to the ground truths, RMSPE. We will also use posterior predictive checks to check for auto-consistency. To reiterate the settings of the rejection ABC sampler; we generate the following posteriors using the 0.4-quantile to set the tolerance and the set of importance weighted summary statistics (i) average AP overshoot, (ii) spike rate, (iii) average AP width and (iv) average AHP depth.
+We can assess the identifiability of the HH model's active conductance parameters by examining the locations and widths of the resulting posterior estimates. A wide, flat posterior on a parameter indicates a large number of equally optimal values, which suggests that the parameter may be unidentifiable. As outlined in \cref{sec:performance_metrics}, the goodness of fit of the inferred posteriors will be considered through the MAP estimate, $95\%$ highest density interval (HDI) and, since we have access to the ground truths, RMSPE. We will also use posterior predictive checks (PPCs) to check for auto-consistency. To reiterate the settings of the rejection ABC sampler; we generate the following posteriors using the 0.4-quantile to determine the tolerance and the set of importance weighted summary statistics (i) average AP overshoot, (ii) spike rate, (iii) average AP width and (iv) average AHP depth.
 
+Informed by the preceding findings, going forward we will use the set of summary statistics labelled (i)-(iv) above and also keep the inclusion of importance weights. 
+
+%================================================================
 \subsection{Posteriors from Informative Priors}
+%================================================================
 
-\autoref{fig:hh_posterior_org_normal} shows the original posteriors over $\gbarK$ and $\gbarNa$, with summarizing metrics stated in the legends.
+\autoref{fig:hh_posterior_org_normal} shows the original posteriors over $\gbarK$ and $\gbarNa$, with summarizing metrics stated in the legends. Compared to the informative priors over the model parameters (see \autoref{fig:hh_priors}), the updated state of knowledge represented by the posteriors is more constrained. The MAP estimates are centered close on the ground truth parameters, which, by the definition of MAP, means that the ground truth parameters are in regions of high posterior density. Compared to the $\gbarNa$ posterior, the RMSPE of the $\gbarK$ posterior is slightly larger, even though the 95\% HDI of $\gbarK$ is narrower than that of $\gbarNa$. This might be a bit surprising, but can be explained by noticing the sharpness of the posterior peaks. The peak of the $\gbarK$ posterior is more flat compared to the peak of the $\gbarNa$ posterior, which is quite sharp about the ground truth, and this is reflected in the RMSPE measure.
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=1]{hh_posterior_org_normal}
-    \caption{Original rejection ABC posteriors over the Hodgkin-Huxley model parameters $\gbarK$ (top) and $\gbarNa$ (bottom). Here, the parameter proposals were sampled from the joint informative prior distribution. }
+    \includegraphics[scale=1.0]{hh_posterior_org_normal}
+    \caption{Original rejection ABC posteriors over the Hodgkin-Huxley model parameters $\gbarK$ (top) and $\gbarNa$ (bottom). Here, the parameter proposals were sampled from the joint informative prior distribution. The dark shaded region indicates the 95\% HDI and the dotted line the MAP estimate. The ground truth is indicated by the red line. The legend states the numerical values for each of these, in addition to the RMSPE in the posterior.}
     \label{fig:hh_posterior_org_normal}
 \end{figure}
-Compared to the (informative) priors over the model parameters (see \autoref{fig:hh_priors}), the updated state of knowledge represented by the posteriors is more constrained. The MAP estimates are centered close on the ground truth parameters, which, by the definition of MAP, means that the ground truth parameters are in regions of high posterior density. Although the posteriors. Compared to the $\gbarNa$ posterior, the RMSPE of the $\gbarK$ posterior is slightly larger, even though the 95\% HDI of $\gbarK$ is narrower than that of $\gbarNa$. This might be a bit surprising, but can be explained by noticing the sharpness of the posterior peaks. The peak of the $\gbarK$ posterior is more flat compared to the peak of the $\gbarNa$ posterior, which is quite sharp about the ground truth, and this is reflected in the RMSPE measure.
 
-
-
-
-
-ground truth parameter values are in regions of high posterior density 
-
-
-the analysis revealed that as more features are taken into account, the posterior became narrower and centered more closely on the ground truth parameters
-
-
-
-Application of these new techniques also allows us to explore the issue of model identifiability. By examining posterior distributions over model parameters, we can quantify and characterize model uncertainty, which can either inform us as to the ability of our data to constrain the model or the degree of biological variability in the system, as we outline below.
-
----
-
-Make subfig with corr and joint
-
-Correlation 
-
-
-
-
----
-\autoref{fig:hh_joint}
+\autoref{fig:hh_joint} maps the correlation, in terms of pairwise Pearson's correlation coefficients, between the posterior samples of $\gbarK$ and $\gbarNa$. It shows that the parameter samples are indeed strongly correlated. Consequently, for predictive sampling from the posteriors, we need to sample from the \textit{joint posterior}, also shown in the figure.
 % subfigure
 \begin{figure}[!htb]
 \centering
@@ -204,76 +182,51 @@ Correlation
 \label{fig:hh_joint}
 \end{figure}
 
----
-
-
-Posteriors, reg adjusted samples, informative prior
-
+\autoref{fig:hh_posterior_reg_normal} shows the regression adjusted posterior. Here, $\gbarK$ is constrained to the interval $[35.986, 36.029]$ with 95\% probability, and $\gbarNa$ to the $[120.001, 120.423]$ with 95\% probability. The RMSPE in both posteriors are consequently reduced significantly compared with RMSPE in the original posteriors (\autoref{fig:hh_posterior_org_normal}). Again, we see that the corrected $\gbarK$ samples become more constrained than the $\gbarNa$ samples, due to the stronger linear relationship $\gbarK$ has with the summary statistics. The regression adjustment overshoots the ground truth of $\gbarNa$ by a tiny amount, but the estimated parameter range could be equally capable of describing the observed data. The regression adjusted posteriors are able to identify the conductance parameters remarkably well, which is promising for using ABC algorithms to identify parameters in other conductance-based neural models based on the HH formalism as well. 
 \begin{figure}[H]
     \centering
     \includegraphics[scale=1.0]{hh_posterior_reg_normal}
-    \caption{caption}
-    \label{fig:fig1}
+    \caption{Regression adjusted rejection ABC posteriors over the Hodgkin-Huxley model parameters $\gbarK$ (top) and $\gbarNa$ (bottom). Here, the parameter proposals were sampled from the joint informative prior distribution. The dark shaded region indicates the 95\% HDI and the dotted line the MAP estimate. The ground truth is indicated by the red line. The legend states the numerical values for each of these, in addition to the RMSPE in the posterior.}
+    \label{fig:hh_posterior_reg_normal}
 \end{figure}
 
-regression adjustment of the posteriors is crucial for obtaining accurate estimates with the rejection ABC sampler. 
-
-PPC reg adjusted posterior predictive 
-
-\begin{figure}[H]
+To verify that the parameter ranges in the regression adjusted posteriors are able to describe the observed data well, we perform a PPC. We draw 100 samples from the joint posterior predictive distribution and feed the parameters to the HH simulator. We then take the average of the simulated voltage traces. The result can be seen in \autoref{fig:hh_postpred_reg_normal}, where we plot the predicted simulations and their mean together with the observed voltage trace. 
+\begin{figure}[!htb]
     \centering
     \includegraphics[scale=1.0]{hh_postpred_reg_normal}
-    \caption{caption}
-    \label{fig:fig1}
+    \caption{Graphical posterior predictive check comparing the observed voltage trace to simulated data predicted by the Hodgkin-Huxley model under the regression adjusted joint posterior predictive distribution.}
+    \label{fig:hh_postpred_reg_normal}
 \end{figure}
+As can be seen from the figure, the samples from the inferred joint posterior lead to simulations that are virtually identical to the observed data, confirming that the procedure succeeds at capturing the observed data and identifying the underlying parameters.
 
 
-As can be seen, the samples from the inferred posterior lead to simulations that closely resemble the observed data, confirming that Rej-ABC did a good job at capturing the observed data in this simple case.
+%================================================================
+\subsection{Posteriors from Noninformative Priors}
+%================================================================
 
-\subsection{Noninformative priors}
-
-posterior, original, noninfo prior
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=1.0]{hh_posterior_org_uniform}
-    \caption{Original rejection ABC posteriors over the Hodgkin-Huxley model parameters $\gbarK$ (top) and $\gbarNa$ (bottom). Here, the parameter proposals were sampled from a joint noninformative prior distribution.}
-    \label{fig:fig1}
-\end{figure}
-
-Adjusted posterior, noninformative prior
-
-\begin{figure}[H]
+By now, it has been demonstrated that regression adjustment of the posteriors is crucial for improving the accuracy of estimates from the rejection ABC sampler. \autoref{fig:hh_posterior_reg_uniform} shows the regression adjusted posteriors over $\gbarK$ and $\gbarNa$ when we use noninformative priors.
+\begin{figure}[!htb]
     \centering
     \includegraphics[scale=1.0]{hh_posterior_reg_uniform}
-    \caption{caption}
+    \caption{Regression adjusted rejection ABC posteriors over the Hodgkin-Huxley model parameters $\gbarK$ (top) and $\gbarNa$ (bottom). Here, the parameter proposals were sampled from the joint noninformative prior distribution. The dark shaded region indicates the 95\% HDI and the dotted line the MAP estimate. The ground truth is indicated by the red line. The legend states the numerical values for each of these, in addition to the RMSPE in the posterior.}
     \label{fig:hh_posterior_reg_uniform}
 \end{figure} 
-
-PPC adjusted posterior 
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=1.0]{hh_postpred_reg_uniform}
-    \caption{Posterior predictive check of the. With predictions sampled from the regression adjusted posterior shown in \autoref{fig:hh_posterior_reg_uniform}}
-    \label{fig:fig1}
-\end{figure}
+Compared with the regression adjusted posteriors where we used informative priors, the present posteriors are only marginally less accurate. This means that, even with data-driven ABC inference, the HH conductance parameters can be accurately identified.
 
 
 %================================================================
-\section{HH SBI Results}
+\section{SNPE Posteriors}
 %================================================================
 
-same observed data as for clean hh
-
-Posterior:
-
+Rejection ABC is one of simplest simulation-based inference algorithms. We have added certain refinements to the standard rejection ABC sampling procedure, such as regression adjustment, weighted Euclidean distance and quantile-based rejection. Now, we will compare the posteriors obtained through our implementation of ABC in \cw{pyLFI} to one of the more recent advancements in the field; neural density estimation (NDE). In particular, the NDE algorithm SNPE introduced in \cref{sec:nde}. The objective here is not to perform an exhaustive analysis of SNPE and its capabilities, as this is demonstrated in the original papers \cite{SNL_first}, \cite{SNPE_first} and \cite{SNPE_apt}. Here, and in subsequent analyses with SNPE, the aim is to compare how its estimated posteriors compare with the ABC posterior under similar settings. This means that we will train the neural density estimator to learn the association between summary statistics of the data and the underlying parameters. As neural density estimator we use a particular normalizing flow (NF) called \textit{masked autoregressive flow} (MAF) that is developed by Papamakarios et al. \cite{MAF}. SNPE is given a modified HH simulator, which returns the same set of summary statistics we used in the preceding analyses; (i) average AP overshoot, (ii) spike rate, (iii) average AP width and (iv) average AHP depth. Moreover, we use the same noninformative priors as in \autoref{fig:hh_priors}, and train the network on 1000 simulations. The resulting posteriors over $\gbarK$ and $\gbarNa$ are shown in \autoref{fig:hh_post_sbi}.
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.8]{hh_post_sbi}
-    \caption{caption}
-    \label{fig:fig1}
+    \includegraphics[scale=1.0]{hh_post_sbi}
+    \caption{SNPE posteriors over the Hodgkin-Huxley model parameters $\gbarK$ (top) and $\gbarNa$ (bottom). The dark shaded region indicates the 95\% HDI and the dotted line the MAP estimate. The ground truth is indicated by the red line. The legend states the numerical values for each of these, in addition to the RMSPE in the posterior.}
+    \label{fig:hh_post_sbi}
 \end{figure}
+Both posteriors we obtain are narrow and sharply peaked about the ground truth parameters, meaning that SNPE is able to identify admissible parameters as well. The summaries of the estimated posteriors are similar to the ones for the regression adjusted ABC posteriors. Though it is a close competition, the ABC posteriors are actually slightly more narrow than the SNPE posteriors. Moreover, the outliers observed in the tails of the SNPE posterior are not present in the ABC posteriors. This comparison might not be entirely fair to SNPE, as it is difficult to pin-point exactly how many training simulations that measure up to be “under similar settings”. By training the network on even more simulations, the posteriors could perhaps be made even more narrow. Furthermore, it is likely that the parameter ranges in the SNPE posteriors all are compatible with the observed data, which will be illuminated in more detail in the next section
+
 
 %PPC
 %\begin{figure}[H]
@@ -290,17 +243,16 @@ Posterior:
 \section{Noisy Observation}
 %================================================================
 
-\begin{figure}[H]
+So far we have only used an idealized voltage trace, free of any noise, as the observed data. However, real-world neural data are quite noisy. Here, we will examine the impact a noisy observed recording has on the inference with the rejection ABC sampler. There are several sources to noise in cellular dynamics, and, in extension, ways to introduce noise to the Hodgkin-Huxley equations, see e.g. \cite{hh_noise} for a review. We will introduce noise to the observed voltage trace by using a stochastic version of the HH model that incorporates current noise as a Gaussian white noise process. Besides the inclusion of current noise, we use the same same settings for the HH simulator as earlier and record the voltage trace seen in \autoref{fig:hh_noisy_data}.
+\begin{figure}[!htb]
     \centering
     \includegraphics[scale=0.9]{hh_noisy_data}
-    \caption{caption}
-    \label{fig:fig1}
+    \caption{Noisy voltage trace generated with the HH simulator by introducing Gaussian white noise to the input stimulus. The parametrization of the HH model and simulation parameters are identical to the ones used in preceding noise-free voltage trace (\autoref{fig:hh_obs_data}).}
+    \label{fig:hh_noisy_data}
 \end{figure} 
-
-
-% Alternating row colors
-\begin{table}[H]
-  \caption{Generic table with alternating rows and different sized rulers. The number of spikes is not used as a summary statistic in and of itself, but is included to show that the statistic extraction indeed finds all spikes.}
+The corresponding summary statistics are tabulated in \autoref{tab:hh_noisy_sumstats}. 
+\begin{table}[!htb]
+  \caption{Summary statistics extracted from the noisy observed voltage trace.}
   %\footnotesize%
   \begin{center}
     \rowcolors{2}{gray!15}{white}
@@ -321,64 +273,37 @@ Posterior:
   \label{tab:hh_noisy_sumstats}
 \end{table}
 
-
-
-----
-
-observed data w/o noise 
-
-feature extraction 
-
-plot features 
-
-compute weights (plot correlation matrix) 
-
-plot priors (informative, noninformative)
-
-
----
-
-create the observed data
-
-summary statistics of observation 
-
-summary statistics from prior predictive
-
-weights
-
-(observed data with noise; same as above)
-
-
-original posterior on noisy observed data
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=1.0]{hh_posterior_org_noisy}
-    \caption{caption}
-    \label{fig:fig1}
-\end{figure} 
-
-adjusted posterior on noisy observed data
-
-\begin{figure}[H]
+We then use the rejection ABC sampler in \cw{pyLFI} and a HH simulator that generates noise-free simulations to infer the underlying parameters in the observed voltage trace. Though our observation is not a particularly noisy recording, it still distorts the regression adjusted ABC posteriors significantly compared to when we used noise-free observed data, as seen in \autoref{fig:hh_posterior_reg_noisy}.
+\begin{figure}[!htb]
     \centering
     \includegraphics[scale=1.0]{hh_posterior_reg_noisy}
-    \caption{caption}
-    \label{fig:fig1}
+    \caption{Regression adjusted rejection ABC posteriors over the Hodgkin-Huxley model parameters $\gbarK$ (top) and $\gbarNa$ (bottom) with noisy observed voltage trace. Here, the parameter proposals were sampled from the joint informative prior distribution. The dark shaded region indicates the 95\% HDI and the dotted line the MAP estimate. The ground truth is indicated by the red line. The legend states the numerical values for each of these, in addition to the RMSPE in the posterior.}
+    \label{fig:hh_posterior_reg_noisy}
 \end{figure} 
-
-ppc with reg adjusted posterior samples (100 posterior samples)
-
-
-\begin{figure}[H]
+As can be seen, the ground truth parameters are no longer in regions of high posterior density -- they are not actually included in the posteriors at all. Though both the $\gbarK$ and $\gbarNa$ posteriors are narrow and sharp, their locations in parameter space are shifted toward a completely different set of parameter values, especially $\gbarNa$, than we found with the noise-free observation. However, if do a graphical PPC, as seen in \autoref{fig:hh_postpred_reg_noisy}, we find that the simulations predicted by the joint posterior match the observed voltage trace surprisingly well. 
+\begin{figure}[!htb]
     \centering
     \includegraphics[scale=1.0]{hh_postpred_reg_noisy}
-    \caption{caption}
-    \label{fig:fig1}
+    \caption{Graphical posterior predictive check comparing the noisy observed voltage trace to simulated data predicted by the Hodgkin-Huxley model under the regression adjusted joint posterior predictive distribution. The posterior predictive mean is the average of 100 predicted simulations.}
+    \label{fig:hh_postpred_reg_noisy}
 \end{figure}
+This example bolster the motivation for why the Bayesian approach to inference should be considered; there might be multiple parameter settings that are consistent with the observed data.
+
+
+
+
+%===============================================================
+%===============================================================
+%===============================================================
+%===============================================================
+%===============================================================
+
 %================================================================
-\chapter{Inference on Brunel}\label{chap:res_brunel}
+\chapter{Inference on the Brunel Model}\label{chap:res_brunel}
 %================================================================ 
+
+In this chapter, we present the results from simulation-based inference on the Hodgkin-Huxley (HH) model's conductance parameters $\gbarK$ and $\gbarNa$. 
+
 
 Chapter Inference on the Brunel model
 - observed data 
